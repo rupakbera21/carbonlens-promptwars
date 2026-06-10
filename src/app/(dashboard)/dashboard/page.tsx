@@ -39,6 +39,11 @@ interface ScoreData {
     totalCo2eKg: number;
     score: number;
   }>;
+  dailyHistory: Array<{
+    periodStart: string;
+    totalCo2eKg: number;
+    score: number;
+  }>;
 }
 
 interface GoalData {

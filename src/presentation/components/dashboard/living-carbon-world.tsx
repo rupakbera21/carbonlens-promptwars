@@ -372,6 +372,9 @@ function ProceduralCity({ phiScore, waterQuality }: { phiScore: number, waterQua
         emissiveIntensity={0.2}
       />
     </instancedMesh>
+  );
+}
+
 // --- Solar System & Galaxies ---
 function Sun() {
   return (

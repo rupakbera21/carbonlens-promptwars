@@ -76,8 +76,20 @@ function useAudioEngine(isGameOver: boolean | undefined, isSoundEnabled: boolean
   const audioCtxRef = useRef<AudioContext | null>(null);
   const explosionPlayed = useRef(false);
 
+  const isSoundEnabledRef = useRef(isSoundEnabled);
   useEffect(() => {
-    if (typeof window === "undefined" || !isSoundEnabled) return;
+    isSoundEnabledRef.current = isSoundEnabled;
+    if (audioCtxRef.current) {
+      if (isSoundEnabled) {
+        audioCtxRef.current.resume();
+      } else {
+        audioCtxRef.current.suspend();
+      }
+    }
+  }, [isSoundEnabled]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
     
     let voices: { osc: OscillatorNode; lfo: OscillatorNode; mainGain: GainNode }[] = [];
 
@@ -127,7 +139,7 @@ function useAudioEngine(isGameOver: boolean | undefined, isSoundEnabled: boolean
           createBreathingOsc(329.63, 0.0)   // E4
         ];
       }
-      if (audioCtxRef.current.state === "suspended") {
+      if (audioCtxRef.current.state === "suspended" && isSoundEnabledRef.current) {
         audioCtxRef.current.resume();
       }
     };

@@ -88,6 +88,50 @@ export default function DashboardPage() {
   const [lastAction, setLastAction] = useState<{ type: "positive" | "negative"; timestamp: number } | null>(null);
   const [isGameOver, setIsGameOver] = useState(false);
 
+  // localStorage key for persisting world state scores so they never reset to 0
+  const LS_KEY = "carbonlens_world_state_v2";
+
+  const loadLocalState = () => {
+    try {
+      const raw = localStorage.getItem(LS_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch { return null; }
+  };
+
+  const saveLocalState = (state: any) => {
+    try {
+      localStorage.setItem(LS_KEY, JSON.stringify({
+        phiScore: state.phiScore,
+        ecoPoints: state.ecoPoints,
+        forestHealth: state.forestHealth,
+        waterQuality: state.waterQuality,
+        airQuality: state.airQuality,
+        biodiversity: state.biodiversity,
+        level: state.level,
+      }));
+    } catch { /* noop */ }
+  };
+
+  // Merge server response with local cache — always keep the HIGHER value
+  const mergeWithLocal = (serverState: any) => {
+    const local = loadLocalState();
+    if (!local) {
+      saveLocalState(serverState);
+      return serverState;
+    }
+    const merged = {
+      ...serverState,
+      phiScore: Math.max(serverState.phiScore ?? 0, local.phiScore ?? 0),
+      ecoPoints: Math.max(serverState.ecoPoints ?? 0, local.ecoPoints ?? 0),
+      forestHealth: Math.max(serverState.forestHealth ?? 0, local.forestHealth ?? 0),
+      waterQuality: Math.max(serverState.waterQuality ?? 0, local.waterQuality ?? 0),
+      airQuality: Math.max(serverState.airQuality ?? 0, local.airQuality ?? 0),
+      biodiversity: Math.max(serverState.biodiversity ?? 0, local.biodiversity ?? 0),
+    };
+    saveLocalState(merged);
+    return merged;
+  };
+
   const fetchData = useCallback(async () => {
     try {
       const [scoreRes, goalsRes, recsRes, efRes, worldStateRes] = await Promise.all([
@@ -111,7 +155,14 @@ export default function DashboardPage() {
       setGoals(goalsDataRes.data);
       setRecommendations(recsDataRes.data);
       setEmissionFactors(efDataRes.data);
-      if (worldStateDataRes?.data) setWorldState(worldStateDataRes.data);
+      if (worldStateDataRes?.data) {
+        // Merge server state with localStorage to prevent reset to 0
+        setWorldState(mergeWithLocal(worldStateDataRes.data));
+      } else {
+        // Server returned nothing — load from localStorage as fallback
+        const local = loadLocalState();
+        if (local) setWorldState((prev: any) => prev ?? local);
+      }
     } catch (error) {
       console.error("Failed to fetch dashboard data:", error);
     } finally {
@@ -185,13 +236,17 @@ export default function DashboardPage() {
       
       let nextPhi = worldState.phiScore + impact;
       
-      setWorldState((prev: any) => ({
-        ...prev,
-        phiScore: Math.max(0, nextPhi),
-        airQuality: Math.max(0, Math.min(100, prev.airQuality + (isPositive ? 1 : -3))),
-        forestHealth: Math.max(0, Math.min(100, prev.forestHealth + impact)),
-        waterQuality: Math.max(0, Math.min(100, prev.waterQuality + impact)),
-      }));
+      setWorldState((prev: any) => {
+        const next = {
+          ...prev,
+          phiScore: Math.max(0, nextPhi),
+          airQuality: Math.max(0, Math.min(100, prev.airQuality + (isPositive ? 1 : -3))),
+          forestHealth: Math.max(0, Math.min(100, prev.forestHealth + impact)),
+          waterQuality: Math.max(0, Math.min(100, prev.waterQuality + impact)),
+        };
+        saveLocalState(next); // Always persist to localStorage
+        return next;
+      });
       setLastAction({ type: isPositive ? "positive" : "negative", timestamp: Date.now() });
     }
 

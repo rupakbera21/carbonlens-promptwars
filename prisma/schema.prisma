@@ -1,0 +1,171 @@
+// CarbonLens — Prisma Schema
+// All tables follow the domain model from the architecture document.
+// Indexes are designed for the most common query patterns.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// ─── User ────────────────────────────────────────────────────────────
+// Stores account info, regional settings, and UI preferences.
+// Soft-delete via deletedAt supports GDPR right-to-erasure with audit trail.
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String    @map("password_hash")
+  name         String
+  region       String    @default("global")
+  timezone     String    @default("UTC")
+  // SQLite does not support Json, using String for JSON data
+  preferences  String    @default("{}")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  deletedAt    DateTime? @map("deleted_at")
+
+  activities      Activity[]
+  carbonScores    CarbonScore[]
+  goals           Goal[]
+  recommendations Recommendation[]
+
+  @@index([email])
+  @@index([id], map: "idx_user_active")
+  @@map("users")
+}
+
+// ─── Activity ────────────────────────────────────────────────────────
+// Individual carbon-producing action logged by a user.
+// co2eKg is pre-computed at write time using the linked EmissionFactor.
+// The synced flag supports offline-first: false = created offline, pending sync.
+model Activity {
+  id               String   @id @default(uuid())
+  userId           String   @map("user_id")
+  category         String
+  subCategory      String   @map("sub_category")
+  quantity         Float
+  unit             String
+  co2eKg           Float    @map("co2e_kg")
+  emissionFactorId String   @map("emission_factor_id")
+  activityDate     DateTime @map("activity_date")
+  metadata         String   @default("{}")
+  synced           Boolean  @default(true)
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  emissionFactor EmissionFactor @relation(fields: [emissionFactorId], references: [id])
+
+  @@index([userId, activityDate(sort: Desc)], map: "idx_activity_user_date")
+  @@index([userId, category], map: "idx_activity_user_category")
+  @@map("activities")
+}
+
+// ─── EmissionFactor ──────────────────────────────────────────────────
+// Reference data: kg CO₂e per unit for each activity type.
+// Versioned and region-specific so calculations remain reproducible
+// even when factors are updated.
+model EmissionFactor {
+  id           String    @id @default(uuid())
+  category     String
+  subCategory  String    @map("sub_category")
+  name         String
+  factorKgCo2e Float     @map("factor_kg_co2e")
+  unit         String
+  source       String
+  region       String    @default("global")
+  version      Int       @default(1)
+  validFrom    DateTime  @default(now()) @map("valid_from")
+  validTo      DateTime? @map("valid_to")
+
+  activities Activity[]
+
+  @@index([category, subCategory, region], map: "idx_ef_category_region")
+  @@map("emission_factors")
+}
+
+// ─── CarbonScore ─────────────────────────────────────────────────────
+// Pre-computed aggregate score for a time period.
+// Breakdown stores per-category CO₂e as JSON for fast dashboard rendering.
+// Avoids expensive re-aggregation of raw activities on every page load.
+model CarbonScore {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  score       Int
+  totalCo2eKg Float    @map("total_co2e_kg")
+  breakdown   String
+  periodType  String   @map("period_type")
+  periodStart DateTime @map("period_start")
+  periodEnd   DateTime @map("period_end")
+  calculatedAt DateTime @default(now()) @map("calculated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, periodType, periodStart], map: "idx_score_user_period")
+  @@map("carbon_scores")
+}
+
+// ─── Goal ────────────────────────────────────────────────────────────
+// User-defined carbon reduction target for a date range.
+// Status transitions: active → completed | missed | cancelled.
+model Goal {
+  id           String   @id @default(uuid())
+  userId       String   @map("user_id")
+  targetCo2eKg Float    @map("target_co2e_kg")
+  periodType   String   @map("period_type")
+  startDate    DateTime @map("start_date")
+  endDate      DateTime @map("end_date")
+  status       String   @default("active")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status], map: "idx_goal_user_status")
+  @@map("goals")
+}
+
+// ─── Recommendation ──────────────────────────────────────────────────
+// Personalized suggestion produced by the rule engine.
+// Linked to the Rule that generated it for auditability.
+model Recommendation {
+  id               String    @id @default(uuid())
+  userId           String    @map("user_id")
+  ruleId           String    @map("rule_id")
+  category         String
+  title            String
+  description      String
+  potentialSavingKg Float    @map("potential_saving_kg")
+  priority         String    @default("medium")
+  status           String    @default("active")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  dismissedAt      DateTime? @map("dismissed_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rule Rule @relation(fields: [ruleId], references: [id])
+
+  @@index([userId, status], map: "idx_rec_user_status")
+  @@map("recommendations")
+}
+
+// ─── Rule ────────────────────────────────────────────────────────────
+// Configurable rule definition with JSON conditions and actions.
+// Drives the recommendation engine without hardcoded business logic.
+// conditions: array of {field, operator, value} objects
+// actions: array of {type, params} objects
+model Rule {
+  id         String   @id @default(uuid())
+  name       String
+  category   String
+  conditions String
+  actions    String
+  priority   Int      @default(0)
+  active     Boolean  @default(true)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  recommendations Recommendation[]
+
+  @@map("rules")
+}

@@ -16,6 +16,7 @@ interface WorldState {
 interface LivingCarbonWorldProps {
   worldState: WorldState;
   lastAction?: { type: "positive" | "negative"; timestamp: number } | null;
+  isGameOver?: boolean;
 }
 
 function ActionShockwave({ lastAction }: { lastAction?: { type: "positive" | "negative"; timestamp: number } | null }) {
@@ -61,7 +62,45 @@ function ActionShockwave({ lastAction }: { lastAction?: { type: "positive" | "ne
   );
 }
 
-function Planet({ state }: { state: WorldState }) {
+function BigBang({ active }: { active: boolean }) {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const materialRef = useRef<THREE.MeshBasicMaterial>(null);
+  const [exploded, setExploded] = useState(false);
+
+  useEffect(() => {
+    if (active && !exploded) {
+      setExploded(true);
+      if (meshRef.current) meshRef.current.scale.set(1, 1, 1);
+      if (materialRef.current) materialRef.current.opacity = 1;
+    }
+  }, [active, exploded]);
+
+  useFrame((_, delta) => {
+    if (exploded && meshRef.current && materialRef.current) {
+      if (meshRef.current.scale.x < 30) {
+        meshRef.current.scale.addScalar(delta * 20);
+        materialRef.current.opacity -= delta * 0.5;
+      }
+    }
+  });
+
+  if (!active) return null;
+
+  return (
+    <mesh ref={meshRef}>
+      <sphereGeometry args={[2.1, 32, 32]} />
+      <meshBasicMaterial
+        ref={materialRef}
+        color="#ff1100"
+        transparent
+        blending={THREE.AdditiveBlending}
+        depthWrite={false}
+      />
+    </mesh>
+  );
+}
+
+function Planet({ state, isGameOver }: { state: WorldState, isGameOver?: boolean }) {
   const coreRef = useRef<THREE.Mesh>(null);
   const cloudsRef = useRef<THREE.Mesh>(null);
 
@@ -70,17 +109,23 @@ function Planet({ state }: { state: WorldState }) {
     if (cloudsRef.current) cloudsRef.current.rotation.y += delta * 0.07;
   });
 
-  const targetWaterColor = useMemo(() => new THREE.Color().lerpColors(
-    new THREE.Color("#1a365d"), // Polluted dark ocean
-    new THREE.Color("#0ea5e9"), // Vibrant clean ocean
-    state.waterQuality / 100
-  ), [state.waterQuality]);
+  const targetWaterColor = useMemo(() => {
+    if (isGameOver) return new THREE.Color("#450a0a"); // Magma red
+    return new THREE.Color().lerpColors(
+      new THREE.Color("#1a365d"), // Polluted dark ocean
+      new THREE.Color("#0ea5e9"), // Vibrant clean ocean
+      state.waterQuality / 100
+    );
+  }, [state.waterQuality, isGameOver]);
   
-  const targetLandColor = useMemo(() => new THREE.Color().lerpColors(
-    new THREE.Color("#78350f"), // Barren earth
-    new THREE.Color("#22c55e"), // Lush green forest
-    state.forestHealth / 100
-  ), [state.forestHealth]);
+  const targetLandColor = useMemo(() => {
+    if (isGameOver) return new THREE.Color("#171717"); // Scorched earth
+    return new THREE.Color().lerpColors(
+      new THREE.Color("#78350f"), // Barren earth
+      new THREE.Color("#22c55e"), // Lush green forest
+      state.forestHealth / 100
+    );
+  }, [state.forestHealth, isGameOver]);
 
   const [waterColor] = useState(() => targetWaterColor.clone());
   const [landColor] = useState(() => targetLandColor.clone());
@@ -157,7 +202,7 @@ function Planet({ state }: { state: WorldState }) {
   );
 }
 
-export function LivingCarbonWorld({ worldState, lastAction }: LivingCarbonWorldProps) {
+export function LivingCarbonWorld({ worldState, lastAction, isGameOver }: LivingCarbonWorldProps) {
   return (
     <div
       className="relative h-[400px] w-full overflow-hidden rounded-xl bg-slate-950 shadow-[0_0_40px_rgba(14,165,233,0.15)] ring-1 ring-white/10"
@@ -171,8 +216,9 @@ export function LivingCarbonWorld({ worldState, lastAction }: LivingCarbonWorldP
         <pointLight position={[-10, -10, -5]} intensity={0.5} color="#0ea5e9" />
 
         <Float speed={2} rotationIntensity={0.6} floatIntensity={1.2}>
-          <Planet state={worldState} />
+          <Planet state={worldState} isGameOver={isGameOver} />
           <ActionShockwave lastAction={lastAction} />
+          <BigBang active={!!isGameOver} />
         </Float>
 
         {worldState.airQuality > 40 && (

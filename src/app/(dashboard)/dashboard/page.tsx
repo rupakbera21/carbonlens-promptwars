@@ -75,6 +75,7 @@ export default function DashboardPage() {
   } = useGamification();
 
   const [lastAction, setLastAction] = useState<{ type: "positive" | "negative"; timestamp: number } | null>(null);
+  const [isGameOver, setIsGameOver] = useState(false);
 
   const fetchData = useCallback(async () => {
     try {
@@ -111,6 +112,13 @@ export default function DashboardPage() {
     fetchData();
   }, [fetchData]);
 
+  useEffect(() => {
+    const lockout = localStorage.getItem("carbonlens_game_over");
+    if (lockout && parseInt(lockout, 10) > Date.now()) {
+      setIsGameOver(true);
+    }
+  }, []);
+
   const handleLogActivity = async (data: {
     category: string;
     subCategory: string;
@@ -122,10 +130,21 @@ export default function DashboardPage() {
     // Optimistic Update!
     if (worldState) {
       const isPositive = data.category === "food" && data.subCategory.includes("plant");
-      const impact = isPositive ? 2 : -2;
+      const impact = isPositive ? 2 : -20; // amplified negative impact for demo
+      
+      let nextPhi = worldState.phiScore + impact;
+      if (nextPhi <= 0) {
+        nextPhi = 0;
+        setIsGameOver(true);
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(0, 0, 0, 0);
+        localStorage.setItem("carbonlens_game_over", tomorrow.getTime().toString());
+      }
+      
       setWorldState((prev: any) => ({
         ...prev,
-        phiScore: Math.max(0, Math.min(100, prev.phiScore + impact)),
+        phiScore: nextPhi,
         airQuality: Math.max(0, Math.min(100, prev.airQuality + (isPositive ? 1 : -3))),
         forestHealth: Math.max(0, Math.min(100, prev.forestHealth + impact)),
         waterQuality: Math.max(0, Math.min(100, prev.waterQuality + impact)),
@@ -169,12 +188,34 @@ export default function DashboardPage() {
       </div>
 
       {isLivingWorldEnabled && worldState && (
-        <div className="mb-8">
-          <LivingCarbonWorld worldState={worldState} lastAction={lastAction} />
+        <div className="mb-8 relative">
+          <LivingCarbonWorld worldState={worldState} lastAction={lastAction} isGameOver={isGameOver} />
+          
+          {isGameOver && (
+            <div className="absolute inset-0 z-50 flex flex-col items-center justify-center rounded-xl bg-black/80 p-8 text-center backdrop-blur-sm animation-fade-in">
+              <h2 className="mb-2 text-3xl font-black text-red-500 tracking-widest">WORLD COLLAPSED</h2>
+              <p className="mb-6 text-lg text-slate-300">
+                Your Planet Health Index reached 0. The ecosystem can no longer sustain life.
+              </p>
+              <div className="max-w-md rounded-lg border border-red-500/30 bg-red-950/40 p-4 text-left">
+                <h4 className="mb-2 font-semibold text-red-400 text-sm uppercase">How to prevent this</h4>
+                <ul className="list-inside list-disc text-sm text-slate-300 space-y-1">
+                  <li>Log more plant-based meals</li>
+                  <li>Use public transit or carpool</li>
+                  <li>Reduce energy consumption at home</li>
+                </ul>
+              </div>
+              <p className="mt-8 text-sm font-medium text-slate-400">
+                The simulation will reset tomorrow at midnight.
+              </p>
+            </div>
+          )}
         </div>
       )}
 
-      {/* Score + Breakdown + Quick Log */}
+      {isGameOver ? null : (
+        <>
+          {/* Score + Breakdown + Quick Log */}
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         <ScoreCard
           score={scoreData?.current?.score ?? null}
@@ -321,6 +362,8 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+      </>
+      )}
     </div>
   );
 }

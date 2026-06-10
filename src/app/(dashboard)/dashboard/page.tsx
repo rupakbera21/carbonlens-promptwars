@@ -8,6 +8,8 @@ import { TrendChart } from "@/presentation/components/charts/trend-chart";
 import { Loading } from "@/presentation/components/common/loading";
 import { useGamification } from "@/presentation/providers/gamification-provider";
 import { LivingCarbonWorld } from "@/presentation/components/dashboard/living-carbon-world";
+import { MissionPanel } from "@/presentation/components/dashboard/mission-panel";
+import { CommunityChallengePanel } from "@/presentation/components/dashboard/community-challenge";
 import {
   Card,
   CardContent,
@@ -61,7 +63,11 @@ export default function DashboardPage() {
   >([]);
   const [worldState, setWorldState] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const { isLivingWorldEnabled } = useGamification();
+  const {
+    isLivingWorldEnabled,
+    isDetectiveMissionsEnabled,
+    isCommunityChallengesEnabled,
+  } = useGamification();
 
   const fetchData = useCallback(async () => {
     try {
@@ -244,8 +250,16 @@ export default function DashboardPage() {
         </Card>
       </div>
 
+      {/* Gamification Modules Row */}
+      {(isDetectiveMissionsEnabled || isCommunityChallengesEnabled) && (
+        <div className="mt-6 grid gap-6 lg:grid-cols-2">
+          {isDetectiveMissionsEnabled && <MissionPanel />}
+          {isCommunityChallengesEnabled && <CommunityChallengePanel />}
+        </div>
+      )}
+
       {/* Trends chart + Recommendations */}
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="mt-6 grid gap-6 lg:grid-cols-2">
         <TrendChart data={history} />
 
         {/* Recommendations */}

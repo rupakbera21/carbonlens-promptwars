@@ -179,8 +179,10 @@ export default function DashboardPage() {
   }) => {
     // Optimistic Update!
     if (worldState) {
-      const isPositive = data.category === "food" && data.subCategory.includes("plant");
-      const impact = isPositive ? 15 : -35; // Amplified impact for rapid change
+      // Rough estimation for optimistic UI matching GamificationEngine
+      const estimatedCo2eKg = data.quantity * (data.category === "energy" ? 0.5 : data.category === "transport" ? 0.2 : 0.1);
+      const isPositive = estimatedCo2eKg < 5;
+      const impact = isPositive ? 15 : -15; 
       
       let nextPhi = worldState.phiScore + impact;
       

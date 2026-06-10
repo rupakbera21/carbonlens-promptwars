@@ -9,10 +9,10 @@ export class GamificationEngineService {
     // A simplified XP / PHI logic based on carbon footprint.
     if (activity.co2eKg < 5) {
       xpAwarded = 50;
-      phiImpact = 0.5;
+      phiImpact = 15.0; // Huge visual impact for the user
     } else if (activity.co2eKg > 50) {
       xpAwarded = 0;
-      phiImpact = -0.5;
+      phiImpact = -15.0;
     }
 
     const state = await prisma.worldState.findUnique({

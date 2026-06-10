@@ -526,7 +526,9 @@ export function LivingCarbonWorld({ worldState, lastAction, isGameOver }: Living
                   ? "Thriving World"
                   : (worldState.phiScore % 100) > 50
                     ? "Stable Orbit"
-                    : "Critical Condition"}
+                    : (worldState.phiScore % 100) <= 0 && worldState.phiScore <= 0
+                      ? "Barren World"
+                      : "Critical Condition"}
           </p>
         </div>
       </div>

@@ -220,11 +220,10 @@ export function EcoPlatformer({ onComplete, onClose }: EcoPlatformerProps) {
       // Player
       ctx.save();
       if (player.direction === -1) {
-        ctx.translate(player.x + player.width, player.y);
-        ctx.scale(-1, 1);
-        ctx.fillText("🧑", player.width / 2, player.height / 2);
+        // Just draw a different emoji or the same one unscaled so the face doesn't flip weirdly
+        ctx.fillText("🧑‍🌾", player.x + player.width / 2, player.y + player.height / 2);
       } else {
-        ctx.fillText("🧑", player.x + player.width / 2, player.y + player.height / 2);
+        ctx.fillText("🧑‍🚀", player.x + player.width / 2, player.y + player.height / 2);
       }
       ctx.restore();
 

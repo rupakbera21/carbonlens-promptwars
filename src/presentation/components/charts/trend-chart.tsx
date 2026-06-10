@@ -29,30 +29,30 @@ interface TrendChartProps {
 }
 
 /**
- * TrendChart — visualizes daily CO₂e trends as an area chart.
+ * TrendChart — visualizes hourly CO₂e trends as an area chart.
  * Includes an accessible data table hidden for screen readers.
  */
 export function TrendChart({ data, className }: TrendChartProps) {
   const chartData = data.map((point) => ({
     ...point,
-    label: new Date(point.periodStart).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
+    label: new Date(point.periodStart).toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
     }),
   }));
 
   return (
     <Card className={cn(className)}>
       <CardHeader className="pb-2">
-        <CardTitle className="text-lg">Daily Trends</CardTitle>
+        <CardTitle className="text-lg">Hourly Trends</CardTitle>
       </CardHeader>
       <CardContent>
         {/* Screen reader table */}
         <table className="sr-only">
-          <caption>Daily carbon emissions trend</caption>
+          <caption>Hourly carbon emissions trend</caption>
           <thead>
             <tr>
-              <th>Date</th>
+              <th>Time</th>
               <th>CO₂e (kg)</th>
               <th>Score</th>
             </tr>

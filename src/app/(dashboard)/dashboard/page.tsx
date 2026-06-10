@@ -44,6 +44,11 @@ interface ScoreData {
     totalCo2eKg: number;
     score: number;
   }>;
+  hourlyHistory: Array<{
+    periodStart: string;
+    totalCo2eKg: number;
+    score: number;
+  }>;
 }
 
 interface GoalData {
@@ -116,7 +121,25 @@ export default function DashboardPage() {
 
   useEffect(() => {
     fetchData();
+
+    // Set up polling for external world state changes
+    const interval = setInterval(fetchData, 30000);
+    return () => clearInterval(interval);
   }, [fetchData]);
+
+  // Live decaying effect
+  useEffect(() => {
+    if (!isGameOver && worldState && worldState.phiScore > 0) {
+      const decayInterval = setInterval(() => {
+        setWorldState((prev: any) => {
+          if (!prev) return prev;
+          const newScore = Math.max(0, prev.phiScore - 0.005);
+          return { ...prev, phiScore: newScore };
+        });
+      }, 1000);
+      return () => clearInterval(decayInterval);
+    }
+  }, [isGameOver, worldState?.phiScore]);
 
   useEffect(() => {
     const lockout = localStorage.getItem("carbonlens_game_over");
@@ -135,6 +158,17 @@ export default function DashboardPage() {
     }
   }, [isGameOver]);
 
+  // Ensure game over happens if phiScore hits 0
+  useEffect(() => {
+    if (worldState && worldState.phiScore <= 0 && !isGameOver) {
+      setIsGameOver(true);
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      tomorrow.setHours(0, 0, 0, 0);
+      localStorage.setItem("carbonlens_game_over", tomorrow.getTime().toString());
+    }
+  }, [worldState?.phiScore, isGameOver]);
+
   const handleLogActivity = async (data: {
     category: string;
     subCategory: string;
@@ -149,18 +183,10 @@ export default function DashboardPage() {
       const impact = isPositive ? 15 : -35; // Amplified impact for rapid change
       
       let nextPhi = worldState.phiScore + impact;
-      if (nextPhi <= 0) {
-        nextPhi = 0;
-        setIsGameOver(true);
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        tomorrow.setHours(0, 0, 0, 0);
-        localStorage.setItem("carbonlens_game_over", tomorrow.getTime().toString());
-      }
       
       setWorldState((prev: any) => ({
         ...prev,
-        phiScore: nextPhi,
+        phiScore: Math.max(0, nextPhi),
         airQuality: Math.max(0, Math.min(100, prev.airQuality + (isPositive ? 1 : -3))),
         forestHealth: Math.max(0, Math.min(100, prev.forestHealth + impact)),
         waterQuality: Math.max(0, Math.min(100, prev.waterQuality + impact)),
@@ -202,6 +228,7 @@ export default function DashboardPage() {
   // Week-over-week change
   const history = scoreData?.weeklyHistory ?? [];
   const dailyHistory = scoreData?.dailyHistory ?? [];
+  const hourlyHistory = scoreData?.hourlyHistory ?? [];
   const weekChange =
     history.length >= 2
       ? history[history.length - 1].totalCo2eKg - history[history.length - 2].totalCo2eKg
@@ -349,7 +376,7 @@ export default function DashboardPage() {
 
       {/* Trends chart + Recommendations */}
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
-        <TrendChart data={dailyHistory} />
+        <TrendChart data={hourlyHistory} />
 
         {/* Recommendations */}
         <Card>

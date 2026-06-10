@@ -17,8 +17,9 @@ export async function GET() {
     const auth = await requireAuth();
     if (auth instanceof NextResponse) return auth;
 
-    const [currentScore, dailyHistory, weeklyHistory, monthlyHistory] = await Promise.all([
+    const [currentScore, hourlyHistory, dailyHistory, weeklyHistory, monthlyHistory] = await Promise.all([
       scoreService.getCurrentScore(auth.userId),
+      scoreService.getScoreHistory(auth.userId, "hourly", 24),
       scoreService.getScoreHistory(auth.userId, "daily", 14),
       scoreService.getScoreHistory(auth.userId, "weekly", 8),
       scoreService.getScoreHistory(auth.userId, "monthly", 6),
@@ -30,6 +31,7 @@ export async function GET() {
         explanation: currentScore
           ? ScoreCalculator.explainScore(currentScore.score)
           : "No data yet. Log your first activity to see your score!",
+        hourlyHistory,
         dailyHistory,
         weeklyHistory,
         monthlyHistory,

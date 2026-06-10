@@ -4,6 +4,7 @@ import React, { useRef, useMemo, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Stars, Environment, Float, Sparkles } from "@react-three/drei";
 import * as THREE from "three";
+import { Volume2, VolumeX } from "lucide-react";
 
 interface WorldState {
   phiScore: number;
@@ -62,12 +63,12 @@ function ActionShockwave({ lastAction }: { lastAction?: { type: "positive" | "ne
   );
 }
 
-function useAudioEngine(isGameOver?: boolean) {
+function useAudioEngine(isGameOver: boolean | undefined, isSoundEnabled: boolean) {
   const audioCtxRef = useRef<AudioContext | null>(null);
   const explosionPlayed = useRef(false);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || !isSoundEnabled) return;
     
     const handleInteraction = () => {
       if (!audioCtxRef.current) {
@@ -83,7 +84,7 @@ function useAudioEngine(isGameOver?: boolean) {
   }, []);
 
   useEffect(() => {
-    if (isGameOver && !explosionPlayed.current && audioCtxRef.current) {
+    if (isGameOver && !explosionPlayed.current && audioCtxRef.current && isSoundEnabled) {
       explosionPlayed.current = true;
       const ctx = audioCtxRef.current;
       
@@ -265,7 +266,9 @@ function Planet({ state, isGameOver }: { state: WorldState, isGameOver?: boolean
 }
 
 export function LivingCarbonWorld({ worldState, lastAction, isGameOver }: LivingCarbonWorldProps) {
-  useAudioEngine(isGameOver);
+  const [isSoundEnabled, setIsSoundEnabled] = useState(true);
+  
+  useAudioEngine(isGameOver, isSoundEnabled);
 
   return (
     <div
@@ -310,7 +313,7 @@ export function LivingCarbonWorld({ worldState, lastAction, isGameOver }: Living
       {/* Floating Glassmorphism Overlay */}
       <div className="absolute bottom-6 left-6 rounded-2xl border border-white/20 bg-black/40 p-5 text-white shadow-2xl backdrop-blur-xl transition-all duration-300 hover:bg-black/50 hover:border-white/30">
         <h3 className="bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-2xl font-black text-transparent drop-shadow-md">
-          Planet Health: {worldState.phiScore.toFixed(1)}%
+          Planet Health: {worldState.phiScore.toFixed(2)}%
         </h3>
         <div className="mt-2 flex items-center gap-2">
           <span className="relative flex h-3 w-3">
@@ -326,6 +329,14 @@ export function LivingCarbonWorld({ worldState, lastAction, isGameOver }: Living
           </p>
         </div>
       </div>
+      
+      <button
+        onClick={() => setIsSoundEnabled(!isSoundEnabled)}
+        className="absolute right-6 top-6 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white backdrop-blur-md transition-all hover:bg-black/60"
+        aria-label="Toggle Sound"
+      >
+        {isSoundEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
+      </button>
     </div>
   );
 }

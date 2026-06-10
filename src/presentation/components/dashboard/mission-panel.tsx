@@ -35,16 +35,14 @@ export function MissionPanel({ onMissionComplete }: MissionPanelProps) {
           let fetchedMissions: Mission[] = data.data;
           
           // Inject Random Platformer Mission (Valid for today)
-          const randomChance = Math.random();
-          if (randomChance > 0.1) { // 90% chance for demo purposes
-            const platformerMission = {
-              id: "eco-platformer-daily",
-              missionType: "Eco-Platformer Rescue",
-              progress: 0,
-              completed: false,
-            };
-            fetchedMissions = [platformerMission, ...fetchedMissions];
-          }
+          const platformerMission = {
+            id: "eco-platformer-daily",
+            missionType: "Eco-Platformer Rescue",
+            progress: 0,
+            completed: false,
+          };
+          fetchedMissions = [platformerMission, ...fetchedMissions];
+          
           setMissions(fetchedMissions);
         }
       })
@@ -83,33 +81,58 @@ export function MissionPanel({ onMissionComplete }: MissionPanelProps) {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {missions.map((mission) => (
-          <div 
-            key={mission.id} 
-            className={`space-y-2 rounded-lg p-2 transition-colors ${mission.missionType === "Eco-Platformer Rescue" && !mission.completed ? "cursor-pointer hover:bg-indigo-500/10 border border-indigo-500/30" : ""}`}
-            onClick={() => {
-              if (!mission.completed) {
-                handleStartMission(mission.id, mission.missionType);
-              }
-            }}
-          >
-            <div className="flex items-center justify-between text-sm">
-              <span className="flex items-center gap-2 font-medium text-slate-200">
-                {mission.completed && <ShieldCheck className="h-4 w-4 text-green-400" />}
-                {mission.missionType}
-                {mission.missionType === "Eco-Platformer Rescue" && !mission.completed && (
-                  <span className="ml-2 rounded bg-indigo-500 px-1.5 py-0.5 text-xs text-white">Play Now</span>
-                )}
-              </span>
-              <span className="text-muted-foreground">{mission.progress}%</span>
+        {missions.map((mission) => {
+          if (mission.missionType === "Eco-Platformer Rescue") {
+            return (
+              <div 
+                key={mission.id} 
+                className={`relative overflow-hidden rounded-xl border-2 p-4 transition-all ${!mission.completed ? "cursor-pointer border-indigo-500 bg-indigo-500/10 hover:bg-indigo-500/20 hover:scale-[1.02]" : "border-slate-800 bg-slate-900/50"}`}
+                onClick={() => {
+                  if (!mission.completed) {
+                    handleStartMission(mission.id, mission.missionType);
+                  }
+                }}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="flex items-center gap-2 text-lg font-bold text-indigo-300">
+                    {mission.completed && <ShieldCheck className="h-5 w-5 text-green-400" />}
+                    {mission.missionType}
+                  </span>
+                  {!mission.completed && (
+                    <span className="animate-pulse rounded bg-indigo-600 px-3 py-1 text-sm font-black text-white shadow-[0_0_10px_rgba(79,70,229,0.8)]">
+                      🕹️ PLAY NOW
+                    </span>
+                  )}
+                </div>
+                <p className="mb-3 text-sm text-indigo-200/70">
+                  {mission.completed ? "Mission Complete! World saved." : "Critical mission! Jump and collect Eco-Coins to instantly restore Planet Health!"}
+                </p>
+                <Progress
+                  value={mission.progress}
+                  className="h-2 bg-indigo-950"
+                  indicatorClassName={mission.completed ? "bg-green-500" : "bg-indigo-500"}
+                />
+              </div>
+            );
+          }
+
+          return (
+            <div key={mission.id} className="space-y-2 p-2">
+              <div className="flex items-center justify-between text-sm">
+                <span className="flex items-center gap-2 font-medium text-slate-200">
+                  {mission.completed && <ShieldCheck className="h-4 w-4 text-green-400" />}
+                  {mission.missionType}
+                </span>
+                <span className="text-muted-foreground">{mission.progress}%</span>
+              </div>
+              <Progress
+                value={mission.progress}
+                className="h-2"
+                indicatorClassName={mission.completed ? "bg-green-500" : "bg-indigo-500"}
+              />
             </div>
-            <Progress
-              value={mission.progress}
-              className="h-2"
-              indicatorClassName={mission.completed ? "bg-green-500" : "bg-indigo-500"}
-            />
-          </div>
-        ))}
+          );
+        })}
       </CardContent>
       {isPlatformerOpen && (
         <EcoPlatformer 

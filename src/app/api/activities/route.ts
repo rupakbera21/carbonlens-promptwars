@@ -11,7 +11,7 @@ import { ScoreService } from "@/application/services/score-service";
 import { RecommendationService } from "@/application/services/recommendation-service";
 import { PrismaActivityRepository } from "@/infrastructure/database/activity-repository-impl";
 import { PrismaEmissionFactorRepository } from "@/infrastructure/database/emission-factor-repository-impl";
-import { getWeekStart, getWeekEnd, getDayStart, getDayEnd } from "@/shared/utils/date";
+import { getWeekStart, getWeekEnd, getDayStart, getDayEnd, getHourStart, getHourEnd } from "@/shared/utils/date";
 
 const activityRepo = new PrismaActivityRepository();
 const emissionFactorRepo = new PrismaEmissionFactorRepository();
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
       ...input,
     });
 
-    // Recalculate weekly and daily score after logging
+    // Recalculate weekly, daily, and hourly score after logging
     const now = new Date();
     await Promise.all([
       scoreService.calculateAndStore(
@@ -75,6 +75,12 @@ export async function POST(request: NextRequest) {
         "daily",
         getDayStart(now),
         getDayEnd(now),
+      ),
+      scoreService.calculateAndStore(
+        auth.userId,
+        "hourly",
+        getHourStart(now),
+        getHourEnd(now),
       ),
     ]);
 

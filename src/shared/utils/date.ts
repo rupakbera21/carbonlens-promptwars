@@ -52,6 +52,20 @@ export function getDayEnd(date: Date = new Date()): Date {
   return d;
 }
 
+/** Get the start of the hour */
+export function getHourStart(date: Date = new Date()): Date {
+  const d = new Date(date);
+  d.setUTCMinutes(0, 0, 0);
+  return d;
+}
+
+/** Get the end of the hour */
+export function getHourEnd(date: Date = new Date()): Date {
+  const d = new Date(date);
+  d.setUTCMinutes(59, 59, 999);
+  return d;
+}
+
 /** Format a date as YYYY-MM-DD */
 export function formatDate(date: Date): string {
   return date.toISOString().split("T")[0];

@@ -20,6 +20,15 @@ interface LivingCarbonWorldProps {
   isGameOver?: boolean;
 }
 
+const ECO_HINTS = [
+  "Hint: Switching to renewable energy reduces your footprint significantly!",
+  "Hint: Plant-based meals save up to 2.5kg of CO2 compared to meat.",
+  "Hint: Unplugging devices when not in use stops vampire energy drain.",
+  "Hint: Carpooling or taking public transit cuts your emissions by half.",
+  "Hint: Recycling paper saves trees and preserves the planet's lungs.",
+  "Hint: A 5-minute shower saves dozens of gallons of water.",
+];
+
 function ActionShockwave({ lastAction }: { lastAction?: { type: "positive" | "negative"; timestamp: number } | null }) {
   const meshRef = useRef<THREE.Mesh>(null);
   const materialRef = useRef<THREE.MeshBasicMaterial>(null);
@@ -368,8 +377,22 @@ function ProceduralCity({ phiScore, waterQuality }: { phiScore: number, waterQua
 
 export function LivingCarbonWorld({ worldState, lastAction, isGameOver }: LivingCarbonWorldProps) {
   const [isSoundEnabled, setIsSoundEnabled] = useState(true);
+  const [activeHint, setActiveHint] = useState<string | null>(null);
   
   useAudioEngine(isGameOver, isSoundEnabled);
+
+  useEffect(() => {
+    if (isGameOver) return;
+    const interval = setInterval(() => {
+      // 50% chance to show a hint every 15 seconds
+      if (Math.random() > 0.5) {
+        const hint = ECO_HINTS[Math.floor(Math.random() * ECO_HINTS.length)];
+        setActiveHint(hint);
+        setTimeout(() => setActiveHint(null), 7000); // hide after 7s
+      }
+    }, 15000);
+    return () => clearInterval(interval);
+  }, [isGameOver]);
 
   return (
     <div
@@ -438,6 +461,16 @@ export function LivingCarbonWorld({ worldState, lastAction, isGameOver }: Living
       >
         {isSoundEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
       </button>
+
+      {/* Floating Hint Alert */}
+      <div 
+        className={`absolute left-1/2 top-6 z-20 -translate-x-1/2 rounded-full border border-teal-500/30 bg-black/70 px-6 py-2 text-sm font-medium text-teal-200 shadow-[0_0_20px_rgba(20,184,166,0.3)] backdrop-blur-md transition-all duration-500 ${
+          activeHint ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0 pointer-events-none"
+        }`}
+      >
+        <span className="mr-2 animate-pulse text-teal-400">💡</span>
+        {activeHint}
+      </div>
     </div>
   );
 }

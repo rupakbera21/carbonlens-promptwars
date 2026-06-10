@@ -10,7 +10,7 @@ export async function GET() {
     if (auth instanceof NextResponse) return auth;
 
     let worldState = null;
-    let achievements = [];
+    let achievements: any[] = [];
     try {
       worldState = await prisma.worldState.findUnique({
         where: { userId: auth.userId },

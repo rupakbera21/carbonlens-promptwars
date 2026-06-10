@@ -3,16 +3,34 @@ import { prisma } from "@/infrastructure/database/prisma-client";
 
 export class GamificationEngineService {
   async processActivity(activity: Activity): Promise<void> {
-    let xpAwarded = 10;
     let phiImpact = 0;
 
-    // A simplified XP / PHI logic based on carbon footprint.
-    if (activity.co2eKg < 5) {
-      xpAwarded = 50;
-      phiImpact = 15.0; // Huge visual impact for the user
-    } else if (activity.co2eKg > 50) {
+    // Baselines: Average daily CO2e footprint for typical actions (in kg)
+    const baselines: Record<string, number> = {
+      transport: 15, // E.g., average commute
+      energy: 20,    // E.g., daily household energy
+      food: 10,      // E.g., meat-heavy diet average
+      waste: 5       // E.g., daily trash
+    };
+
+    const baseline = baselines[activity.category.toLowerCase()] || 10;
+    
+    // Difference: Positive means you saved carbon compared to average. Negative means excess pollution.
+    const difference = baseline - activity.co2eKg;
+
+    // Multiplier for RAPID progression so the user sees changes immediately
+    const impactMultiplier = 2.0; 
+    
+    phiImpact = difference * impactMultiplier;
+    
+    // Cap extreme impacts per single activity so one flight doesn't drop score by -5000 instantly,
+    // but still drops it by a massive amount like -50.
+    phiImpact = Math.max(-60, Math.min(40, phiImpact));
+
+    if (phiImpact > 0) {
+      xpAwarded = Math.floor(phiImpact * 3);
+    } else {
       xpAwarded = 0;
-      phiImpact = -15.0;
     }
 
     const state = await prisma.worldState.findUnique({

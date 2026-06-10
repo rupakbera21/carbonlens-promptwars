@@ -167,10 +167,21 @@ export default function DashboardPage() {
   }) => {
     // Optimistic Update!
     if (worldState) {
-      // Rough estimation for optimistic UI matching GamificationEngine
-      const estimatedCo2eKg = data.quantity * (data.category === "energy" ? 0.5 : data.category === "transport" ? 0.2 : 0.1);
-      const isPositive = estimatedCo2eKg < 5;
-      const impact = isPositive ? 15 : -15; 
+      // Dynamic optimistic UI matching GamificationEngine
+      const baselines: Record<string, number> = {
+        transport: 15,
+        energy: 20,
+        food: 10,
+        waste: 5
+      };
+      const category = data.category.toLowerCase();
+      const baseline = baselines[category] || 10;
+      
+      const estimatedCo2eKg = data.quantity * (category === "energy" ? 0.5 : category === "transport" ? 0.2 : 0.1);
+      const difference = baseline - estimatedCo2eKg;
+      let impact = difference * 2.0;
+      impact = Math.max(-60, Math.min(40, impact));
+      const isPositive = impact > 0;
       
       let nextPhi = worldState.phiScore + impact;
       

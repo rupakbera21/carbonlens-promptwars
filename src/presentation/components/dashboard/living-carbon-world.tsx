@@ -93,7 +93,7 @@ function useAudioEngine(isGameOver: boolean | undefined, isSoundEnabled: boolean
         ambientOsc.frequency.setValueAtTime(110, ctx.currentTime); // Low A hum
         
         ambientGain = ctx.createGain();
-        ambientGain.gain.setValueAtTime(0.05, ctx.currentTime);
+        ambientGain.gain.setValueAtTime(0.15, ctx.currentTime);
         
         ambientOsc.connect(ambientGain);
         ambientGain.connect(ctx.destination);
@@ -444,8 +444,8 @@ function OrbitingPlanet({
 }
 
 function SolarSystem({ state, isGameOver }: { state: WorldState, isGameOver?: boolean }) {
-  const totalPlanets = Math.floor(state.phiScore / 100) + 1;
-  const activePlanetScore = state.phiScore % 100;
+  const totalPlanets = Math.floor(state.phiScore / 110) + 1;
+  const activePlanetScore = state.phiScore % 110;
 
   const planets = Array.from({ length: totalPlanets }).map((_, i) => {
     const isActive = i === totalPlanets - 1;

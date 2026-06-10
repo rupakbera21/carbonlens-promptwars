@@ -43,3 +43,43 @@ export async function GET() {
     return handleApiError(error);
   }
 }
+
+export async function POST(request: Request) {
+  try {
+    const auth = await requireAuth();
+    if (auth instanceof NextResponse) return auth;
+
+    const body = await request.json();
+    const { boost } = body;
+
+    if (typeof boost !== "number") {
+      return NextResponse.json({ error: "Invalid boost value" }, { status: 400 });
+    }
+
+    const state = await prisma.worldState.upsert({
+      where: { userId: auth.userId },
+      create: {
+        userId: auth.userId,
+        ecoPoints: boost,
+        phiScore: boost,
+        forestHealth: boost,
+        waterQuality: boost,
+        airQuality: boost,
+        biodiversity: boost,
+        level: 1,
+      },
+      update: {
+        ecoPoints: { increment: boost },
+        phiScore: { increment: boost },
+        forestHealth: { increment: boost },
+        waterQuality: { increment: boost },
+        airQuality: { increment: boost },
+        biodiversity: { increment: boost },
+      },
+    });
+
+    return NextResponse.json(successResponse(state));
+  } catch (error) {
+    return handleApiError(error);
+  }
+}

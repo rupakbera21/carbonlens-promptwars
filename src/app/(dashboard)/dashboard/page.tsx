@@ -195,13 +195,23 @@ export default function DashboardPage() {
     }
   };
 
-  const handleMissionComplete = (score: number) => {
+  const handleMissionComplete = async (score: number) => {
     if (worldState) {
       setWorldState((prev: any) => ({
         ...prev,
         phiScore: Math.max(0, prev.phiScore + score),
         forestHealth: Math.max(0, Math.min(100, prev.forestHealth + score)),
       }));
+
+      try {
+        await fetch("/api/world-state", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ boost: score }),
+        });
+      } catch (err) {
+        console.error("Failed to save mini-game score", err);
+      }
     }
   };
 

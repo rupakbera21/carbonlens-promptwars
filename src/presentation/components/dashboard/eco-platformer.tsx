@@ -83,6 +83,8 @@ export function EcoPlatformer({ onComplete, onClose }: EcoPlatformerProps) {
       { x: 1000, y: 326, width: 24, height: 24, vx: 2, minX: 800, maxX: 2000, dead: false },
     ];
 
+    const flagpole = { x: 2250, y: 100, width: 20, height: 250 };
+
     let currentScore = 0;
     const MAX_SCORE = coins.length * 10;
 
@@ -188,8 +190,10 @@ export function EcoPlatformer({ onComplete, onClose }: EcoPlatformerProps) {
         setGameState("gameover");
       }
 
-      // Win condition
-      if (currentScore === MAX_SCORE) {
+      // Win condition (Touch Flagpole)
+      if (checkCollision(player, flagpole)) {
+        currentScore = 100; // Bonus to next level!
+        setScore(currentScore);
         setGameState("won");
       }
 
@@ -221,6 +225,12 @@ export function EcoPlatformer({ onComplete, onClose }: EcoPlatformerProps) {
         ctx.fillStyle = "#166534";
       }
 
+      // Flagpole
+      ctx.fillStyle = "#d1d5db"; // Pole
+      ctx.fillRect(flagpole.x, flagpole.y, flagpole.width / 4, flagpole.height);
+      ctx.fillStyle = "#22c55e"; // Flag
+      ctx.fillRect(flagpole.x + flagpole.width / 4, flagpole.y + 10, 60, 40);
+
       // Fonts
       ctx.font = "24px Arial";
       ctx.textAlign = "center";
@@ -248,14 +258,9 @@ export function EcoPlatformer({ onComplete, onClose }: EcoPlatformerProps) {
         }
       }
 
-      // Player
+      // Player (Always same character)
       ctx.save();
-      if (player.direction === -1) {
-        // Just draw a different emoji or the same one unscaled so the face doesn't flip weirdly
-        ctx.fillText("🧑‍🌾", player.x + player.width / 2, player.y + player.height / 2);
-      } else {
-        ctx.fillText("🧑‍🚀", player.x + player.width / 2, player.y + player.height / 2);
-      }
+      ctx.fillText("🧑‍🚀", player.x + player.width / 2, player.y + player.height / 2);
       ctx.restore();
 
       // Restore camera transform

@@ -12,12 +12,14 @@ import { RecommendationService } from "@/application/services/recommendation-ser
 import { PrismaActivityRepository } from "@/infrastructure/database/activity-repository-impl";
 import { PrismaEmissionFactorRepository } from "@/infrastructure/database/emission-factor-repository-impl";
 import { getWeekStart, getWeekEnd, getDayStart, getDayEnd, getHourStart, getHourEnd } from "@/shared/utils/date";
+import { GamificationEngineService } from "@/application/services/gamification-engine";
 
 const activityRepo = new PrismaActivityRepository();
 const emissionFactorRepo = new PrismaEmissionFactorRepository();
 const activityService = new ActivityService(activityRepo, emissionFactorRepo);
 const scoreService = new ScoreService(activityRepo);
 const recommendationService = new RecommendationService(activityRepo);
+const gamificationEngine = new GamificationEngineService();
 
 /**
  * GET /api/activities — List user's activities (paginated).
@@ -82,6 +84,7 @@ export async function POST(request: NextRequest) {
         getHourStart(now),
         getHourEnd(now),
       ),
+      gamificationEngine.processActivity(activity),
     ]);
 
     // Generate recommendations asynchronously (fire-and-forget)

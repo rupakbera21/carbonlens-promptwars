@@ -49,8 +49,8 @@ export class GamificationEngineService {
     }
 
     // Award badges for progression milestones
-    const oldMilestone = Math.floor(oldPhi / 100);
-    const newMilestone = Math.floor(newPhi / 100);
+    const oldMilestone = Math.floor(oldPhi / 110);
+    const newMilestone = Math.floor(newPhi / 110);
     if (newMilestone > oldMilestone && newMilestone >= 1) {
       // Create achievement based on tier
       let achievementType = `Planet ${newMilestone + 1} Restored`;

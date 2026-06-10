@@ -23,16 +23,11 @@ export class ScoreService {
       periodEnd,
     );
 
-    const { score, totalCo2eKg, breakdown } =
-      ScoreCalculator.compute(activities);
+    const { score, totalCo2eKg, breakdown } = ScoreCalculator.compute(activities);
 
     const record = await prisma.carbonScore.upsert({
       where: {
-        id: await this.findExistingScoreId(
-          userId,
-          periodType,
-          periodStart,
-        ),
+        id: await this.findExistingScoreId(userId, periodType, periodStart),
       },
       update: {
         score,

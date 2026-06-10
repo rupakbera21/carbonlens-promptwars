@@ -40,9 +40,9 @@ export function CategoryBreakdownCard({
   };
   const total = Object.values(data).reduce((sum, v) => sum + v, 0);
 
-  const categories = (
-    Object.entries(data) as [keyof CategoryBreakdown, number][]
-  ).sort(([, a], [, b]) => b - a);
+  const categories = (Object.entries(data) as [keyof CategoryBreakdown, number][]).sort(
+    ([, a], [, b]) => b - a,
+  );
 
   return (
     <Card className={cn(className)}>
@@ -65,9 +65,7 @@ export function CategoryBreakdownCard({
               <tr key={cat}>
                 <td>{CATEGORY_LABELS[cat]}</td>
                 <td>{formatCo2e(value)}</td>
-                <td>
-                  {total > 0 ? Math.round((value / total) * 100) : 0}%
-                </td>
+                <td>{total > 0 ? Math.round((value / total) * 100) : 0}%</td>
               </tr>
             ))}
           </tbody>
@@ -83,9 +81,7 @@ export function CategoryBreakdownCard({
                 <div className="flex items-center justify-between text-sm">
                   <div className="flex items-center gap-2">
                     <Icon className="h-4 w-4 text-muted-foreground" />
-                    <span className="font-medium">
-                      {CATEGORY_LABELS[cat]}
-                    </span>
+                    <span className="font-medium">{CATEGORY_LABELS[cat]}</span>
                   </div>
                   <span className="tabular-nums text-muted-foreground">
                     {formatCo2e(value)}

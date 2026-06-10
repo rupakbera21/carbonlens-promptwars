@@ -7,9 +7,7 @@ import type { EmissionFactor } from "@/domain/entities/emission-factor";
  * Emission factors are reference data that rarely change,
  * making them ideal for caching (see CacheAdapter).
  */
-export class PrismaEmissionFactorRepository
-  implements EmissionFactorRepository
-{
+export class PrismaEmissionFactorRepository implements EmissionFactorRepository {
   async findById(id: string): Promise<EmissionFactor | null> {
     const record = await prisma.emissionFactor.findUnique({
       where: { id },
@@ -17,10 +15,7 @@ export class PrismaEmissionFactorRepository
     return record ? (record as EmissionFactor) : null;
   }
 
-  async findByCategory(
-    category: string,
-    region = "global",
-  ): Promise<EmissionFactor[]> {
+  async findByCategory(category: string, region = "global"): Promise<EmissionFactor[]> {
     const records = await prisma.emissionFactor.findMany({
       where: {
         category,

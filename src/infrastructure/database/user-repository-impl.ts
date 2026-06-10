@@ -3,11 +3,7 @@ import type {
   UserRepository,
   UserExportData,
 } from "@/domain/repositories/user-repository";
-import type {
-  User,
-  CreateUserInput,
-  SafeUser,
-} from "@/domain/entities/user";
+import type { User, CreateUserInput, SafeUser } from "@/domain/entities/user";
 
 /**
  * Prisma implementation of the UserRepository port.

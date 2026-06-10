@@ -16,13 +16,8 @@ export class RuleEngine {
    * Evaluate all conditions against the given context.
    * Returns true only if ALL conditions pass (AND logic).
    */
-  evaluate(
-    conditions: RuleCondition[],
-    context: Record<string, unknown>,
-  ): boolean {
-    return conditions.every((condition) =>
-      this.evaluateCondition(condition, context),
-    );
+  evaluate(conditions: RuleCondition[], context: Record<string, unknown>): boolean {
+    return conditions.every((condition) => this.evaluateCondition(condition, context));
   }
 
   private evaluateCondition(
@@ -40,39 +35,29 @@ export class RuleEngine {
 
       case "greaterThan":
         return (
-          typeof contextValue === "number" &&
-          contextValue > (condition.value as number)
+          typeof contextValue === "number" && contextValue > (condition.value as number)
         );
 
       case "lessThan":
         return (
-          typeof contextValue === "number" &&
-          contextValue < (condition.value as number)
+          typeof contextValue === "number" && contextValue < (condition.value as number)
         );
 
       case "greaterThanOrEqual":
         return (
-          typeof contextValue === "number" &&
-          contextValue >= (condition.value as number)
+          typeof contextValue === "number" && contextValue >= (condition.value as number)
         );
 
       case "lessThanOrEqual":
         return (
-          typeof contextValue === "number" &&
-          contextValue <= (condition.value as number)
+          typeof contextValue === "number" && contextValue <= (condition.value as number)
         );
 
       case "in":
-        return (
-          Array.isArray(condition.value) &&
-          condition.value.includes(contextValue)
-        );
+        return Array.isArray(condition.value) && condition.value.includes(contextValue);
 
       case "notIn":
-        return (
-          Array.isArray(condition.value) &&
-          !condition.value.includes(contextValue)
-        );
+        return Array.isArray(condition.value) && !condition.value.includes(contextValue);
 
       case "contains":
         return (

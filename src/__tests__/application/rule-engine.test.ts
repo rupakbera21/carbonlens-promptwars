@@ -39,12 +39,8 @@ describe("RuleEngine", () => {
         },
       ];
 
-      expect(
-        engine.evaluate(conditions, { subCategory: "car_petrol" }),
-      ).toBe(true);
-      expect(
-        engine.evaluate(conditions, { subCategory: "bus" }),
-      ).toBe(false);
+      expect(engine.evaluate(conditions, { subCategory: "car_petrol" })).toBe(true);
+      expect(engine.evaluate(conditions, { subCategory: "bus" })).toBe(false);
     });
 
     it("should handle 'notEquals' operator", () => {
@@ -52,12 +48,8 @@ describe("RuleEngine", () => {
         { field: "status", operator: "notEquals", value: "completed" },
       ];
 
-      expect(
-        engine.evaluate(conditions, { status: "active" }),
-      ).toBe(true);
-      expect(
-        engine.evaluate(conditions, { status: "completed" }),
-      ).toBe(false);
+      expect(engine.evaluate(conditions, { status: "active" })).toBe(true);
+      expect(engine.evaluate(conditions, { status: "completed" })).toBe(false);
     });
 
     it("should handle 'lessThan' operator", () => {

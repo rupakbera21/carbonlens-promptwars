@@ -16,9 +16,7 @@ export async function GET() {
     const auth = await requireAuth();
     if (auth instanceof NextResponse) return auth;
 
-    const recs = await recommendationService.getUserRecommendations(
-      auth.userId,
-    );
+    const recs = await recommendationService.getUserRecommendations(auth.userId);
     return NextResponse.json(successResponse(recs));
   } catch (error) {
     return handleApiError(error);

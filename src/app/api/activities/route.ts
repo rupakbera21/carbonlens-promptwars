@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/infrastructure/middleware/auth-middleware";
 import { handleApiError } from "@/infrastructure/middleware/error-handler";
-import { createActivitySchema, activityQuerySchema } from "@/shared/schemas/activity-schema";
+import {
+  createActivitySchema,
+  activityQuerySchema,
+} from "@/shared/schemas/activity-schema";
 import { successResponse } from "@/shared/types/api-response";
 import { ActivityService } from "@/application/services/activity-service";
 import { ScoreService } from "@/application/services/score-service";
@@ -27,10 +30,7 @@ export async function GET(request: NextRequest) {
     const params = Object.fromEntries(request.nextUrl.searchParams);
     const query = activityQuerySchema.parse(params);
 
-    const result = await activityService.getUserActivities(
-      auth.userId,
-      query,
-    );
+    const result = await activityService.getUserActivities(auth.userId, query);
 
     return NextResponse.json(
       successResponse(result.data, {

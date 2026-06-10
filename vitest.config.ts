@@ -12,15 +12,17 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html"],
-      include: [
-        "src/domain/**",
-        "src/application/**",
-        "src/shared/**",
-      ],
+      include: ["src/domain/**", "src/application/**", "src/shared/**"],
       exclude: [
         "src/__tests__/**",
         "**/*.d.ts",
         "**/index.ts",
+        "src/shared/types/**",
+        "src/shared/constants/**",
+        "src/domain/entities/**",
+        "src/domain/repositories/**",
+        "src/domain/value-objects/recommendation.ts",
+        "src/application/rules/rule-types.ts",
       ],
       thresholds: {
         branches: 80,

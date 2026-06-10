@@ -76,10 +76,8 @@ export class RecommendationService {
                   category: rule.category,
                   title: action.params.title as string,
                   description: action.params.description as string,
-                  potentialSavingKg:
-                    (action.params.potentialSavingKg as number) ?? 0,
-                  priority:
-                    (action.params.priority as string) ?? "medium",
+                  potentialSavingKg: (action.params.potentialSavingKg as number) ?? 0,
+                  priority: (action.params.priority as string) ?? "medium",
                 },
               });
               newRecommendations.push(rec as unknown as Recommendation);
@@ -100,20 +98,14 @@ export class RecommendationService {
     return records as unknown as Recommendation[];
   }
 
-  async dismissRecommendation(
-    id: string,
-    userId: string,
-  ): Promise<void> {
+  async dismissRecommendation(id: string, userId: string): Promise<void> {
     await prisma.recommendation.updateMany({
       where: { id, userId },
       data: { status: "dismissed", dismissedAt: new Date() },
     });
   }
 
-  async acceptRecommendation(
-    id: string,
-    userId: string,
-  ): Promise<void> {
+  async acceptRecommendation(id: string, userId: string): Promise<void> {
     await prisma.recommendation.updateMany({
       where: { id, userId },
       data: { status: "accepted" },
@@ -129,18 +121,10 @@ export class RecommendationService {
     const context: Record<string, unknown> = {};
 
     // Extract what data the conditions need
-    const needsWeeklyTotal = conditions.some(
-      (c) => c.field === "weeklyTotal",
-    );
-    const needsMonthlyCount = conditions.some(
-      (c) => c.field === "monthlyCount",
-    );
-    const categoryCondition = conditions.find(
-      (c) => c.field === "category",
-    );
-    const subCategoryCondition = conditions.find(
-      (c) => c.field === "subCategory",
-    );
+    const needsWeeklyTotal = conditions.some((c) => c.field === "weeklyTotal");
+    const needsMonthlyCount = conditions.some((c) => c.field === "monthlyCount");
+    const categoryCondition = conditions.find((c) => c.field === "category");
+    const subCategoryCondition = conditions.find((c) => c.field === "subCategory");
 
     if (categoryCondition) {
       context.category = categoryCondition.value;
@@ -150,12 +134,11 @@ export class RecommendationService {
     }
 
     if (needsWeeklyTotal && categoryCondition) {
-      context.weeklyTotal =
-        await this.activityRepo.getWeeklyTotalByCategory(
-          userId,
-          categoryCondition.value as string,
-          weekStart,
-        );
+      context.weeklyTotal = await this.activityRepo.getWeeklyTotalByCategory(
+        userId,
+        categoryCondition.value as string,
+        weekStart,
+      );
     }
 
     if (needsMonthlyCount && subCategoryCondition) {
@@ -163,12 +146,11 @@ export class RecommendationService {
       const subCats = Array.isArray(subCat) ? subCat : [subCat];
       let totalCount = 0;
       for (const sc of subCats) {
-        totalCount +=
-          await this.activityRepo.getMonthlyCountBySubCategory(
-            userId,
-            sc as string,
-            monthStart,
-          );
+        totalCount += await this.activityRepo.getMonthlyCountBySubCategory(
+          userId,
+          sc as string,
+          monthStart,
+        );
       }
       context.monthlyCount = totalCount;
     }

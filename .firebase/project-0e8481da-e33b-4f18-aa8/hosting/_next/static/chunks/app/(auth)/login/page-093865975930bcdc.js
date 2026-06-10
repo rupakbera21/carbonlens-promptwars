@@ -1,1 +1,374 @@
-(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[72],{10117:(e,r,t)=>{"use strict";t.d(r,{$:()=>o});var a=t(95155),s=t(12115),n=t(46673),i=t(83101),l=t(61433);let d=(0,i.F)("inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",{variants:{variant:{default:"bg-primary text-primary-foreground shadow hover:bg-primary/90",destructive:"bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",outline:"border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",secondary:"bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",ghost:"hover:bg-accent hover:text-accent-foreground",link:"text-primary underline-offset-4 hover:underline"},size:{default:"h-10 px-4 py-2",sm:"h-9 rounded-md px-3 text-xs",lg:"h-11 rounded-md px-8",icon:"h-10 w-10"}},defaultVariants:{variant:"default",size:"default"}}),o=s.forwardRef((e,r)=>{let{className:t,variant:s,size:i,asChild:o=!1,...c}=e,u=o?n.DX:"button";return(0,a.jsx)(u,{className:(0,l.cn)(d({variant:s,size:i,className:t})),ref:r,...c})});o.displayName="Button"},10489:(e,r,t)=>{"use strict";t.d(r,{b:()=>l});var a=t(12115),s=t(97602),n=t(95155),i=a.forwardRef((e,r)=>(0,n.jsx)(s.sG.label,{...e,ref:r,onMouseDown:r=>{var t;r.target.closest("button, input, select, textarea")||(null==(t=e.onMouseDown)||t.call(e,r),!r.defaultPrevented&&r.detail>1&&r.preventDefault())}}));i.displayName="Label";var l=i},11726:(e,r,t)=>{Promise.resolve().then(t.bind(t,14423))},14423:(e,r,t)=>{"use strict";t.r(r),t.d(r,{default:()=>x});var a=t(95155),s=t(12115),n=t(36489),i=t(20063),l=t(52619),d=t.n(l),o=t(10117),c=t(80323),u=t(86153),f=t(17055),m=t(11503),p=t(35299);function x(){let e=(0,i.useRouter)(),[r,t]=(0,s.useState)(""),[l,x]=(0,s.useState)(""),[g,v]=(0,s.useState)(""),[b,h]=(0,s.useState)(!1),y=async t=>{t.preventDefault(),v(""),h(!0);try{let t=await (0,n.signIn)("credentials",{email:r,password:l,redirect:!1});(null==t?void 0:t.error)?v("Invalid email or password"):(e.push("/dashboard"),e.refresh())}catch(e){v("An unexpected error occurred")}finally{h(!1)}};return(0,a.jsx)("main",{className:"flex min-h-screen items-center justify-center bg-gradient-to-br from-green-50 via-background to-emerald-50 p-4 dark:from-green-950/20 dark:via-background dark:to-emerald-950/20",children:(0,a.jsxs)(f.Zp,{className:"w-full max-w-md",children:[(0,a.jsxs)(f.aR,{className:"text-center",children:[(0,a.jsx)("div",{className:"mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10",children:(0,a.jsx)(m.A,{className:"h-7 w-7 text-primary"})}),(0,a.jsx)(f.ZB,{className:"text-2xl",children:"Welcome back"}),(0,a.jsx)(f.BT,{children:"Sign in to continue tracking your carbon footprint"})]}),(0,a.jsxs)("form",{onSubmit:y,children:[(0,a.jsxs)(f.Wu,{className:"space-y-4",children:[g&&(0,a.jsx)("div",{className:"rounded-lg bg-destructive/10 p-3 text-sm text-destructive",role:"alert",children:g}),(0,a.jsxs)("div",{className:"space-y-2",children:[(0,a.jsx)(u.J,{htmlFor:"login-email",children:"Email"}),(0,a.jsx)(c.p,{id:"login-email",type:"email",placeholder:"you@example.com",value:r,onChange:e=>t(e.target.value),required:!0,autoComplete:"email",disabled:b})]}),(0,a.jsxs)("div",{className:"space-y-2",children:[(0,a.jsx)(u.J,{htmlFor:"login-password",children:"Password"}),(0,a.jsx)(c.p,{id:"login-password",type:"password",value:l,onChange:e=>x(e.target.value),required:!0,autoComplete:"current-password",disabled:b})]})]}),(0,a.jsxs)(f.wL,{className:"flex flex-col gap-3",children:[(0,a.jsx)(o.$,{type:"submit",className:"w-full",disabled:b,children:b?(0,a.jsx)(p.A,{className:"h-4 w-4 animate-spin"}):"Sign in"}),(0,a.jsxs)("p",{className:"text-center text-sm text-muted-foreground",children:["Don't have an account?"," ",(0,a.jsx)(d(),{href:"/register",className:"font-medium text-primary hover:underline",children:"Sign up"})]})]})]})]})})}},17055:(e,r,t)=>{"use strict";t.d(r,{BT:()=>o,Wu:()=>c,ZB:()=>d,Zp:()=>i,aR:()=>l,wL:()=>u});var a=t(95155),s=t(12115),n=t(61433);let i=s.forwardRef((e,r)=>{let{className:t,...s}=e;return(0,a.jsx)("div",{ref:r,className:(0,n.cn)("rounded-xl border bg-card text-card-foreground shadow-sm",t),...s})});i.displayName="Card";let l=s.forwardRef((e,r)=>{let{className:t,...s}=e;return(0,a.jsx)("div",{ref:r,className:(0,n.cn)("flex flex-col space-y-1.5 p-6",t),...s})});l.displayName="CardHeader";let d=s.forwardRef((e,r)=>{let{className:t,...s}=e;return(0,a.jsx)("div",{ref:r,className:(0,n.cn)("font-semibold leading-none tracking-tight",t),...s})});d.displayName="CardTitle";let o=s.forwardRef((e,r)=>{let{className:t,...s}=e;return(0,a.jsx)("div",{ref:r,className:(0,n.cn)("text-sm text-muted-foreground",t),...s})});o.displayName="CardDescription";let c=s.forwardRef((e,r)=>{let{className:t,...s}=e;return(0,a.jsx)("div",{ref:r,className:(0,n.cn)("p-6 pt-0",t),...s})});c.displayName="CardContent";let u=s.forwardRef((e,r)=>{let{className:t,...s}=e;return(0,a.jsx)("div",{ref:r,className:(0,n.cn)("flex items-center p-6 pt-0",t),...s})});u.displayName="CardFooter"},35299:(e,r,t)=>{"use strict";t.d(r,{A:()=>a});let a=(0,t(71847).A)("loader-circle",[["path",{d:"M21 12a9 9 0 1 1-6.219-8.56",key:"13zald"}]])},61433:(e,r,t)=>{"use strict";t.d(r,{cn:()=>n});var a=t(2821),s=t(75889);function n(){for(var e=arguments.length,r=Array(e),t=0;t<e;t++)r[t]=arguments[t];return(0,s.QP)((0,a.$)(r))}},80323:(e,r,t)=>{"use strict";t.d(r,{p:()=>i});var a=t(95155),s=t(12115),n=t(61433);let i=s.forwardRef((e,r)=>{let{className:t,type:s,...i}=e;return(0,a.jsx)("input",{type:s,className:(0,n.cn)("flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",t),ref:r,...i})});i.displayName="Input"},86153:(e,r,t)=>{"use strict";t.d(r,{J:()=>o});var a=t(95155),s=t(12115),n=t(10489),i=t(83101),l=t(61433);let d=(0,i.F)("text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"),o=s.forwardRef((e,r)=>{let{className:t,...s}=e;return(0,a.jsx)(n.b,{ref:r,className:(0,l.cn)(d(),t),...s})});o.displayName=n.b.displayName},97602:(e,r,t)=>{"use strict";t.d(r,{sG:()=>i});var a=t(12115);t(47650);var s=t(46673),n=t(95155),i=["a","button","div","form","h2","h3","img","input","label","li","nav","ol","p","select","span","svg","ul"].reduce((e,r)=>{let t=(0,s.TL)(`Primitive.${r}`),i=a.forwardRef((e,a)=>{let{asChild:s,...i}=e;return"undefined"!=typeof window&&(window[Symbol.for("radix-ui")]=!0),(0,n.jsx)(s?t:r,{...i,ref:a})});return i.displayName=`Primitive.${r}`,{...e,[r]:i}},{})}},e=>{e.O(0,[407,489,406,441,255,358],()=>e(e.s=11726)),_N_E=e.O()}]);
+(self.webpackChunk_N_E = self.webpackChunk_N_E || []).push([
+  [72],
+  {
+    10117: (e, r, t) => {
+      "use strict";
+      t.d(r, { $: () => o });
+      var a = t(95155),
+        s = t(12115),
+        n = t(46673),
+        i = t(83101),
+        l = t(61433);
+      let d = (0, i.F)(
+          "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+          {
+            variants: {
+              variant: {
+                default: "bg-primary text-primary-foreground shadow hover:bg-primary/90",
+                destructive:
+                  "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+                outline:
+                  "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
+                secondary:
+                  "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
+                ghost: "hover:bg-accent hover:text-accent-foreground",
+                link: "text-primary underline-offset-4 hover:underline",
+              },
+              size: {
+                default: "h-10 px-4 py-2",
+                sm: "h-9 rounded-md px-3 text-xs",
+                lg: "h-11 rounded-md px-8",
+                icon: "h-10 w-10",
+              },
+            },
+            defaultVariants: { variant: "default", size: "default" },
+          },
+        ),
+        o = s.forwardRef((e, r) => {
+          let { className: t, variant: s, size: i, asChild: o = !1, ...c } = e,
+            u = o ? n.DX : "button";
+          return (0, a.jsx)(u, {
+            className: (0, l.cn)(d({ variant: s, size: i, className: t })),
+            ref: r,
+            ...c,
+          });
+        });
+      o.displayName = "Button";
+    },
+    10489: (e, r, t) => {
+      "use strict";
+      t.d(r, { b: () => l });
+      var a = t(12115),
+        s = t(97602),
+        n = t(95155),
+        i = a.forwardRef((e, r) =>
+          (0, n.jsx)(s.sG.label, {
+            ...e,
+            ref: r,
+            onMouseDown: (r) => {
+              var t;
+              r.target.closest("button, input, select, textarea") ||
+                (null == (t = e.onMouseDown) || t.call(e, r),
+                !r.defaultPrevented && r.detail > 1 && r.preventDefault());
+            },
+          }),
+        );
+      i.displayName = "Label";
+      var l = i;
+    },
+    11726: (e, r, t) => {
+      Promise.resolve().then(t.bind(t, 14423));
+    },
+    14423: (e, r, t) => {
+      "use strict";
+      (t.r(r), t.d(r, { default: () => x }));
+      var a = t(95155),
+        s = t(12115),
+        n = t(36489),
+        i = t(20063),
+        l = t(52619),
+        d = t.n(l),
+        o = t(10117),
+        c = t(80323),
+        u = t(86153),
+        f = t(17055),
+        m = t(11503),
+        p = t(35299);
+      function x() {
+        let e = (0, i.useRouter)(),
+          [r, t] = (0, s.useState)(""),
+          [l, x] = (0, s.useState)(""),
+          [g, v] = (0, s.useState)(""),
+          [b, h] = (0, s.useState)(!1),
+          y = async (t) => {
+            (t.preventDefault(), v(""), h(!0));
+            try {
+              let t = await (0, n.signIn)("credentials", {
+                email: r,
+                password: l,
+                redirect: !1,
+              });
+              (null == t ? void 0 : t.error)
+                ? v("Invalid email or password")
+                : (e.push("/dashboard"), e.refresh());
+            } catch (e) {
+              v("An unexpected error occurred");
+            } finally {
+              h(!1);
+            }
+          };
+        return (0, a.jsx)("main", {
+          className:
+            "flex min-h-screen items-center justify-center bg-gradient-to-br from-green-50 via-background to-emerald-50 p-4 dark:from-green-950/20 dark:via-background dark:to-emerald-950/20",
+          children: (0, a.jsxs)(f.Zp, {
+            className: "w-full max-w-md",
+            children: [
+              (0, a.jsxs)(f.aR, {
+                className: "text-center",
+                children: [
+                  (0, a.jsx)("div", {
+                    className:
+                      "mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10",
+                    children: (0, a.jsx)(m.A, { className: "h-7 w-7 text-primary" }),
+                  }),
+                  (0, a.jsx)(f.ZB, { className: "text-2xl", children: "Welcome back" }),
+                  (0, a.jsx)(f.BT, {
+                    children: "Sign in to continue tracking your carbon footprint",
+                  }),
+                ],
+              }),
+              (0, a.jsxs)("form", {
+                onSubmit: y,
+                children: [
+                  (0, a.jsxs)(f.Wu, {
+                    className: "space-y-4",
+                    children: [
+                      g &&
+                        (0, a.jsx)("div", {
+                          className:
+                            "rounded-lg bg-destructive/10 p-3 text-sm text-destructive",
+                          role: "alert",
+                          children: g,
+                        }),
+                      (0, a.jsxs)("div", {
+                        className: "space-y-2",
+                        children: [
+                          (0, a.jsx)(u.J, { htmlFor: "login-email", children: "Email" }),
+                          (0, a.jsx)(c.p, {
+                            id: "login-email",
+                            type: "email",
+                            placeholder: "you@example.com",
+                            value: r,
+                            onChange: (e) => t(e.target.value),
+                            required: !0,
+                            autoComplete: "email",
+                            disabled: b,
+                          }),
+                        ],
+                      }),
+                      (0, a.jsxs)("div", {
+                        className: "space-y-2",
+                        children: [
+                          (0, a.jsx)(u.J, {
+                            htmlFor: "login-password",
+                            children: "Password",
+                          }),
+                          (0, a.jsx)(c.p, {
+                            id: "login-password",
+                            type: "password",
+                            value: l,
+                            onChange: (e) => x(e.target.value),
+                            required: !0,
+                            autoComplete: "current-password",
+                            disabled: b,
+                          }),
+                        ],
+                      }),
+                    ],
+                  }),
+                  (0, a.jsxs)(f.wL, {
+                    className: "flex flex-col gap-3",
+                    children: [
+                      (0, a.jsx)(o.$, {
+                        type: "submit",
+                        className: "w-full",
+                        disabled: b,
+                        children: b
+                          ? (0, a.jsx)(p.A, { className: "h-4 w-4 animate-spin" })
+                          : "Sign in",
+                      }),
+                      (0, a.jsxs)("p", {
+                        className: "text-center text-sm text-muted-foreground",
+                        children: [
+                          "Don't have an account?",
+                          " ",
+                          (0, a.jsx)(d(), {
+                            href: "/register",
+                            className: "font-medium text-primary hover:underline",
+                            children: "Sign up",
+                          }),
+                        ],
+                      }),
+                    ],
+                  }),
+                ],
+              }),
+            ],
+          }),
+        });
+      }
+    },
+    17055: (e, r, t) => {
+      "use strict";
+      t.d(r, {
+        BT: () => o,
+        Wu: () => c,
+        ZB: () => d,
+        Zp: () => i,
+        aR: () => l,
+        wL: () => u,
+      });
+      var a = t(95155),
+        s = t(12115),
+        n = t(61433);
+      let i = s.forwardRef((e, r) => {
+        let { className: t, ...s } = e;
+        return (0, a.jsx)("div", {
+          ref: r,
+          className: (0, n.cn)(
+            "rounded-xl border bg-card text-card-foreground shadow-sm",
+            t,
+          ),
+          ...s,
+        });
+      });
+      i.displayName = "Card";
+      let l = s.forwardRef((e, r) => {
+        let { className: t, ...s } = e;
+        return (0, a.jsx)("div", {
+          ref: r,
+          className: (0, n.cn)("flex flex-col space-y-1.5 p-6", t),
+          ...s,
+        });
+      });
+      l.displayName = "CardHeader";
+      let d = s.forwardRef((e, r) => {
+        let { className: t, ...s } = e;
+        return (0, a.jsx)("div", {
+          ref: r,
+          className: (0, n.cn)("font-semibold leading-none tracking-tight", t),
+          ...s,
+        });
+      });
+      d.displayName = "CardTitle";
+      let o = s.forwardRef((e, r) => {
+        let { className: t, ...s } = e;
+        return (0, a.jsx)("div", {
+          ref: r,
+          className: (0, n.cn)("text-sm text-muted-foreground", t),
+          ...s,
+        });
+      });
+      o.displayName = "CardDescription";
+      let c = s.forwardRef((e, r) => {
+        let { className: t, ...s } = e;
+        return (0, a.jsx)("div", { ref: r, className: (0, n.cn)("p-6 pt-0", t), ...s });
+      });
+      c.displayName = "CardContent";
+      let u = s.forwardRef((e, r) => {
+        let { className: t, ...s } = e;
+        return (0, a.jsx)("div", {
+          ref: r,
+          className: (0, n.cn)("flex items-center p-6 pt-0", t),
+          ...s,
+        });
+      });
+      u.displayName = "CardFooter";
+    },
+    35299: (e, r, t) => {
+      "use strict";
+      t.d(r, { A: () => a });
+      let a = (0, t(71847).A)("loader-circle", [
+        ["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }],
+      ]);
+    },
+    61433: (e, r, t) => {
+      "use strict";
+      t.d(r, { cn: () => n });
+      var a = t(2821),
+        s = t(75889);
+      function n() {
+        for (var e = arguments.length, r = Array(e), t = 0; t < e; t++)
+          r[t] = arguments[t];
+        return (0, s.QP)((0, a.$)(r));
+      }
+    },
+    80323: (e, r, t) => {
+      "use strict";
+      t.d(r, { p: () => i });
+      var a = t(95155),
+        s = t(12115),
+        n = t(61433);
+      let i = s.forwardRef((e, r) => {
+        let { className: t, type: s, ...i } = e;
+        return (0, a.jsx)("input", {
+          type: s,
+          className: (0, n.cn)(
+            "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+            t,
+          ),
+          ref: r,
+          ...i,
+        });
+      });
+      i.displayName = "Input";
+    },
+    86153: (e, r, t) => {
+      "use strict";
+      t.d(r, { J: () => o });
+      var a = t(95155),
+        s = t(12115),
+        n = t(10489),
+        i = t(83101),
+        l = t(61433);
+      let d = (0, i.F)(
+          "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+        ),
+        o = s.forwardRef((e, r) => {
+          let { className: t, ...s } = e;
+          return (0, a.jsx)(n.b, { ref: r, className: (0, l.cn)(d(), t), ...s });
+        });
+      o.displayName = n.b.displayName;
+    },
+    97602: (e, r, t) => {
+      "use strict";
+      t.d(r, { sG: () => i });
+      var a = t(12115);
+      t(47650);
+      var s = t(46673),
+        n = t(95155),
+        i = [
+          "a",
+          "button",
+          "div",
+          "form",
+          "h2",
+          "h3",
+          "img",
+          "input",
+          "label",
+          "li",
+          "nav",
+          "ol",
+          "p",
+          "select",
+          "span",
+          "svg",
+          "ul",
+        ].reduce((e, r) => {
+          let t = (0, s.TL)(`Primitive.${r}`),
+            i = a.forwardRef((e, a) => {
+              let { asChild: s, ...i } = e;
+              return (
+                "undefined" != typeof window && (window[Symbol.for("radix-ui")] = !0),
+                (0, n.jsx)(s ? t : r, { ...i, ref: a })
+              );
+            });
+          return ((i.displayName = `Primitive.${r}`), { ...e, [r]: i });
+        }, {});
+    },
+  },
+  (e) => {
+    (e.O(0, [407, 489, 406, 441, 255, 358], () => e((e.s = 11726))), (_N_E = e.O()));
+  },
+]);

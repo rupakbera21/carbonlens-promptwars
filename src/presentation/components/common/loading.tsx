@@ -14,10 +14,7 @@ interface LoadingProps {
 export function Loading({ className, text = "Loading..." }: LoadingProps) {
   return (
     <div
-      className={cn(
-        "flex flex-col items-center justify-center gap-3 p-8",
-        className,
-      )}
+      className={cn("flex flex-col items-center justify-center gap-3 p-8", className)}
       role="status"
       aria-label={text}
     >

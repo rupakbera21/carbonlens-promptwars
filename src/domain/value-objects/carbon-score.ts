@@ -50,10 +50,8 @@ export function calculateScore(totalCo2eKg: number): number {
   if (totalCo2eKg <= SCORE_THRESHOLDS.MIN_CO2E_KG) return 100;
   if (totalCo2eKg >= SCORE_THRESHOLDS.MAX_CO2E_KG) return 0;
 
-  const range =
-    SCORE_THRESHOLDS.MAX_CO2E_KG - SCORE_THRESHOLDS.MIN_CO2E_KG;
-  const normalized =
-    (totalCo2eKg - SCORE_THRESHOLDS.MIN_CO2E_KG) / range;
+  const range = SCORE_THRESHOLDS.MAX_CO2E_KG - SCORE_THRESHOLDS.MIN_CO2E_KG;
+  const normalized = (totalCo2eKg - SCORE_THRESHOLDS.MIN_CO2E_KG) / range;
 
   return Math.round(100 * (1 - normalized));
 }

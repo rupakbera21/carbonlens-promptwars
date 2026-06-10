@@ -2,10 +2,7 @@ import { describe, it, expect } from "vitest";
 import { ScoreCalculator } from "@/domain/services/score-calculator";
 import type { Activity } from "@/domain/entities/activity";
 
-const createActivity = (
-  category: Activity["category"],
-  co2eKg: number,
-): Activity => ({
+const createActivity = (category: Activity["category"], co2eKg: number): Activity => ({
   id: `test-${Math.random()}`,
   userId: "user-1",
   category,

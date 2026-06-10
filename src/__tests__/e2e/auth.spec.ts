@@ -5,9 +5,7 @@ import { test, expect } from "@playwright/test";
  * Verifies the login page loads, form is accessible, and submission works.
  */
 test.describe("Authentication", () => {
-  test("login page should be accessible and functional", async ({
-    page,
-  }) => {
+  test("login page should be accessible and functional", async ({ page }) => {
     await page.goto("/login");
 
     // Check page title
@@ -29,9 +27,7 @@ test.describe("Authentication", () => {
     await expect(passwordInput).toBeFocused();
   });
 
-  test("register page should validate password requirements", async ({
-    page,
-  }) => {
+  test("register page should validate password requirements", async ({ page }) => {
     await page.goto("/register");
 
     const nameInput = page.getByLabel("Name");
@@ -43,9 +39,7 @@ test.describe("Authentication", () => {
     await expect(passwordInput).toBeVisible();
 
     // Check password hint text
-    await expect(
-      page.getByText("At least 8 characters"),
-    ).toBeVisible();
+    await expect(page.getByText("At least 8 characters")).toBeVisible();
   });
 
   test("should show error for invalid login", async ({ page }) => {
@@ -56,9 +50,7 @@ test.describe("Authentication", () => {
     await page.getByRole("button", { name: "Sign in" }).click();
 
     // Should show error message
-    await expect(
-      page.getByRole("alert"),
-    ).toBeVisible({ timeout: 5000 });
+    await expect(page.getByRole("alert")).toBeVisible({ timeout: 5000 });
   });
 });
 
@@ -75,9 +67,7 @@ test.describe("Accessibility", () => {
     await expect(skipLink).toBeFocused();
   });
 
-  test("login page should have proper heading structure", async ({
-    page,
-  }) => {
+  test("login page should have proper heading structure", async ({ page }) => {
     await page.goto("/login");
 
     // Should have exactly one h1-like prominent heading

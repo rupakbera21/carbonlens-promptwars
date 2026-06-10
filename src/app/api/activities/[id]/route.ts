@@ -26,9 +26,7 @@ export async function DELETE(
 
     if (!deleted) {
       return NextResponse.json(
-        errorResponse([
-          { code: ErrorCodes.NOT_FOUND, message: "Activity not found" },
-        ]),
+        errorResponse([{ code: ErrorCodes.NOT_FOUND, message: "Activity not found" }]),
         { status: 404 },
       );
     }

@@ -42,11 +42,7 @@ export function ScoreCard({
           role="img"
           aria-label={`Carbon score: ${displayScore} out of 100. ${getScoreLabel(displayScore)}`}
         >
-          <svg
-            className="h-36 w-36 -rotate-90"
-            viewBox="0 0 120 120"
-            aria-hidden="true"
-          >
+          <svg className="h-36 w-36 -rotate-90" viewBox="0 0 120 120" aria-hidden="true">
             {/* Background ring */}
             <circle
               cx="60"
@@ -89,31 +85,20 @@ export function ScoreCard({
 
         {/* Score label */}
         <div className="text-center">
-          <p
-            className={cn(
-              "text-sm font-semibold",
-              getScoreColor(displayScore),
-            )}
-          >
+          <p className={cn("text-sm font-semibold", getScoreColor(displayScore))}>
             {getScoreLabel(displayScore)}
           </p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            {explanation}
-          </p>
+          <p className="mt-1 text-xs text-muted-foreground">{explanation}</p>
         </div>
 
         {/* Total emissions */}
         <div className="w-full rounded-lg bg-muted/50 p-3 text-center">
-          <p className="text-xs text-muted-foreground">
-            Total this period
-          </p>
+          <p className="text-xs text-muted-foreground">Total this period</p>
           <p className="text-lg font-semibold tabular-nums">
             {totalCo2eKg >= 1000
               ? `${(totalCo2eKg / 1000).toFixed(1)}t`
               : `${totalCo2eKg.toFixed(1)} kg`}{" "}
-            <span className="text-xs font-normal text-muted-foreground">
-              CO₂e
-            </span>
+            <span className="text-xs font-normal text-muted-foreground">CO₂e</span>
           </p>
         </div>
       </CardContent>

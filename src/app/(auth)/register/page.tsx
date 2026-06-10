@@ -59,9 +59,7 @@ export default function RegisterPage() {
             <Leaf className="h-7 w-7 text-primary" />
           </div>
           <CardTitle className="text-2xl">Create account</CardTitle>
-          <CardDescription>
-            Start tracking your carbon footprint today
-          </CardDescription>
+          <CardDescription>Start tracking your carbon footprint today</CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
@@ -117,11 +115,7 @@ export default function RegisterPage() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-3">
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={isLoading}
-            >
+            <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
@@ -130,10 +124,7 @@ export default function RegisterPage() {
             </Button>
             <p className="text-center text-sm text-muted-foreground">
               Already have an account?{" "}
-              <Link
-                href="/login"
-                className="font-medium text-primary hover:underline"
-              >
+              <Link href="/login" className="font-medium text-primary hover:underline">
                 Sign in
               </Link>
             </p>

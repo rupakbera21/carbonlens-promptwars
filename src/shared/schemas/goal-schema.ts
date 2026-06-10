@@ -28,9 +28,7 @@ export type CreateGoalInput = z.infer<typeof createGoalSchema>;
 
 /** Validation schema for updating a goal */
 export const updateGoalSchema = z.object({
-  status: z
-    .enum(["active", "completed", "missed", "cancelled"])
-    .optional(),
+  status: z.enum(["active", "completed", "missed", "cancelled"]).optional(),
   targetCo2eKg: z.number().positive().max(10_000).optional(),
 });
 

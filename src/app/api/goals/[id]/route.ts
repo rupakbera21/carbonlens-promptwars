@@ -25,11 +25,7 @@ export async function PATCH(
     const input = updateGoalSchema.parse(body);
 
     if (input.status) {
-      const goal = await goalService.updateGoalStatus(
-        id,
-        auth.userId,
-        input.status,
-      );
+      const goal = await goalService.updateGoalStatus(id, auth.userId, input.status);
       return NextResponse.json(successResponse(goal));
     }
 

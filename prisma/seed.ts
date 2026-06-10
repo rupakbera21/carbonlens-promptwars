@@ -385,8 +385,16 @@ async function main() {
   for (const rule of rules) {
     await prisma.rule.upsert({
       where: { id: rule.id },
-      update: { ...rule, conditions: JSON.stringify(rule.conditions), actions: JSON.stringify(rule.actions) },
-      create: { ...rule, conditions: JSON.stringify(rule.conditions), actions: JSON.stringify(rule.actions) },
+      update: {
+        ...rule,
+        conditions: JSON.stringify(rule.conditions),
+        actions: JSON.stringify(rule.actions),
+      },
+      create: {
+        ...rule,
+        conditions: JSON.stringify(rule.conditions),
+        actions: JSON.stringify(rule.actions),
+      },
     });
   }
   console.log(`  ✅ ${rules.length} rules seeded`);

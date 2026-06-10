@@ -66,23 +66,21 @@ export class InsightService {
     prevWeekStart.setDate(prevWeekStart.getDate() - 7);
     const prevWeekEnd = new Date(weekStart);
     prevWeekEnd.setMilliseconds(-1);
-    const prevWeekActivities =
-      await this.activityRepo.findByUserAndDateRange(
-        userId,
-        prevWeekStart,
-        prevWeekEnd,
-      );
+    const prevWeekActivities = await this.activityRepo.findByUserAndDateRange(
+      userId,
+      prevWeekStart,
+      prevWeekEnd,
+    );
     const prevWeekResult = ScoreCalculator.compute(prevWeekActivities);
 
     // Current month
     const monthStart = getMonthStart(now);
     const monthEnd = getMonthEnd(now);
-    const monthActivities =
-      await this.activityRepo.findByUserAndDateRange(
-        userId,
-        monthStart,
-        monthEnd,
-      );
+    const monthActivities = await this.activityRepo.findByUserAndDateRange(
+      userId,
+      monthStart,
+      monthEnd,
+    );
     const monthResult = ScoreCalculator.compute(monthActivities);
 
     // Previous month for comparison
@@ -90,12 +88,11 @@ export class InsightService {
     prevMonthStart.setMonth(prevMonthStart.getMonth() - 1);
     const prevMonthEnd = new Date(monthStart);
     prevMonthEnd.setMilliseconds(-1);
-    const prevMonthActivities =
-      await this.activityRepo.findByUserAndDateRange(
-        userId,
-        prevMonthStart,
-        prevMonthEnd,
-      );
+    const prevMonthActivities = await this.activityRepo.findByUserAndDateRange(
+      userId,
+      prevMonthStart,
+      prevMonthEnd,
+    );
     const prevMonthResult = ScoreCalculator.compute(prevMonthActivities);
 
     // Weekly trends (last 8 weeks)
@@ -107,12 +104,11 @@ export class InsightService {
       trendWeekEnd.setDate(trendWeekEnd.getDate() + 6);
       trendWeekEnd.setHours(23, 59, 59, 999);
 
-      const trendActivities =
-        await this.activityRepo.findByUserAndDateRange(
-          userId,
-          trendWeekStart,
-          trendWeekEnd,
-        );
+      const trendActivities = await this.activityRepo.findByUserAndDateRange(
+        userId,
+        trendWeekStart,
+        trendWeekEnd,
+      );
       const trendResult = ScoreCalculator.compute(trendActivities);
 
       trends.push({
@@ -123,9 +119,7 @@ export class InsightService {
     }
 
     // Savings opportunities based on current breakdown
-    const savingsOpportunities = this.identifySavings(
-      weekResult.breakdown,
-    );
+    const savingsOpportunities = this.identifySavings(weekResult.breakdown);
 
     return {
       currentWeek: {
@@ -150,9 +144,7 @@ export class InsightService {
     };
   }
 
-  private identifySavings(
-    breakdown: CategoryBreakdown,
-  ): SavingsOpportunity[] {
+  private identifySavings(breakdown: CategoryBreakdown): SavingsOpportunity[] {
     const opportunities: SavingsOpportunity[] = [];
 
     if (breakdown.transport > 20) {
@@ -176,14 +168,11 @@ export class InsightService {
     if (breakdown.energy > 10) {
       opportunities.push({
         category: "energy",
-        description:
-          "Reducing standby power could save ~2 kg CO₂e/week",
+        description: "Reducing standby power could save ~2 kg CO₂e/week",
         potentialSavingKg: 2,
       });
     }
 
-    return opportunities.sort(
-      (a, b) => b.potentialSavingKg - a.potentialSavingKg,
-    );
+    return opportunities.sort((a, b) => b.potentialSavingKg - a.potentialSavingKg);
   }
 }

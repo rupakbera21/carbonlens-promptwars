@@ -47,25 +47,16 @@ interface QuickLogProps {
  * QuickLog — compact form for rapidly logging activities.
  * Three-step flow: Category → Sub-category → Quantity.
  */
-export function QuickLog({
-  emissionFactors,
-  onSubmit,
-  className,
-}: QuickLogProps) {
-  const [selectedCategory, setSelectedCategory] =
-    useState<ActivityCategory | null>(null);
-  const [selectedFactor, setSelectedFactor] =
-    useState<EmissionFactorOption | null>(null);
+export function QuickLog({ emissionFactors, onSubmit, className }: QuickLogProps) {
+  const [selectedCategory, setSelectedCategory] = useState<ActivityCategory | null>(null);
+  const [selectedFactor, setSelectedFactor] = useState<EmissionFactorOption | null>(null);
   const [quantity, setQuantity] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const subCategories = selectedCategory
-    ? emissionFactors.filter(
-        (ef) =>
-          Object.keys(
-            SUB_CATEGORY_LABELS[selectedCategory] ?? {},
-          ).includes(ef.subCategory),
+    ? emissionFactors.filter((ef) =>
+        Object.keys(SUB_CATEGORY_LABELS[selectedCategory] ?? {}).includes(ef.subCategory),
       )
     : [];
 
@@ -113,9 +104,7 @@ export function QuickLog({
 
         {/* Step 1: Category selection */}
         <div className="mb-4">
-          <Label className="mb-2 block text-xs text-muted-foreground">
-            Category
-          </Label>
+          <Label className="mb-2 block text-xs text-muted-foreground">Category</Label>
           <div
             className="grid grid-cols-2 gap-2"
             role="radiogroup"
@@ -135,8 +124,7 @@ export function QuickLog({
                     "flex items-center gap-2 rounded-lg border p-3 text-sm transition-colors",
                     "hover:border-primary hover:bg-accent",
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                    selectedCategory === cat &&
-                      "border-primary bg-primary/5 font-medium",
+                    selectedCategory === cat && "border-primary bg-primary/5 font-medium",
                   )}
                   role="radio"
                   aria-checked={selectedCategory === cat}
@@ -152,9 +140,7 @@ export function QuickLog({
         {/* Step 2: Sub-category selection */}
         {selectedCategory && subCategories.length > 0 && (
           <div className="mb-4">
-            <Label className="mb-2 block text-xs text-muted-foreground">
-              Type
-            </Label>
+            <Label className="mb-2 block text-xs text-muted-foreground">Type</Label>
             <div className="flex flex-wrap gap-2">
               {subCategories.map((ef) => (
                 <button
@@ -201,17 +187,10 @@ export function QuickLog({
                 disabled={!quantity || isSubmitting}
                 size="default"
               >
-                {isSubmitting ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  "Log"
-                )}
+                {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Log"}
               </Button>
             </div>
-            <p
-              id="quantity-hint"
-              className="mt-1 text-xs text-muted-foreground"
-            >
+            <p id="quantity-hint" className="mt-1 text-xs text-muted-foreground">
               Enter the amount in {selectedFactor.unit}
             </p>
           </div>

@@ -11,9 +11,7 @@ import type { Activity, CreateActivityInput } from "@/domain/entities/activity";
  * All queries enforce user_id scoping for row-level security.
  */
 export class PrismaActivityRepository implements ActivityRepository {
-  async create(
-    input: CreateActivityInput & { co2eKg: number },
-  ): Promise<Activity> {
+  async create(input: CreateActivityInput & { co2eKg: number }): Promise<Activity> {
     const record = await prisma.activity.create({
       data: {
         userId: input.userId,

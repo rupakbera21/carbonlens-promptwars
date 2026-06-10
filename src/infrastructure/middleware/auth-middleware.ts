@@ -16,9 +16,7 @@ export async function getAuthUserId(): Promise<string | null> {
 /**
  * Guard function for API routes — returns 401 if not authenticated.
  */
-export async function requireAuth(): Promise<
-  { userId: string } | NextResponse
-> {
+export async function requireAuth(): Promise<{ userId: string } | NextResponse> {
   const userId = await getAuthUserId();
   if (!userId) {
     return NextResponse.json(

@@ -1,1 +1,577 @@
-(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[791],{10117:(e,t,s)=>{"use strict";s.d(t,{$:()=>c});var a=s(95155),r=s(12115),n=s(46673),i=s(83101),l=s(61433);let o=(0,i.F)("inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",{variants:{variant:{default:"bg-primary text-primary-foreground shadow hover:bg-primary/90",destructive:"bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",outline:"border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",secondary:"bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",ghost:"hover:bg-accent hover:text-accent-foreground",link:"text-primary underline-offset-4 hover:underline"},size:{default:"h-10 px-4 py-2",sm:"h-9 rounded-md px-3 text-xs",lg:"h-11 rounded-md px-8",icon:"h-10 w-10"}},defaultVariants:{variant:"default",size:"default"}}),c=r.forwardRef((e,t)=>{let{className:s,variant:r,size:i,asChild:c=!1,...d}=e,u=c?n.DX:"button";return(0,a.jsx)(u,{className:(0,l.cn)(o({variant:r,size:i,className:s})),ref:t,...d})});c.displayName="Button"},10489:(e,t,s)=>{"use strict";s.d(t,{b:()=>l});var a=s(12115),r=s(97602),n=s(95155),i=a.forwardRef((e,t)=>(0,n.jsx)(r.sG.label,{...e,ref:t,onMouseDown:t=>{var s;t.target.closest("button, input, select, textarea")||(null==(s=e.onMouseDown)||s.call(e,t),!t.defaultPrevented&&t.detail>1&&t.preventDefault())}}));i.displayName="Label";var l=i},17055:(e,t,s)=>{"use strict";s.d(t,{BT:()=>c,Wu:()=>d,ZB:()=>o,Zp:()=>i,aR:()=>l,wL:()=>u});var a=s(95155),r=s(12115),n=s(61433);let i=r.forwardRef((e,t)=>{let{className:s,...r}=e;return(0,a.jsx)("div",{ref:t,className:(0,n.cn)("rounded-xl border bg-card text-card-foreground shadow-sm",s),...r})});i.displayName="Card";let l=r.forwardRef((e,t)=>{let{className:s,...r}=e;return(0,a.jsx)("div",{ref:t,className:(0,n.cn)("flex flex-col space-y-1.5 p-6",s),...r})});l.displayName="CardHeader";let o=r.forwardRef((e,t)=>{let{className:s,...r}=e;return(0,a.jsx)("div",{ref:t,className:(0,n.cn)("font-semibold leading-none tracking-tight",s),...r})});o.displayName="CardTitle";let c=r.forwardRef((e,t)=>{let{className:s,...r}=e;return(0,a.jsx)("div",{ref:t,className:(0,n.cn)("text-sm text-muted-foreground",s),...r})});c.displayName="CardDescription";let d=r.forwardRef((e,t)=>{let{className:s,...r}=e;return(0,a.jsx)("div",{ref:t,className:(0,n.cn)("p-6 pt-0",s),...r})});d.displayName="CardContent";let u=r.forwardRef((e,t)=>{let{className:s,...r}=e;return(0,a.jsx)("div",{ref:t,className:(0,n.cn)("flex items-center p-6 pt-0",s),...r})});u.displayName="CardFooter"},43401:(e,t,s)=>{"use strict";s.r(t),s.d(t,{default:()=>v});var a=s(95155),r=s(58903),n=s(17055),i=s(10117),l=s(86153),o=s(71847);let c=(0,o.A)("sun",[["circle",{cx:"12",cy:"12",r:"4",key:"4exip2"}],["path",{d:"M12 2v2",key:"tus03m"}],["path",{d:"M12 20v2",key:"1lh1kg"}],["path",{d:"m4.93 4.93 1.41 1.41",key:"149t6j"}],["path",{d:"m17.66 17.66 1.41 1.41",key:"ptbguv"}],["path",{d:"M2 12h2",key:"1t8f8n"}],["path",{d:"M20 12h2",key:"1q8mjw"}],["path",{d:"m6.34 17.66-1.41 1.41",key:"1m8zz5"}],["path",{d:"m19.07 4.93-1.41 1.41",key:"1shlcs"}]]),d=(0,o.A)("moon",[["path",{d:"M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z",key:"a7tn18"}]]),u=(0,o.A)("monitor",[["rect",{width:"20",height:"14",x:"2",y:"3",rx:"2",key:"48i651"}],["line",{x1:"8",x2:"16",y1:"21",y2:"21",key:"1svkeh"}],["line",{x1:"12",x2:"12",y1:"17",y2:"21",key:"vw1qmm"}]]),m=(0,o.A)("eye",[["path",{d:"M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0",key:"1nclc0"}],["circle",{cx:"12",cy:"12",r:"3",key:"1v7zrd"}]]);var h=s(56154);let x=(0,o.A)("download",[["path",{d:"M12 15V3",key:"m9g1x1"}],["path",{d:"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4",key:"ih7n3h"}],["path",{d:"m7 10 5 5 5-5",key:"brsn70"}]]),f=(0,o.A)("trash-2",[["path",{d:"M3 6h18",key:"d0wm0j"}],["path",{d:"M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6",key:"4alrt4"}],["path",{d:"M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2",key:"v07s0e"}],["line",{x1:"10",x2:"10",y1:"11",y2:"17",key:"1uufr5"}],["line",{x1:"14",x2:"14",y1:"11",y2:"17",key:"xtxkd"}]]);var p=s(61433),g=s(12115);function v(){let{theme:e,setTheme:t,highContrast:s,setHighContrast:o,reducedMotion:v,setReducedMotion:y}=(0,r.D)(),[b,j]=(0,g.useState)(!1),[w,k]=(0,g.useState)(!1),N=async()=>{j(!0);try{let e=await fetch("/api/user/export"),t=await e.json(),s=new Blob([JSON.stringify(t,null,2)],{type:"application/json"}),a=URL.createObjectURL(s),r=document.createElement("a");r.href=a,r.download="carbonlens-export-".concat(new Date().toISOString().split("T")[0],".json"),r.click(),URL.revokeObjectURL(a)}finally{j(!1)}},C=async()=>{await fetch("/api/user/delete",{method:"DELETE"}),window.location.href="/login"};return(0,a.jsxs)("div",{className:"space-y-6",children:[(0,a.jsxs)("div",{children:[(0,a.jsx)("h1",{className:"text-2xl font-bold tracking-tight",children:"Settings"}),(0,a.jsx)("p",{className:"text-muted-foreground",children:"Manage your preferences and data"})]}),(0,a.jsxs)(n.Zp,{children:[(0,a.jsxs)(n.aR,{children:[(0,a.jsx)(n.ZB,{children:"Appearance"}),(0,a.jsx)(n.BT,{children:"Customize the look and feel"})]}),(0,a.jsx)(n.Wu,{className:"space-y-4",children:(0,a.jsxs)("div",{children:[(0,a.jsx)(l.J,{className:"mb-2 block text-sm",children:"Theme"}),(0,a.jsx)("div",{className:"flex gap-2",role:"radiogroup","aria-label":"Theme selection",children:[{value:"light",icon:c,label:"Light"},{value:"dark",icon:d,label:"Dark"},{value:"system",icon:u,label:"System"}].map(s=>{let{value:r,icon:n,label:i}=s;return(0,a.jsxs)("button",{onClick:()=>t(r),className:(0,p.cn)("flex items-center gap-2 rounded-lg border px-4 py-2 text-sm transition-colors","focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",e===r&&"border-primary bg-primary/5 font-medium"),role:"radio","aria-checked":e===r,children:[(0,a.jsx)(n,{className:"h-4 w-4"}),i]},r)})})]})})]}),(0,a.jsxs)(n.Zp,{children:[(0,a.jsxs)(n.aR,{children:[(0,a.jsx)(n.ZB,{children:"Accessibility"}),(0,a.jsx)(n.BT,{children:"WCAG 2.2 AA compliant options"})]}),(0,a.jsxs)(n.Wu,{className:"space-y-4",children:[(0,a.jsxs)("div",{className:"flex items-center justify-between",children:[(0,a.jsxs)("div",{className:"flex items-center gap-3",children:[(0,a.jsx)(m,{className:"h-5 w-5 text-muted-foreground"}),(0,a.jsxs)("div",{children:[(0,a.jsx)(l.J,{children:"High Contrast"}),(0,a.jsx)("p",{className:"text-xs text-muted-foreground",children:"7:1 contrast ratio"})]})]}),(0,a.jsx)("button",{onClick:()=>o(!s),className:(0,p.cn)("relative h-6 w-11 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",s?"bg-primary":"bg-muted"),role:"switch","aria-checked":s,"aria-label":"Toggle high contrast mode",children:(0,a.jsx)("span",{className:(0,p.cn)("block h-5 w-5 rounded-full bg-white shadow-sm transition-transform",s?"translate-x-5":"translate-x-0.5")})})]}),(0,a.jsxs)("div",{className:"flex items-center justify-between",children:[(0,a.jsxs)("div",{className:"flex items-center gap-3",children:[(0,a.jsx)(h.A,{className:"h-5 w-5 text-muted-foreground"}),(0,a.jsxs)("div",{children:[(0,a.jsx)(l.J,{children:"Reduced Motion"}),(0,a.jsx)("p",{className:"text-xs text-muted-foreground",children:"Disable all animations"})]})]}),(0,a.jsx)("button",{onClick:()=>y(!v),className:(0,p.cn)("relative h-6 w-11 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",v?"bg-primary":"bg-muted"),role:"switch","aria-checked":v,"aria-label":"Toggle reduced motion",children:(0,a.jsx)("span",{className:(0,p.cn)("block h-5 w-5 rounded-full bg-white shadow-sm transition-transform",v?"translate-x-5":"translate-x-0.5")})})]})]})]}),(0,a.jsxs)(n.Zp,{children:[(0,a.jsxs)(n.aR,{children:[(0,a.jsx)(n.ZB,{children:"Data & Privacy"}),(0,a.jsx)(n.BT,{children:"GDPR-compliant data management"})]}),(0,a.jsxs)(n.Wu,{className:"space-y-4",children:[(0,a.jsxs)(i.$,{variant:"outline",onClick:N,disabled:b,className:"gap-2",children:[(0,a.jsx)(x,{className:"h-4 w-4"}),b?"Exporting...":"Export My Data"]}),w?(0,a.jsxs)("div",{className:"rounded-lg border border-destructive p-4",children:[(0,a.jsx)("p",{className:"text-sm font-medium text-destructive",children:"This will permanently delete your account and all data. This cannot be undone."}),(0,a.jsxs)("div",{className:"mt-3 flex gap-2",children:[(0,a.jsx)(i.$,{variant:"destructive",size:"sm",onClick:C,children:"Confirm Delete"}),(0,a.jsx)(i.$,{variant:"outline",size:"sm",onClick:()=>k(!1),children:"Cancel"})]})]}):(0,a.jsxs)(i.$,{variant:"destructive",onClick:()=>k(!0),className:"gap-2",children:[(0,a.jsx)(f,{className:"h-4 w-4"}),"Delete My Account"]})]})]})]})}},55572:(e,t,s)=>{Promise.resolve().then(s.bind(s,43401))},56154:(e,t,s)=>{"use strict";s.d(t,{A:()=>a});let a=(0,s(71847).A)("zap",[["path",{d:"M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z",key:"1xq2db"}]])},58903:(e,t,s)=>{"use strict";s.d(t,{D:()=>l,ThemeProvider:()=>i});var a=s(95155),r=s(12115);let n=(0,r.createContext)(void 0);function i(e){let{children:t}=e,[s,i]=(0,r.useState)("system"),[l,o]=(0,r.useState)(!1),[c,d]=(0,r.useState)(!1);return(0,r.useEffect)(()=>{let e=localStorage.getItem("carbonlens-theme");e&&i(e);let t=localStorage.getItem("carbonlens-high-contrast");t&&o("true"===t);let s=localStorage.getItem("carbonlens-reduced-motion");s&&d("true"===s)},[]),(0,r.useEffect)(()=>{let e=document.documentElement;if("system"===s){let t=window.matchMedia("(prefers-color-scheme: dark)").matches;e.classList.toggle("dark",t)}else e.classList.toggle("dark","dark"===s);localStorage.setItem("carbonlens-theme",s),e.classList.toggle("high-contrast",l),localStorage.setItem("carbonlens-high-contrast",String(l)),e.classList.toggle("reduce-motion",c),localStorage.setItem("carbonlens-reduced-motion",String(c))},[s,l,c]),(0,a.jsx)(n.Provider,{value:{theme:s,setTheme:i,highContrast:l,setHighContrast:o,reducedMotion:c,setReducedMotion:d},children:t})}function l(){let e=(0,r.useContext)(n);if(!e)throw Error("useTheme must be used within a ThemeProvider");return e}},61433:(e,t,s)=>{"use strict";s.d(t,{cn:()=>n});var a=s(2821),r=s(75889);function n(){for(var e=arguments.length,t=Array(e),s=0;s<e;s++)t[s]=arguments[s];return(0,r.QP)((0,a.$)(t))}},86153:(e,t,s)=>{"use strict";s.d(t,{J:()=>c});var a=s(95155),r=s(12115),n=s(10489),i=s(83101),l=s(61433);let o=(0,i.F)("text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"),c=r.forwardRef((e,t)=>{let{className:s,...r}=e;return(0,a.jsx)(n.b,{ref:t,className:(0,l.cn)(o(),s),...r})});c.displayName=n.b.displayName},97602:(e,t,s)=>{"use strict";s.d(t,{sG:()=>i});var a=s(12115);s(47650);var r=s(46673),n=s(95155),i=["a","button","div","form","h2","h3","img","input","label","li","nav","ol","p","select","span","svg","ul"].reduce((e,t)=>{let s=(0,r.TL)(`Primitive.${t}`),i=a.forwardRef((e,a)=>{let{asChild:r,...i}=e;return"undefined"!=typeof window&&(window[Symbol.for("radix-ui")]=!0),(0,n.jsx)(r?s:t,{...i,ref:a})});return i.displayName=`Primitive.${t}`,{...e,[t]:i}},{})}},e=>{e.O(0,[407,441,255,358],()=>e(e.s=55572)),_N_E=e.O()}]);
+(self.webpackChunk_N_E = self.webpackChunk_N_E || []).push([
+  [791],
+  {
+    10117: (e, t, s) => {
+      "use strict";
+      s.d(t, { $: () => c });
+      var a = s(95155),
+        r = s(12115),
+        n = s(46673),
+        i = s(83101),
+        l = s(61433);
+      let o = (0, i.F)(
+          "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+          {
+            variants: {
+              variant: {
+                default: "bg-primary text-primary-foreground shadow hover:bg-primary/90",
+                destructive:
+                  "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+                outline:
+                  "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
+                secondary:
+                  "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
+                ghost: "hover:bg-accent hover:text-accent-foreground",
+                link: "text-primary underline-offset-4 hover:underline",
+              },
+              size: {
+                default: "h-10 px-4 py-2",
+                sm: "h-9 rounded-md px-3 text-xs",
+                lg: "h-11 rounded-md px-8",
+                icon: "h-10 w-10",
+              },
+            },
+            defaultVariants: { variant: "default", size: "default" },
+          },
+        ),
+        c = r.forwardRef((e, t) => {
+          let { className: s, variant: r, size: i, asChild: c = !1, ...d } = e,
+            u = c ? n.DX : "button";
+          return (0, a.jsx)(u, {
+            className: (0, l.cn)(o({ variant: r, size: i, className: s })),
+            ref: t,
+            ...d,
+          });
+        });
+      c.displayName = "Button";
+    },
+    10489: (e, t, s) => {
+      "use strict";
+      s.d(t, { b: () => l });
+      var a = s(12115),
+        r = s(97602),
+        n = s(95155),
+        i = a.forwardRef((e, t) =>
+          (0, n.jsx)(r.sG.label, {
+            ...e,
+            ref: t,
+            onMouseDown: (t) => {
+              var s;
+              t.target.closest("button, input, select, textarea") ||
+                (null == (s = e.onMouseDown) || s.call(e, t),
+                !t.defaultPrevented && t.detail > 1 && t.preventDefault());
+            },
+          }),
+        );
+      i.displayName = "Label";
+      var l = i;
+    },
+    17055: (e, t, s) => {
+      "use strict";
+      s.d(t, {
+        BT: () => c,
+        Wu: () => d,
+        ZB: () => o,
+        Zp: () => i,
+        aR: () => l,
+        wL: () => u,
+      });
+      var a = s(95155),
+        r = s(12115),
+        n = s(61433);
+      let i = r.forwardRef((e, t) => {
+        let { className: s, ...r } = e;
+        return (0, a.jsx)("div", {
+          ref: t,
+          className: (0, n.cn)(
+            "rounded-xl border bg-card text-card-foreground shadow-sm",
+            s,
+          ),
+          ...r,
+        });
+      });
+      i.displayName = "Card";
+      let l = r.forwardRef((e, t) => {
+        let { className: s, ...r } = e;
+        return (0, a.jsx)("div", {
+          ref: t,
+          className: (0, n.cn)("flex flex-col space-y-1.5 p-6", s),
+          ...r,
+        });
+      });
+      l.displayName = "CardHeader";
+      let o = r.forwardRef((e, t) => {
+        let { className: s, ...r } = e;
+        return (0, a.jsx)("div", {
+          ref: t,
+          className: (0, n.cn)("font-semibold leading-none tracking-tight", s),
+          ...r,
+        });
+      });
+      o.displayName = "CardTitle";
+      let c = r.forwardRef((e, t) => {
+        let { className: s, ...r } = e;
+        return (0, a.jsx)("div", {
+          ref: t,
+          className: (0, n.cn)("text-sm text-muted-foreground", s),
+          ...r,
+        });
+      });
+      c.displayName = "CardDescription";
+      let d = r.forwardRef((e, t) => {
+        let { className: s, ...r } = e;
+        return (0, a.jsx)("div", { ref: t, className: (0, n.cn)("p-6 pt-0", s), ...r });
+      });
+      d.displayName = "CardContent";
+      let u = r.forwardRef((e, t) => {
+        let { className: s, ...r } = e;
+        return (0, a.jsx)("div", {
+          ref: t,
+          className: (0, n.cn)("flex items-center p-6 pt-0", s),
+          ...r,
+        });
+      });
+      u.displayName = "CardFooter";
+    },
+    43401: (e, t, s) => {
+      "use strict";
+      (s.r(t), s.d(t, { default: () => v }));
+      var a = s(95155),
+        r = s(58903),
+        n = s(17055),
+        i = s(10117),
+        l = s(86153),
+        o = s(71847);
+      let c = (0, o.A)("sun", [
+          ["circle", { cx: "12", cy: "12", r: "4", key: "4exip2" }],
+          ["path", { d: "M12 2v2", key: "tus03m" }],
+          ["path", { d: "M12 20v2", key: "1lh1kg" }],
+          ["path", { d: "m4.93 4.93 1.41 1.41", key: "149t6j" }],
+          ["path", { d: "m17.66 17.66 1.41 1.41", key: "ptbguv" }],
+          ["path", { d: "M2 12h2", key: "1t8f8n" }],
+          ["path", { d: "M20 12h2", key: "1q8mjw" }],
+          ["path", { d: "m6.34 17.66-1.41 1.41", key: "1m8zz5" }],
+          ["path", { d: "m19.07 4.93-1.41 1.41", key: "1shlcs" }],
+        ]),
+        d = (0, o.A)("moon", [
+          ["path", { d: "M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z", key: "a7tn18" }],
+        ]),
+        u = (0, o.A)("monitor", [
+          ["rect", { width: "20", height: "14", x: "2", y: "3", rx: "2", key: "48i651" }],
+          ["line", { x1: "8", x2: "16", y1: "21", y2: "21", key: "1svkeh" }],
+          ["line", { x1: "12", x2: "12", y1: "17", y2: "21", key: "vw1qmm" }],
+        ]),
+        m = (0, o.A)("eye", [
+          [
+            "path",
+            {
+              d: "M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0",
+              key: "1nclc0",
+            },
+          ],
+          ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }],
+        ]);
+      var h = s(56154);
+      let x = (0, o.A)("download", [
+          ["path", { d: "M12 15V3", key: "m9g1x1" }],
+          ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
+          ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }],
+        ]),
+        f = (0, o.A)("trash-2", [
+          ["path", { d: "M3 6h18", key: "d0wm0j" }],
+          ["path", { d: "M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6", key: "4alrt4" }],
+          ["path", { d: "M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2", key: "v07s0e" }],
+          ["line", { x1: "10", x2: "10", y1: "11", y2: "17", key: "1uufr5" }],
+          ["line", { x1: "14", x2: "14", y1: "11", y2: "17", key: "xtxkd" }],
+        ]);
+      var p = s(61433),
+        g = s(12115);
+      function v() {
+        let {
+            theme: e,
+            setTheme: t,
+            highContrast: s,
+            setHighContrast: o,
+            reducedMotion: v,
+            setReducedMotion: y,
+          } = (0, r.D)(),
+          [b, j] = (0, g.useState)(!1),
+          [w, k] = (0, g.useState)(!1),
+          N = async () => {
+            j(!0);
+            try {
+              let e = await fetch("/api/user/export"),
+                t = await e.json(),
+                s = new Blob([JSON.stringify(t, null, 2)], { type: "application/json" }),
+                a = URL.createObjectURL(s),
+                r = document.createElement("a");
+              ((r.href = a),
+                (r.download = "carbonlens-export-".concat(
+                  new Date().toISOString().split("T")[0],
+                  ".json",
+                )),
+                r.click(),
+                URL.revokeObjectURL(a));
+            } finally {
+              j(!1);
+            }
+          },
+          C = async () => {
+            (await fetch("/api/user/delete", { method: "DELETE" }),
+              (window.location.href = "/login"));
+          };
+        return (0, a.jsxs)("div", {
+          className: "space-y-6",
+          children: [
+            (0, a.jsxs)("div", {
+              children: [
+                (0, a.jsx)("h1", {
+                  className: "text-2xl font-bold tracking-tight",
+                  children: "Settings",
+                }),
+                (0, a.jsx)("p", {
+                  className: "text-muted-foreground",
+                  children: "Manage your preferences and data",
+                }),
+              ],
+            }),
+            (0, a.jsxs)(n.Zp, {
+              children: [
+                (0, a.jsxs)(n.aR, {
+                  children: [
+                    (0, a.jsx)(n.ZB, { children: "Appearance" }),
+                    (0, a.jsx)(n.BT, { children: "Customize the look and feel" }),
+                  ],
+                }),
+                (0, a.jsx)(n.Wu, {
+                  className: "space-y-4",
+                  children: (0, a.jsxs)("div", {
+                    children: [
+                      (0, a.jsx)(l.J, {
+                        className: "mb-2 block text-sm",
+                        children: "Theme",
+                      }),
+                      (0, a.jsx)("div", {
+                        className: "flex gap-2",
+                        role: "radiogroup",
+                        "aria-label": "Theme selection",
+                        children: [
+                          { value: "light", icon: c, label: "Light" },
+                          { value: "dark", icon: d, label: "Dark" },
+                          { value: "system", icon: u, label: "System" },
+                        ].map((s) => {
+                          let { value: r, icon: n, label: i } = s;
+                          return (0, a.jsxs)(
+                            "button",
+                            {
+                              onClick: () => t(r),
+                              className: (0, p.cn)(
+                                "flex items-center gap-2 rounded-lg border px-4 py-2 text-sm transition-colors",
+                                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                                e === r && "border-primary bg-primary/5 font-medium",
+                              ),
+                              role: "radio",
+                              "aria-checked": e === r,
+                              children: [(0, a.jsx)(n, { className: "h-4 w-4" }), i],
+                            },
+                            r,
+                          );
+                        }),
+                      }),
+                    ],
+                  }),
+                }),
+              ],
+            }),
+            (0, a.jsxs)(n.Zp, {
+              children: [
+                (0, a.jsxs)(n.aR, {
+                  children: [
+                    (0, a.jsx)(n.ZB, { children: "Accessibility" }),
+                    (0, a.jsx)(n.BT, { children: "WCAG 2.2 AA compliant options" }),
+                  ],
+                }),
+                (0, a.jsxs)(n.Wu, {
+                  className: "space-y-4",
+                  children: [
+                    (0, a.jsxs)("div", {
+                      className: "flex items-center justify-between",
+                      children: [
+                        (0, a.jsxs)("div", {
+                          className: "flex items-center gap-3",
+                          children: [
+                            (0, a.jsx)(m, { className: "h-5 w-5 text-muted-foreground" }),
+                            (0, a.jsxs)("div", {
+                              children: [
+                                (0, a.jsx)(l.J, { children: "High Contrast" }),
+                                (0, a.jsx)("p", {
+                                  className: "text-xs text-muted-foreground",
+                                  children: "7:1 contrast ratio",
+                                }),
+                              ],
+                            }),
+                          ],
+                        }),
+                        (0, a.jsx)("button", {
+                          onClick: () => o(!s),
+                          className: (0, p.cn)(
+                            "relative h-6 w-11 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                            s ? "bg-primary" : "bg-muted",
+                          ),
+                          role: "switch",
+                          "aria-checked": s,
+                          "aria-label": "Toggle high contrast mode",
+                          children: (0, a.jsx)("span", {
+                            className: (0, p.cn)(
+                              "block h-5 w-5 rounded-full bg-white shadow-sm transition-transform",
+                              s ? "translate-x-5" : "translate-x-0.5",
+                            ),
+                          }),
+                        }),
+                      ],
+                    }),
+                    (0, a.jsxs)("div", {
+                      className: "flex items-center justify-between",
+                      children: [
+                        (0, a.jsxs)("div", {
+                          className: "flex items-center gap-3",
+                          children: [
+                            (0, a.jsx)(h.A, {
+                              className: "h-5 w-5 text-muted-foreground",
+                            }),
+                            (0, a.jsxs)("div", {
+                              children: [
+                                (0, a.jsx)(l.J, { children: "Reduced Motion" }),
+                                (0, a.jsx)("p", {
+                                  className: "text-xs text-muted-foreground",
+                                  children: "Disable all animations",
+                                }),
+                              ],
+                            }),
+                          ],
+                        }),
+                        (0, a.jsx)("button", {
+                          onClick: () => y(!v),
+                          className: (0, p.cn)(
+                            "relative h-6 w-11 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                            v ? "bg-primary" : "bg-muted",
+                          ),
+                          role: "switch",
+                          "aria-checked": v,
+                          "aria-label": "Toggle reduced motion",
+                          children: (0, a.jsx)("span", {
+                            className: (0, p.cn)(
+                              "block h-5 w-5 rounded-full bg-white shadow-sm transition-transform",
+                              v ? "translate-x-5" : "translate-x-0.5",
+                            ),
+                          }),
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            (0, a.jsxs)(n.Zp, {
+              children: [
+                (0, a.jsxs)(n.aR, {
+                  children: [
+                    (0, a.jsx)(n.ZB, { children: "Data & Privacy" }),
+                    (0, a.jsx)(n.BT, { children: "GDPR-compliant data management" }),
+                  ],
+                }),
+                (0, a.jsxs)(n.Wu, {
+                  className: "space-y-4",
+                  children: [
+                    (0, a.jsxs)(i.$, {
+                      variant: "outline",
+                      onClick: N,
+                      disabled: b,
+                      className: "gap-2",
+                      children: [
+                        (0, a.jsx)(x, { className: "h-4 w-4" }),
+                        b ? "Exporting..." : "Export My Data",
+                      ],
+                    }),
+                    w
+                      ? (0, a.jsxs)("div", {
+                          className: "rounded-lg border border-destructive p-4",
+                          children: [
+                            (0, a.jsx)("p", {
+                              className: "text-sm font-medium text-destructive",
+                              children:
+                                "This will permanently delete your account and all data. This cannot be undone.",
+                            }),
+                            (0, a.jsxs)("div", {
+                              className: "mt-3 flex gap-2",
+                              children: [
+                                (0, a.jsx)(i.$, {
+                                  variant: "destructive",
+                                  size: "sm",
+                                  onClick: C,
+                                  children: "Confirm Delete",
+                                }),
+                                (0, a.jsx)(i.$, {
+                                  variant: "outline",
+                                  size: "sm",
+                                  onClick: () => k(!1),
+                                  children: "Cancel",
+                                }),
+                              ],
+                            }),
+                          ],
+                        })
+                      : (0, a.jsxs)(i.$, {
+                          variant: "destructive",
+                          onClick: () => k(!0),
+                          className: "gap-2",
+                          children: [
+                            (0, a.jsx)(f, { className: "h-4 w-4" }),
+                            "Delete My Account",
+                          ],
+                        }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        });
+      }
+    },
+    55572: (e, t, s) => {
+      Promise.resolve().then(s.bind(s, 43401));
+    },
+    56154: (e, t, s) => {
+      "use strict";
+      s.d(t, { A: () => a });
+      let a = (0, s(71847).A)("zap", [
+        [
+          "path",
+          {
+            d: "M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z",
+            key: "1xq2db",
+          },
+        ],
+      ]);
+    },
+    58903: (e, t, s) => {
+      "use strict";
+      s.d(t, { D: () => l, ThemeProvider: () => i });
+      var a = s(95155),
+        r = s(12115);
+      let n = (0, r.createContext)(void 0);
+      function i(e) {
+        let { children: t } = e,
+          [s, i] = (0, r.useState)("system"),
+          [l, o] = (0, r.useState)(!1),
+          [c, d] = (0, r.useState)(!1);
+        return (
+          (0, r.useEffect)(() => {
+            let e = localStorage.getItem("carbonlens-theme");
+            e && i(e);
+            let t = localStorage.getItem("carbonlens-high-contrast");
+            t && o("true" === t);
+            let s = localStorage.getItem("carbonlens-reduced-motion");
+            s && d("true" === s);
+          }, []),
+          (0, r.useEffect)(() => {
+            let e = document.documentElement;
+            if ("system" === s) {
+              let t = window.matchMedia("(prefers-color-scheme: dark)").matches;
+              e.classList.toggle("dark", t);
+            } else e.classList.toggle("dark", "dark" === s);
+            (localStorage.setItem("carbonlens-theme", s),
+              e.classList.toggle("high-contrast", l),
+              localStorage.setItem("carbonlens-high-contrast", String(l)),
+              e.classList.toggle("reduce-motion", c),
+              localStorage.setItem("carbonlens-reduced-motion", String(c)));
+          }, [s, l, c]),
+          (0, a.jsx)(n.Provider, {
+            value: {
+              theme: s,
+              setTheme: i,
+              highContrast: l,
+              setHighContrast: o,
+              reducedMotion: c,
+              setReducedMotion: d,
+            },
+            children: t,
+          })
+        );
+      }
+      function l() {
+        let e = (0, r.useContext)(n);
+        if (!e) throw Error("useTheme must be used within a ThemeProvider");
+        return e;
+      }
+    },
+    61433: (e, t, s) => {
+      "use strict";
+      s.d(t, { cn: () => n });
+      var a = s(2821),
+        r = s(75889);
+      function n() {
+        for (var e = arguments.length, t = Array(e), s = 0; s < e; s++)
+          t[s] = arguments[s];
+        return (0, r.QP)((0, a.$)(t));
+      }
+    },
+    86153: (e, t, s) => {
+      "use strict";
+      s.d(t, { J: () => c });
+      var a = s(95155),
+        r = s(12115),
+        n = s(10489),
+        i = s(83101),
+        l = s(61433);
+      let o = (0, i.F)(
+          "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+        ),
+        c = r.forwardRef((e, t) => {
+          let { className: s, ...r } = e;
+          return (0, a.jsx)(n.b, { ref: t, className: (0, l.cn)(o(), s), ...r });
+        });
+      c.displayName = n.b.displayName;
+    },
+    97602: (e, t, s) => {
+      "use strict";
+      s.d(t, { sG: () => i });
+      var a = s(12115);
+      s(47650);
+      var r = s(46673),
+        n = s(95155),
+        i = [
+          "a",
+          "button",
+          "div",
+          "form",
+          "h2",
+          "h3",
+          "img",
+          "input",
+          "label",
+          "li",
+          "nav",
+          "ol",
+          "p",
+          "select",
+          "span",
+          "svg",
+          "ul",
+        ].reduce((e, t) => {
+          let s = (0, r.TL)(`Primitive.${t}`),
+            i = a.forwardRef((e, a) => {
+              let { asChild: r, ...i } = e;
+              return (
+                "undefined" != typeof window && (window[Symbol.for("radix-ui")] = !0),
+                (0, n.jsx)(r ? s : t, { ...i, ref: a })
+              );
+            });
+          return ((i.displayName = `Primitive.${t}`), { ...e, [t]: i });
+        }, {});
+    },
+  },
+  (e) => {
+    (e.O(0, [407, 441, 255, 358], () => e((e.s = 55572))), (_N_E = e.O()));
+  },
+]);

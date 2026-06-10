@@ -1,7 +1,10 @@
 import type { ActivityRepository } from "@/domain/repositories/activity-repository";
 import type { EmissionFactorRepository } from "@/domain/repositories/emission-factor-repository";
 import type { Activity, CreateActivityInput } from "@/domain/entities/activity";
-import type { PaginatedResult, ActivityQueryOptions } from "@/domain/repositories/activity-repository";
+import type {
+  PaginatedResult,
+  ActivityQueryOptions,
+} from "@/domain/repositories/activity-repository";
 import { CarbonCalculator } from "@/domain/services/carbon-calculator";
 
 /**
@@ -15,9 +18,7 @@ export class ActivityService {
   ) {}
 
   async logActivity(input: CreateActivityInput): Promise<Activity> {
-    const factor = await this.emissionFactorRepo.findById(
-      input.emissionFactorId,
-    );
+    const factor = await this.emissionFactorRepo.findById(input.emissionFactorId);
     if (!factor) {
       throw new Error(`Emission factor not found: ${input.emissionFactorId}`);
     }
@@ -46,10 +47,6 @@ export class ActivityService {
     startDate: Date,
     endDate: Date,
   ): Promise<Activity[]> {
-    return this.activityRepo.findByUserAndDateRange(
-      userId,
-      startDate,
-      endDate,
-    );
+    return this.activityRepo.findByUserAndDateRange(userId, startDate, endDate);
   }
 }

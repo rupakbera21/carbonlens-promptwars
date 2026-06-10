@@ -19,18 +19,11 @@ export class GoalService {
     return this.goalRepo.create(input);
   }
 
-  async getUserGoals(
-    userId: string,
-    status?: GoalStatus,
-  ): Promise<Goal[]> {
+  async getUserGoals(userId: string, status?: GoalStatus): Promise<Goal[]> {
     return this.goalRepo.findByUser(userId, status);
   }
 
-  async updateGoalStatus(
-    id: string,
-    userId: string,
-    status: GoalStatus,
-  ): Promise<Goal> {
+  async updateGoalStatus(id: string, userId: string, status: GoalStatus): Promise<Goal> {
     return this.goalRepo.update(id, userId, { status });
   }
 

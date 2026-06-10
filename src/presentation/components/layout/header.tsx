@@ -39,16 +39,12 @@ export function Header() {
       <div className="flex h-16 items-center justify-between px-4 lg:px-6">
         {/* Mobile menu button */}
         <button
-          className="rounded-md p-2 lg:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="rounded-md p-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring lg:hidden"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-expanded={mobileMenuOpen}
           aria-label="Toggle navigation menu"
         >
-          {mobileMenuOpen ? (
-            <X className="h-5 w-5" />
-          ) : (
-            <Menu className="h-5 w-5" />
-          )}
+          {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
 
         {/* Mobile logo */}
@@ -83,16 +79,12 @@ export function Header() {
 
       {/* Mobile nav drawer */}
       {mobileMenuOpen && (
-        <nav
-          className="border-t bg-card p-4 lg:hidden"
-          aria-label="Mobile navigation"
-        >
+        <nav className="border-t bg-card p-4 lg:hidden" aria-label="Mobile navigation">
           <div className="space-y-1">
             {navItems.map((item) => {
               const isActive =
                 pathname === item.href ||
-                (item.href !== "/dashboard" &&
-                  pathname.startsWith(item.href));
+                (item.href !== "/dashboard" && pathname.startsWith(item.href));
               const Icon = item.icon;
               return (
                 <Link

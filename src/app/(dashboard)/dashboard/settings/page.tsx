@@ -18,7 +18,14 @@ import { useState } from "react";
  * Settings page — user preferences, accessibility, and GDPR controls.
  */
 export default function SettingsPage() {
-  const { theme, setTheme, highContrast, setHighContrast, reducedMotion, setReducedMotion } = useTheme();
+  const {
+    theme,
+    setTheme,
+    highContrast,
+    setHighContrast,
+    reducedMotion,
+    setReducedMotion,
+  } = useTheme();
   const [isExporting, setIsExporting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
@@ -27,7 +34,9 @@ export default function SettingsPage() {
     try {
       const res = await fetch("/api/user/export");
       const data = await res.json();
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const blob = new Blob([JSON.stringify(data, null, 2)], {
+        type: "application/json",
+      });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -61,11 +70,11 @@ export default function SettingsPage() {
           <div>
             <Label className="mb-2 block text-sm">Theme</Label>
             <div className="flex gap-2" role="radiogroup" aria-label="Theme selection">
-              {([
+              {[
                 { value: "light" as const, icon: Sun, label: "Light" },
                 { value: "dark" as const, icon: Moon, label: "Dark" },
                 { value: "system" as const, icon: Monitor, label: "System" },
-              ]).map(({ value, icon: Icon, label }) => (
+              ].map(({ value, icon: Icon, label }) => (
                 <button
                   key={value}
                   onClick={() => setTheme(value)}
@@ -156,24 +165,40 @@ export default function SettingsPage() {
           <CardDescription>GDPR-compliant data management</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Button variant="outline" onClick={handleExport} disabled={isExporting} className="gap-2">
+          <Button
+            variant="outline"
+            onClick={handleExport}
+            disabled={isExporting}
+            className="gap-2"
+          >
             <Download className="h-4 w-4" />
             {isExporting ? "Exporting..." : "Export My Data"}
           </Button>
 
           {!showDeleteConfirm ? (
-            <Button variant="destructive" onClick={() => setShowDeleteConfirm(true)} className="gap-2">
+            <Button
+              variant="destructive"
+              onClick={() => setShowDeleteConfirm(true)}
+              className="gap-2"
+            >
               <Trash2 className="h-4 w-4" />
               Delete My Account
             </Button>
           ) : (
             <div className="rounded-lg border border-destructive p-4">
-              <p className="text-sm font-medium text-destructive">This will permanently delete your account and all data. This cannot be undone.</p>
+              <p className="text-sm font-medium text-destructive">
+                This will permanently delete your account and all data. This cannot be
+                undone.
+              </p>
               <div className="mt-3 flex gap-2">
                 <Button variant="destructive" size="sm" onClick={handleDelete}>
                   Confirm Delete
                 </Button>
-                <Button variant="outline" size="sm" onClick={() => setShowDeleteConfirm(false)}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowDeleteConfirm(false)}
+                >
                   Cancel
                 </Button>
               </div>

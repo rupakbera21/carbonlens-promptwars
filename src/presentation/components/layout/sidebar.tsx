@@ -66,8 +66,7 @@ export function Sidebar() {
           {navItems.map((item) => {
             const isActive =
               pathname === item.href ||
-              (item.href !== "/dashboard" &&
-                pathname.startsWith(item.href));
+              (item.href !== "/dashboard" && pathname.startsWith(item.href));
             const Icon = item.icon;
             return (
               <Link
@@ -77,9 +76,7 @@ export function Sidebar() {
                   "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
                   "hover:bg-accent hover:text-accent-foreground",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                  isActive
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground",
+                  isActive ? "bg-primary/10 text-primary" : "text-muted-foreground",
                 )}
                 aria-current={isActive ? "page" : undefined}
               >
@@ -92,12 +89,8 @@ export function Sidebar() {
 
         {/* Footer info */}
         <div className="border-t p-4">
-          <p className="text-xs text-muted-foreground">
-            CarbonLens v1.0.0
-          </p>
-          <p className="text-xs text-muted-foreground">
-            Tracking your impact
-          </p>
+          <p className="text-xs text-muted-foreground">CarbonLens v1.0.0</p>
+          <p className="text-xs text-muted-foreground">Tracking your impact</p>
         </div>
       </div>
     </aside>

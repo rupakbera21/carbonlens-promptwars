@@ -30,8 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     title: "CarbonLens — Track & Reduce Your Carbon Footprint",
-    description:
-      "Transparent carbon tracking with personalized recommendations.",
+    description: "Transparent carbon tracking with personalized recommendations.",
     siteName: "CarbonLens",
   },
 };
@@ -45,11 +44,7 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
       <body className="min-h-screen antialiased">

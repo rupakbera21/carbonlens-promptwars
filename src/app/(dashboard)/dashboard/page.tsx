@@ -53,9 +53,7 @@ interface RecommendationData {
 export default function DashboardPage() {
   const [scoreData, setScoreData] = useState<ScoreData | null>(null);
   const [goals, setGoals] = useState<GoalData[]>([]);
-  const [recommendations, setRecommendations] = useState<
-    RecommendationData[]
-  >([]);
+  const [recommendations, setRecommendations] = useState<RecommendationData[]>([]);
   const [emissionFactors, setEmissionFactors] = useState<
     Array<{ id: string; subCategory: string; name: string; unit: string }>
   >([]);
@@ -70,13 +68,12 @@ export default function DashboardPage() {
         fetch("/api/emission-factors"),
       ]);
 
-      const [scoreDataRes, goalsDataRes, recsDataRes, efDataRes] =
-        await Promise.all([
-          scoreRes.ok ? scoreRes.json() : null,
-          goalsRes.ok ? goalsRes.json() : { data: [] },
-          recsRes.ok ? recsRes.json() : { data: [] },
-          efRes.ok ? efRes.json() : { data: [] },
-        ]);
+      const [scoreDataRes, goalsDataRes, recsDataRes, efDataRes] = await Promise.all([
+        scoreRes.ok ? scoreRes.json() : null,
+        goalsRes.ok ? goalsRes.json() : { data: [] },
+        recsRes.ok ? recsRes.json() : { data: [] },
+        efRes.ok ? efRes.json() : { data: [] },
+      ]);
 
       setScoreData(scoreDataRes?.data ?? null);
       setGoals(goalsDataRes.data);
@@ -119,41 +116,31 @@ export default function DashboardPage() {
   const activeGoal = goals.find((g) => g.status === "active");
   const currentCo2e = scoreData?.current?.totalCo2eKg ?? 0;
   const goalProgress = activeGoal
-    ? Math.max(
-        0,
-        Math.min(100, (1 - currentCo2e / activeGoal.targetCo2eKg) * 100),
-      )
+    ? Math.max(0, Math.min(100, (1 - currentCo2e / activeGoal.targetCo2eKg) * 100))
     : null;
 
   // Week-over-week change
   const history = scoreData?.weeklyHistory ?? [];
   const weekChange =
     history.length >= 2
-      ? history[history.length - 1].totalCo2eKg -
-        history[history.length - 2].totalCo2eKg
+      ? history[history.length - 1].totalCo2eKg - history[history.length - 2].totalCo2eKg
       : null;
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
-        <p className="text-muted-foreground">
-          Your carbon footprint at a glance
-        </p>
+        <p className="text-muted-foreground">Your carbon footprint at a glance</p>
       </div>
 
       {/* Score + Breakdown + Quick Log */}
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         <ScoreCard
           score={scoreData?.current?.score ?? null}
-          explanation={
-            scoreData?.explanation ?? "Log activities to see your score"
-          }
+          explanation={scoreData?.explanation ?? "Log activities to see your score"}
           totalCo2eKg={currentCo2e}
         />
-        <CategoryBreakdownCard
-          breakdown={scoreData?.current?.breakdown ?? null}
-        />
+        <CategoryBreakdownCard breakdown={scoreData?.current?.breakdown ?? null} />
         <QuickLog
           emissionFactors={emissionFactors}
           onSubmit={handleLogActivity}

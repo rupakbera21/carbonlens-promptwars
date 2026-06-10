@@ -24,18 +24,12 @@ export interface ApiError {
 }
 
 /** Helper to create a success response */
-export function successResponse<T>(
-  data: T,
-  meta: ApiMeta = {},
-): ApiResponse<T> {
+export function successResponse<T>(data: T, meta: ApiMeta = {}): ApiResponse<T> {
   return { success: true, data, meta, errors: [] };
 }
 
 /** Helper to create an error response */
-export function errorResponse(
-  errors: ApiError[],
-  meta: ApiMeta = {},
-): ApiResponse<null> {
+export function errorResponse(errors: ApiError[], meta: ApiMeta = {}): ApiResponse<null> {
   return { success: false, data: null, meta, errors };
 }
 

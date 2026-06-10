@@ -18,7 +18,10 @@ export async function DELETE() {
     await userRepo.hardDelete(auth.userId);
 
     return NextResponse.json(
-      successResponse({ deleted: true, message: "Account and all data permanently deleted" }),
+      successResponse({
+        deleted: true,
+        message: "Account and all data permanently deleted",
+      }),
     );
   } catch (error) {
     return handleApiError(error);

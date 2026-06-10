@@ -37,10 +37,7 @@ export class ScoreCalculator {
       breakdown[key] = Math.round(breakdown[key] * 1000) / 1000;
     }
 
-    const totalCo2eKg = Object.values(breakdown).reduce(
-      (sum, val) => sum + val,
-      0,
-    );
+    const totalCo2eKg = Object.values(breakdown).reduce((sum, val) => sum + val, 0);
     const score = calculateScore(totalCo2eKg);
 
     return {

@@ -3,7 +3,12 @@
 import { useEffect, useState } from "react";
 import { formatCo2e } from "@/shared/utils/format";
 import { Loading } from "@/presentation/components/common/loading";
-import { Card, CardContent, CardHeader, CardTitle } from "@/presentation/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/presentation/components/ui/card";
 import { Target } from "lucide-react";
 
 export default function GoalsPage() {
@@ -46,13 +51,13 @@ export default function GoalsPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex justify-between items-end">
+                <div className="flex items-end justify-between">
                   <div>
                     <p className="text-sm text-muted-foreground">Target limit</p>
                     <p className="text-2xl font-bold">{formatCo2e(g.targetCo2eKg)}</p>
                   </div>
                   <div>
-                    <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary capitalize">
+                    <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold capitalize text-primary">
                       {g.status}
                     </span>
                   </div>
@@ -61,7 +66,7 @@ export default function GoalsPage() {
             </Card>
           ))
         ) : (
-          <div className="col-span-full py-12 text-center text-muted-foreground border rounded-lg border-dashed">
+          <div className="col-span-full rounded-lg border border-dashed py-12 text-center text-muted-foreground">
             You don't have any active goals right now.
           </div>
         )}

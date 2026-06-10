@@ -34,11 +34,7 @@ export class PrismaGoalRepository implements GoalRepository {
     return records as Goal[];
   }
 
-  async update(
-    id: string,
-    userId: string,
-    data: Partial<Goal>,
-  ): Promise<Goal> {
+  async update(id: string, userId: string, data: Partial<Goal>): Promise<Goal> {
     const record = await prisma.goal.updateMany({
       where: { id, userId },
       data: {

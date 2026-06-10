@@ -175,5 +175,5 @@ ON CONFLICT ("id") DO NOTHING;
 
 -- 4. Create Demo User (Password: Demo1234!)
 INSERT INTO "users" ("id", "email", "password_hash", "name", "updated_at") VALUES
-('u0000001-0000-0000-0000-000000000001', 'demo@carbonlens.app', '$2a$12$R.S2.bK8F9fA.s9BwXp8y.e3Pq6YdJ1QO1M7zP.v.2PqV6HhHh.5K', 'Demo User', CURRENT_TIMESTAMP)
+('u0000001-0000-0000-0000-000000000001', 'demo@carbonlens.app', '$2b$12$fyyHp7WUhsodqApEAiwvXu2I3pwER59urtC9DJJ5Yv4gdWsy29hFS', 'Demo User', CURRENT_TIMESTAMP)
 ON CONFLICT ("email") DO NOTHING;

@@ -15,8 +15,7 @@ interface RateLimitEntry {
 
 const store = new Map<string, RateLimitEntry>();
 
-const DEFAULT_MAX =
-  parseInt(process.env.RATE_LIMIT_MAX ?? "100", 10) || 100;
+const DEFAULT_MAX = parseInt(process.env.RATE_LIMIT_MAX ?? "100", 10) || 100;
 const DEFAULT_WINDOW_MS =
   parseInt(process.env.RATE_LIMIT_WINDOW_MS ?? "60000", 10) || 60000;
 
@@ -50,9 +49,7 @@ export function checkRateLimit(
       {
         status: 429,
         headers: {
-          "Retry-After": String(
-            Math.ceil((entry.resetTime - now) / 1000),
-          ),
+          "Retry-After": String(Math.ceil((entry.resetTime - now) / 1000)),
         },
       },
     );

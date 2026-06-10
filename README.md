@@ -14,53 +14,60 @@ CarbonLens is a **carbon footprint tracking and reduction platform** designed wi
 
 ### Why CarbonLens?
 
-| Feature | Typical Calculator | CarbonLens |
-|---------|-------------------|------------|
-| Tracking | One-time survey | Continuous daily logging |
-| Transparency | Black-box score | Every factor cited with source |
-| Recommendations | Generic tips | Configurable rule-engine-driven suggestions |
-| Offline Support | None | Full PWA with service worker |
-| Accessibility | Partial/None | WCAG 2.2 AA compliant |
-| Data Ownership | Vendor-locked | Full JSON export, right to delete |
+| Feature         | Typical Calculator | CarbonLens                                  |
+| --------------- | ------------------ | ------------------------------------------- |
+| Tracking        | One-time survey    | Continuous daily logging                    |
+| Transparency    | Black-box score    | Every factor cited with source              |
+| Recommendations | Generic tips       | Configurable rule-engine-driven suggestions |
+| Offline Support | None               | Full PWA with service worker                |
+| Accessibility   | Partial/None       | WCAG 2.2 AA compliant                       |
+| Data Ownership  | Vendor-locked      | Full JSON export, right to delete           |
 
 ---
 
 ## ✨ Features
 
 ### 1. Carbon Footprint Dashboard
+
 - Track **transportation**, **electricity**, **food**, and **shopping** emissions
 - Real-time score updates with animated visualizations
 - Per-category breakdown with accessible data tables
 
 ### 2. Smart Carbon Score (0-100)
+
 - **Fully explainable** — every gram of CO₂e is traceable to its emission factor
 - Linear score: `score = 100 × (1 - CO₂e / 200kg)` (weekly)
 - Score explanation text changes based on range
 
 ### 3. Personalized Recommendations
+
 - Driven by a **configurable rule engine** stored in the database
 - Zero hardcoded business logic in the UI
 - Rules define conditions (JSON) and actions (recommendations)
 - Example: "If car usage > 100 km/week → suggest public transport"
 
 ### 4. Goal Tracking
+
 - Set monthly carbon reduction targets
 - Visual progress tracking with percentage indicators
 - Auto-cancellation of previous goals on new goal creation
 
 ### 5. Insights Engine
+
 - Weekly and monthly trend charts (Recharts)
 - Week-over-week comparison
 - Largest emission category identification
 - Estimated savings opportunities
 
 ### 6. Accessibility Mode
+
 - High contrast mode (7:1 ratio)
 - Reduced motion (respects `prefers-reduced-motion`)
 - Screen reader optimizations (ARIA landmarks, live regions, data tables)
 - Keyboard navigation with visible focus indicators
 
 ### 7. Offline Support (PWA)
+
 - Service worker with strategy-based caching
 - Offline fallback page
 - Installable as a Progressive Web App
@@ -84,6 +91,7 @@ CarbonLens is a **carbon footprint tracking and reduction platform** designed wi
 ```
 
 ### Key Design Decisions
+
 - **Modular Monolith** — chosen over microservices for operational simplicity (scored 4.6/5 in weighted decision matrix)
 - **Repository Pattern** — domain defines interfaces; infrastructure implements with Prisma
 - **Pre-computed scores** — stored in `carbon_scores` table to avoid expensive re-aggregation
@@ -115,6 +123,7 @@ carbonlens/
 ## 🚀 Setup Instructions
 
 ### Prerequisites
+
 - **Node.js** ≥ 20.0.0
 - **PostgreSQL** 16+ (or use Docker)
 - **npm** ≥ 10
@@ -137,6 +146,7 @@ cp .env.example .env
 ### 3. Database Setup
 
 **Option A: Docker (recommended)**
+
 ```bash
 npm run docker:up         # Starts PostgreSQL + Redis
 npx prisma migrate dev    # Run migrations
@@ -144,6 +154,7 @@ npm run db:seed           # Seed emission factors & rules
 ```
 
 **Option B: Existing PostgreSQL**
+
 ```bash
 # Update DATABASE_URL in .env
 npx prisma migrate dev
@@ -165,6 +176,7 @@ Open [http://localhost:3000](http://localhost:3000)
 ## 🧪 Running Tests
 
 ### Unit & Integration Tests
+
 ```bash
 npm run test              # Run all tests
 npm run test:watch        # Watch mode
@@ -172,12 +184,14 @@ npm run test:coverage     # With coverage report
 ```
 
 ### E2E Tests
+
 ```bash
 npm run test:e2e          # Headless
 npm run test:e2e:ui       # Interactive UI mode
 ```
 
 ### Linting & Type Checking
+
 ```bash
 npm run lint              # ESLint + Prettier
 npm run type-check        # TypeScript compilation
@@ -188,6 +202,7 @@ npm run type-check        # TypeScript compilation
 ## 🐳 Deployment
 
 ### Vercel + Supabase (Recommended)
+
 When deploying to Vercel with a Supabase database, Vercel build servers block IPv6 connections, preventing automatic database migrations (`prisma db push`). We completely bypass this limitation using a raw SQL setup script:
 
 1. Deploy the repository to Vercel (the build script automatically skips database pushing).
@@ -198,6 +213,7 @@ When deploying to Vercel with a Supabase database, Vercel build servers block IP
 6. Your database is now fully populated with tables, seed data, and a demo user!
 
 ### Docker Production Build
+
 ```bash
 docker build -f docker/Dockerfile -t carbonlens .
 docker run -p 3000:3000 \
@@ -208,12 +224,15 @@ docker run -p 3000:3000 \
 ```
 
 ### Docker Compose (Full Stack)
+
 ```bash
 docker compose -f docker/docker-compose.yml up -d
 ```
 
 ### CI/CD Pipeline
+
 The GitHub Actions workflow automatically:
+
 1. **Lint & Type Check** — ESLint, Prettier, TypeScript
 2. **Unit Tests** — Vitest with PostgreSQL service container
 3. **E2E Tests** — Playwright with Chromium
@@ -223,17 +242,17 @@ The GitHub Actions workflow automatically:
 
 ## 🔒 Security Measures
 
-| Area | Implementation |
-|------|---------------|
-| **OWASP A01** | Row-level security via `userId` checks on all queries |
-| **OWASP A02** | bcrypt (cost 12) for passwords; TLS 1.3 in transit |
-| **OWASP A03** | Prisma parameterized queries; Zod input validation |
-| **OWASP A05** | Non-root Docker; CSP, HSTS, X-Frame-Options headers |
-| **OWASP A06** | `npm audit` in CI; Dependabot alerts |
-| **OWASP A07** | NextAuth with JWT sessions; rate-limited auth endpoints |
-| **OWASP A09** | Structured logging; no PII in logs |
-| **Rate Limiting** | 100 req/min general; 5 req/min for auth endpoints |
-| **GDPR** | Data export, right to erasure, data minimization |
+| Area              | Implementation                                          |
+| ----------------- | ------------------------------------------------------- |
+| **OWASP A01**     | Row-level security via `userId` checks on all queries   |
+| **OWASP A02**     | bcrypt (cost 12) for passwords; TLS 1.3 in transit      |
+| **OWASP A03**     | Prisma parameterized queries; Zod input validation      |
+| **OWASP A05**     | Non-root Docker; CSP, HSTS, X-Frame-Options headers     |
+| **OWASP A06**     | `npm audit` in CI; Dependabot alerts                    |
+| **OWASP A07**     | NextAuth with JWT sessions; rate-limited auth endpoints |
+| **OWASP A09**     | Structured logging; no PII in logs                      |
+| **Rate Limiting** | 100 req/min general; 5 req/min for auth endpoints       |
+| **GDPR**          | Data export, right to erasure, data minimization        |
 
 ---
 
@@ -256,12 +275,12 @@ WCAG 2.2 AA compliance achieved through:
 
 ## 📈 Scalability Considerations
 
-| Phase | Users | Strategy |
-|-------|-------|----------|
-| MVP | 10K | Single PostgreSQL + single app container |
-| Growth | 100K | Read replicas, horizontal scaling, CDN |
-| Scale | 1M | Database partitioning, event-driven architecture |
-| Enterprise | 1M+ | Multi-region, sharding, ML recommendations |
+| Phase      | Users | Strategy                                         |
+| ---------- | ----- | ------------------------------------------------ |
+| MVP        | 10K   | Single PostgreSQL + single app container         |
+| Growth     | 100K  | Read replicas, horizontal scaling, CDN           |
+| Scale      | 1M    | Database partitioning, event-driven architecture |
+| Enterprise | 1M+   | Multi-region, sharding, ML recommendations       |
 
 ---
 
@@ -289,25 +308,25 @@ WCAG 2.2 AA compliance achieved through:
 
 ## ⚖️ Trade-offs
 
-| Decision | Trade-off | Rationale |
-|----------|-----------|-----------|
-| Modular Monolith | Less micro-independence | Simpler ops; can extract services later |
-| Pre-computed scores | Slight staleness | Avoids N+1 queries on dashboard load |
-| JSON rule engine | Less powerful than DSL | Zero supply-chain risk; fully auditable |
-| In-memory rate limiter | Not distributed | Sufficient for single-instance; Redis swap documented |
-| Synchronous score recalc | Slight latency on POST | Simpler than message queue; async planned for >10K users |
+| Decision                 | Trade-off               | Rationale                                                |
+| ------------------------ | ----------------------- | -------------------------------------------------------- |
+| Modular Monolith         | Less micro-independence | Simpler ops; can extract services later                  |
+| Pre-computed scores      | Slight staleness        | Avoids N+1 queries on dashboard load                     |
+| JSON rule engine         | Less powerful than DSL  | Zero supply-chain risk; fully auditable                  |
+| In-memory rate limiter   | Not distributed         | Sufficient for single-instance; Redis swap documented    |
+| Synchronous score recalc | Slight latency on POST  | Simpler than message queue; async planned for >10K users |
 
 ---
 
 ## 🎯 Performance Targets
 
-| Metric | Target | Technique |
-|--------|--------|-----------|
-| Lighthouse | >95 | SSR, optimized images, minimal JS |
-| FCP | <1.5s | Server-side rendering, critical CSS |
-| LCP | <2.5s | Lazy-loaded charts, preloaded fonts |
-| CLS | <0.1 | Explicit dimensions, `font-display: swap` |
-| API P95 | <150ms | Indexed queries, connection pooling |
+| Metric     | Target | Technique                                 |
+| ---------- | ------ | ----------------------------------------- |
+| Lighthouse | >95    | SSR, optimized images, minimal JS         |
+| FCP        | <1.5s  | Server-side rendering, critical CSS       |
+| LCP        | <2.5s  | Lazy-loaded charts, preloaded fonts       |
+| CLS        | <0.1   | Explicit dimensions, `font-display: swap` |
+| API P95    | <150ms | Indexed queries, connection pooling       |
 
 ---
 
@@ -322,6 +341,7 @@ WCAG 2.2 AA compliance achieved through:
 7. **Code review** required from at least 1 team member
 
 ### Code Style
+
 - TypeScript strict mode
 - ESLint + Prettier (auto-formatted on save)
 - Tailwind class sorting via `prettier-plugin-tailwindcss`
@@ -332,6 +352,7 @@ WCAG 2.2 AA compliance achieved through:
 ## 🔧 Troubleshooting
 
 ### Database connection error
+
 ```bash
 # Verify PostgreSQL is running
 docker compose -f docker/docker-compose.yml ps
@@ -339,17 +360,20 @@ docker compose -f docker/docker-compose.yml ps
 ```
 
 ### Prisma client not generated
+
 ```bash
 npx prisma generate
 ```
 
 ### Port 3000 already in use
+
 ```bash
 # Kill existing process or use different port
 PORT=3001 npm run dev
 ```
 
 ### Tests failing with database errors
+
 ```bash
 # Ensure test database exists and migrations are applied
 DATABASE_URL="..." npx prisma migrate deploy

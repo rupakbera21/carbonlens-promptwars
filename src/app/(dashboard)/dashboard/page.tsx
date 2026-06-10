@@ -127,19 +127,7 @@ export default function DashboardPage() {
     return () => clearInterval(interval);
   }, [fetchData]);
 
-  // Live decaying effect
-  useEffect(() => {
-    if (!isGameOver && worldState && worldState.phiScore > 0) {
-      const decayInterval = setInterval(() => {
-        setWorldState((prev: any) => {
-          if (!prev) return prev;
-          const newScore = Math.max(0, prev.phiScore - 0.005);
-          return { ...prev, phiScore: newScore };
-        });
-      }, 1000);
-      return () => clearInterval(decayInterval);
-    }
-  }, [isGameOver, worldState?.phiScore]);
+  // Live decaying effect removed per user request
 
   useEffect(() => {
     const lockout = localStorage.getItem("carbonlens_game_over");

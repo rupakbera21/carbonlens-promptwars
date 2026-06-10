@@ -39,12 +39,21 @@ export function EcoPlatformer({ onComplete, onClose }: EcoPlatformerProps) {
     const gravity = 0.5;
     const keys = { ArrowLeft: false, ArrowRight: false, " ": false };
 
+    const LEVEL_WIDTH = 2400;
+
     const platforms = [
-      { x: 0, y: 350, w: 800, h: 50 }, // Ground
+      { x: 0, y: 350, w: LEVEL_WIDTH, h: 50 }, // Ground
       { x: 200, y: 280, w: 120, h: 20 },
       { x: 400, y: 220, w: 120, h: 20 },
       { x: 600, y: 160, w: 120, h: 20 },
       { x: 100, y: 120, w: 120, h: 20 },
+      // Extended level
+      { x: 800, y: 250, w: 150, h: 20 },
+      { x: 1050, y: 200, w: 100, h: 20 },
+      { x: 1300, y: 150, w: 150, h: 20 },
+      { x: 1600, y: 280, w: 120, h: 20 },
+      { x: 1800, y: 220, w: 100, h: 20 },
+      { x: 2050, y: 180, w: 150, h: 20 },
     ];
 
     let coins = [
@@ -53,6 +62,13 @@ export function EcoPlatformer({ onComplete, onClose }: EcoPlatformerProps) {
       { x: 650, y: 130, collected: false },
       { x: 150, y: 90, collected: false },
       { x: 720, y: 320, collected: false },
+      // Extended level coins
+      { x: 850, y: 220, collected: false },
+      { x: 1080, y: 170, collected: false },
+      { x: 1350, y: 120, collected: false },
+      { x: 1650, y: 250, collected: false },
+      { x: 1830, y: 190, collected: false },
+      { x: 2100, y: 150, collected: false },
     ];
 
     // Villains patrolling platforms
@@ -60,9 +76,15 @@ export function EcoPlatformer({ onComplete, onClose }: EcoPlatformerProps) {
       { x: 220, y: 256, width: 24, height: 24, vx: 1.5, minX: 200, maxX: 300, dead: false },
       { x: 420, y: 196, width: 24, height: 24, vx: 2, minX: 400, maxX: 500, dead: false },
       { x: 300, y: 326, width: 24, height: 24, vx: 1, minX: 100, maxX: 700, dead: false },
+      // Extended level villains
+      { x: 850, y: 226, width: 24, height: 24, vx: 2, minX: 800, maxX: 950, dead: false },
+      { x: 1320, y: 126, width: 24, height: 24, vx: 2.5, minX: 1300, maxX: 1450, dead: false },
+      { x: 1620, y: 256, width: 24, height: 24, vx: 1.5, minX: 1600, maxX: 1720, dead: false },
+      { x: 1000, y: 326, width: 24, height: 24, vx: 2, minX: 800, maxX: 2000, dead: false },
     ];
 
     let currentScore = 0;
+    const MAX_SCORE = coins.length * 10;
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (keys.hasOwnProperty(e.key)) keys[e.key as keyof typeof keys] = true;
@@ -107,7 +129,7 @@ export function EcoPlatformer({ onComplete, onClose }: EcoPlatformerProps) {
 
       // Restrict to bounds
       if (player.x < 0) player.x = 0;
-      if (player.x > canvas.width - player.width) player.x = canvas.width - player.width;
+      if (player.x > LEVEL_WIDTH - player.width) player.x = LEVEL_WIDTH - player.width;
 
       player.grounded = false;
 
@@ -155,7 +177,7 @@ export function EcoPlatformer({ onComplete, onClose }: EcoPlatformerProps) {
           const dy = player.y + player.height / 2 - c.y;
           if (Math.sqrt(dx * dx + dy * dy) < 20) {
             c.collected = true;
-            currentScore += 1;
+            currentScore += 10;
             setScore(currentScore);
           }
         }
@@ -167,19 +189,28 @@ export function EcoPlatformer({ onComplete, onClose }: EcoPlatformerProps) {
       }
 
       // Win condition
-      if (currentScore === coins.length) {
+      if (currentScore === MAX_SCORE) {
         setGameState("won");
       }
+
+      // Calculate camera scroll
+      let cameraX = player.x - canvas.width / 2;
+      if (cameraX < 0) cameraX = 0;
+      if (cameraX > LEVEL_WIDTH - canvas.width) cameraX = LEVEL_WIDTH - canvas.width;
 
       // Draw
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Background
+      // Background (Static, doesn't scroll)
       const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
       gradient.addColorStop(0, "#38bdf8"); // Sky blue
       gradient.addColorStop(1, "#bae6fd");
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Apply camera transform for level objects
+      ctx.save();
+      ctx.translate(-cameraX, 0);
 
       // Platforms
       ctx.fillStyle = "#166534"; // Dark green top
@@ -226,6 +257,15 @@ export function EcoPlatformer({ onComplete, onClose }: EcoPlatformerProps) {
         ctx.fillText("🧑‍🚀", player.x + player.width / 2, player.y + player.height / 2);
       }
       ctx.restore();
+
+      // Restore camera transform
+      ctx.restore();
+      
+      // Draw UI (Static over the camera)
+      ctx.font = "bold 20px Arial";
+      ctx.textAlign = "left";
+      ctx.fillStyle = "#1e293b";
+      ctx.fillText(`Score: ${currentScore}/${MAX_SCORE}`, 20, 30);
 
       animationId = requestAnimationFrame(loop);
     };

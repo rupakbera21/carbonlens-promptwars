@@ -9,10 +9,15 @@ export async function GET() {
     const auth = await requireAuth();
     if (auth instanceof NextResponse) return auth;
 
-    let challenges = await prisma.communityChallenge.findMany({
-      where: { status: "active" },
-      orderBy: { endDate: "asc" },
-    });
+    let challenges = [];
+    try {
+      challenges = await prisma.communityChallenge.findMany({
+        where: { status: "active" },
+        orderBy: { endDate: "asc" },
+      });
+    } catch (dbError) {
+      console.warn("Database unavailable, using mock challenges.");
+    }
 
     if (challenges.length === 0) {
       // Provide dynamic event data if none exists

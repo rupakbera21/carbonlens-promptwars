@@ -9,9 +9,14 @@ export async function GET() {
     const auth = await requireAuth();
     if (auth instanceof NextResponse) return auth;
 
-    let worldState = await prisma.worldState.findUnique({
-      where: { userId: auth.userId },
-    });
+    let worldState = null;
+    try {
+      worldState = await prisma.worldState.findUnique({
+        where: { userId: auth.userId },
+      });
+    } catch (dbError) {
+      console.warn("Database unavailable, using mock world state.");
+    }
 
     if (!worldState) {
       worldState = {

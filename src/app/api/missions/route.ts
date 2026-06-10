@@ -9,10 +9,15 @@ export async function GET() {
     const auth = await requireAuth();
     if (auth instanceof NextResponse) return auth;
 
-    let missions = await prisma.userMission.findMany({
-      where: { userId: auth.userId },
-      orderBy: { updatedAt: "desc" },
-    });
+    let missions = [];
+    try {
+      missions = await prisma.userMission.findMany({
+        where: { userId: auth.userId },
+        orderBy: { updatedAt: "desc" },
+      });
+    } catch (dbError) {
+      console.warn("Database unavailable, using mock missions.");
+    }
 
     if (missions.length === 0) {
       // Return dynamic/seeded mock missions if none exist to fulfill narrative aspect

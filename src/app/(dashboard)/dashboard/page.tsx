@@ -7,7 +7,12 @@ import { QuickLog } from "@/presentation/components/dashboard/quick-log";
 import { TrendChart } from "@/presentation/components/charts/trend-chart";
 import { Loading } from "@/presentation/components/common/loading";
 import { useGamification } from "@/presentation/providers/gamification-provider";
-import { LivingCarbonWorld } from "@/presentation/components/dashboard/living-carbon-world";
+import dynamic from "next/dynamic";
+
+const LivingCarbonWorld = dynamic(
+  () => import("@/presentation/components/dashboard/living-carbon-world").then((mod) => mod.LivingCarbonWorld),
+  { ssr: false }
+);
 import { MissionPanel } from "@/presentation/components/dashboard/mission-panel";
 import { CommunityChallengePanel } from "@/presentation/components/dashboard/community-challenge";
 import {

@@ -55,6 +55,7 @@ describe("ActivityService", () => {
       region: "global",
       version: 1,
       validFrom: new Date(),
+      validTo: null,
     };
 
     const mockActivity: Activity = {

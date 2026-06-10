@@ -64,4 +64,8 @@ describe("getLargestCategory", () => {
     };
     expect(getLargestCategory(breakdown)).toBe("transport");
   });
+
+  it("should return null when breakdown has no entries", () => {
+    expect(getLargestCategory({} as any)).toBeNull();
+  });
 });

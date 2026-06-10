@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   formatCo2e,
   formatPercent,
+  formatNumber,
   getScoreLabel,
   getScoreColor,
 } from "@/shared/utils/format";
@@ -11,6 +12,7 @@ import {
   getMonthStart,
   getMonthEnd,
   formatDate,
+  formatDateShort,
   daysBetween,
 } from "@/shared/utils/date";
 
@@ -31,6 +33,16 @@ describe("formatCo2e", () => {
 describe("formatPercent", () => {
   it("should round to nearest integer", () => {
     expect(formatPercent(75.6)).toBe("76%");
+  });
+});
+
+describe("formatNumber", () => {
+  it("should format number with default decimals", () => {
+    expect(formatNumber(1234)).toBe("1,234");
+  });
+
+  it("should format number with specific decimals", () => {
+    expect(formatNumber(1234.56, 2)).toBe("1,234.56");
   });
 });
 
@@ -83,6 +95,11 @@ describe("Date utilities", () => {
   it("formatDate should return YYYY-MM-DD", () => {
     const date = new Date("2024-01-17T12:00:00Z");
     expect(formatDate(date)).toBe("2024-01-17");
+  });
+
+  it("formatDateShort should return human-readable short string", () => {
+    const date = new Date("2024-01-17T12:00:00Z");
+    expect(formatDateShort(date)).toBe("Jan 17");
   });
 
   it("daysBetween should calculate correct days", () => {

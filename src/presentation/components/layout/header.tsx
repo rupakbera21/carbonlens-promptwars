@@ -70,6 +70,7 @@ export function Header() {
             size="sm"
             onClick={() => signOut({ callbackUrl: "/login" })}
             className="gap-2"
+            aria-label="Sign out"
           >
             <LogOut className="h-4 w-4" />
             <span className="hidden sm:inline">Sign out</span>

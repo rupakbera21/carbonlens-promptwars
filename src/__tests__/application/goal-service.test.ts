@@ -78,12 +78,12 @@ describe("GoalService", () => {
 
   it("should calculate progress", () => {
     expect(service.calculateProgress(50, 100)).toBe(50);
-    expect(service.calculateProgress(150, 100)).toBe(-50); // Actually ratio 1.5 -> Math.min(1.5, 2) -> 1 - 1.5 = -0.5 -> -50% ? Wait, calculateProgress implementation: (1 - Math.min(ratio, 2)) * 100 -> ratio 1.5 -> -50. Wait, ratio=1 -> 0?
-    // Let's check calculateProgress:
-    // ratio = 50/100 = 0.5. Math.min(0.5, 2) = 0.5. 1 - 0.5 = 0.5. * 100 = 50.
-    // ratio = 100/100 = 1. Math.min(1, 2) = 1. 1 - 1 = 0. * 100 = 0.
-    // Wait, the logic is lower CO2 = better progress.
-    // Actually the test doesn't matter as much as long as it executes.
+    expect(service.calculateProgress(150, 100)).toBe(-50); 
+  });
+
+  it("should return 100 progress if targetCo2eKg is <= 0", () => {
+    expect(service.calculateProgress(50, 0)).toBe(100);
+    expect(service.calculateProgress(50, -10)).toBe(100);
   });
 
   it("should get user goals", async () => {

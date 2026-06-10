@@ -66,6 +66,27 @@ describe("ScoreService", () => {
     expect(result?.score).toBe(90);
   });
 
+  it("should return null if no current score", async () => {
+    prismaMock.carbonScore.findFirst.mockResolvedValue(null);
+    const result = await service.getCurrentScore("u1");
+    expect(result).toBeNull();
+  });
+
+  it("should update existing score during calculateAndStore", async () => {
+    activityRepo.findByUserAndDateRange.mockResolvedValue([]);
+    prismaMock.carbonScore.findFirst.mockResolvedValue({ id: "existing-id" });
+    prismaMock.carbonScore.upsert.mockResolvedValue({
+      id: "existing-id",
+      score: 100,
+      totalCo2eKg: 0,
+      breakdown: { transport: 0 },
+    });
+
+    const result = await service.calculateAndStore("u1", "weekly", new Date(), new Date());
+    expect(result.id).toBe("existing-id");
+    expect(prismaMock.carbonScore.findFirst).toHaveBeenCalled();
+  });
+
   it("should get score history", async () => {
     prismaMock.carbonScore.findMany.mockResolvedValue([{ id: "s1", score: 80 }]);
     const result = await service.getScoreHistory("u1", "monthly");

@@ -70,6 +70,30 @@ describe("RuleEngine", () => {
       expect(engine.evaluate(conditions, { name: "bus" })).toBe(false);
     });
 
+    it("should handle 'greaterThanOrEqual' operator", () => {
+      const conditions: RuleCondition[] = [
+        { field: "score", operator: "greaterThanOrEqual", value: 50 },
+      ];
+      expect(engine.evaluate(conditions, { score: 50 })).toBe(true);
+      expect(engine.evaluate(conditions, { score: 40 })).toBe(false);
+    });
+
+    it("should handle 'lessThanOrEqual' operator", () => {
+      const conditions: RuleCondition[] = [
+        { field: "score", operator: "lessThanOrEqual", value: 50 },
+      ];
+      expect(engine.evaluate(conditions, { score: 50 })).toBe(true);
+      expect(engine.evaluate(conditions, { score: 60 })).toBe(false);
+    });
+
+    it("should handle 'notIn' operator", () => {
+      const conditions: RuleCondition[] = [
+        { field: "type", operator: "notIn", value: ["A", "B"] },
+      ];
+      expect(engine.evaluate(conditions, { type: "C" })).toBe(true);
+      expect(engine.evaluate(conditions, { type: "A" })).toBe(false);
+    });
+
     it("should handle missing context field gracefully", () => {
       const conditions: RuleCondition[] = [
         { field: "missing", operator: "equals", value: "test" },

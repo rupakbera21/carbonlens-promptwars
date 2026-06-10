@@ -1060,42 +1060,39 @@
                         v.length > 0
                           ? (0, r.jsx)("div", {
                               className: "space-y-3",
-                              children: v
-                                .slice(0, 3)
-                                .map((e) =>
-                                  (0, r.jsx)(
-                                    "div",
-                                    {
-                                      className:
-                                        "rounded-lg border p-3 transition-colors hover:bg-accent/50",
-                                      children: (0, r.jsxs)("div", {
-                                        className:
-                                          "flex items-start justify-between gap-2",
-                                        children: [
-                                          (0, r.jsxs)("div", {
-                                            children: [
-                                              (0, r.jsx)("p", {
-                                                className: "text-sm font-medium",
-                                                children: e.title,
-                                              }),
-                                              (0, r.jsx)("p", {
-                                                className:
-                                                  "mt-1 text-xs text-muted-foreground",
-                                                children: e.description,
-                                              }),
-                                            ],
-                                          }),
-                                          (0, r.jsxs)("span", {
-                                            className:
-                                              "shrink-0 rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary",
-                                            children: ["-", n(e.potentialSavingKg)],
-                                          }),
-                                        ],
-                                      }),
-                                    },
-                                    e.id,
-                                  ),
+                              children: v.slice(0, 3).map((e) =>
+                                (0, r.jsx)(
+                                  "div",
+                                  {
+                                    className:
+                                      "rounded-lg border p-3 transition-colors hover:bg-accent/50",
+                                    children: (0, r.jsxs)("div", {
+                                      className: "flex items-start justify-between gap-2",
+                                      children: [
+                                        (0, r.jsxs)("div", {
+                                          children: [
+                                            (0, r.jsx)("p", {
+                                              className: "text-sm font-medium",
+                                              children: e.title,
+                                            }),
+                                            (0, r.jsx)("p", {
+                                              className:
+                                                "mt-1 text-xs text-muted-foreground",
+                                              children: e.description,
+                                            }),
+                                          ],
+                                        }),
+                                        (0, r.jsxs)("span", {
+                                          className:
+                                            "shrink-0 rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary",
+                                          children: ["-", n(e.potentialSavingKg)],
+                                        }),
+                                      ],
+                                    }),
+                                  },
+                                  e.id,
                                 ),
+                              ),
                             })
                           : (0, r.jsx)("p", {
                               className: "text-center text-sm text-muted-foreground",

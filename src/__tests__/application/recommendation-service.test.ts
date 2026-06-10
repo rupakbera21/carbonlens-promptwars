@@ -39,23 +39,47 @@ describe("RecommendationService", () => {
     vi.clearAllMocks();
   });
 
-  it("should generate recommendations", async () => {
+  it("should generate recommendations and build rule context", async () => {
     prismaMock.rule.findMany.mockResolvedValue([
       {
         id: "r1",
+        category: "transport",
         conditions: JSON.stringify([
           { field: "category", operator: "equals", value: "transport" },
+          { field: "weeklyTotal", operator: "greaterThan", value: 10 },
         ]),
-        actions: JSON.stringify([{ type: "recommend", params: { title: "Test" } }]),
+        actions: JSON.stringify([{ type: "recommend", params: { title: "Test 1" } }]),
       },
+      {
+        id: "r2",
+        category: "food",
+        conditions: JSON.stringify([
+          { field: "subCategory", operator: "equals", value: "beef" },
+          { field: "monthlyCount", operator: "greaterThan", value: 5 },
+        ]),
+        actions: JSON.stringify([{ type: "recommend", params: { title: "Test 2" } }]),
+      },
+      {
+        id: "r3",
+        category: "food",
+        conditions: JSON.stringify([
+          { field: "subCategory", operator: "in", value: ["beef", "lamb"] },
+          { field: "monthlyCount", operator: "greaterThan", value: 5 },
+        ]),
+        actions: JSON.stringify([{ type: "recommend", params: { title: "Test 3" } }]),
+      }
     ]);
     prismaMock.recommendation.findFirst.mockResolvedValue(null);
     prismaMock.recommendation.create.mockResolvedValue({ id: "rec1", title: "Test" });
+    
+    activityRepo.getWeeklyTotalByCategory.mockResolvedValue(20);
+    activityRepo.getMonthlyCountBySubCategory.mockResolvedValue(10);
 
     const result = await service.generateRecommendations("u1");
     expect(prismaMock.rule.findMany).toHaveBeenCalled();
-    // Rule Engine will evaluate category transport -> true (since context will have transport due to fallback or logic)
-    // Actually we don't need to fully assert RuleEngine logic here, just that it runs without crash
+    expect(activityRepo.getWeeklyTotalByCategory).toHaveBeenCalled();
+    expect(activityRepo.getMonthlyCountBySubCategory).toHaveBeenCalled();
+    expect(prismaMock.recommendation.create).toHaveBeenCalled();
   });
 
   it("should get user recommendations", async () => {

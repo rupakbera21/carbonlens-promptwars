@@ -74,6 +74,8 @@ export default function DashboardPage() {
     isCommunityChallengesEnabled,
   } = useGamification();
 
+  const [lastAction, setLastAction] = useState<{ type: "positive" | "negative"; timestamp: number } | null>(null);
+
   const fetchData = useCallback(async () => {
     try {
       const [scoreRes, goalsRes, recsRes, efRes, worldStateRes] = await Promise.all([
@@ -103,11 +105,11 @@ export default function DashboardPage() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [isLivingWorldEnabled]);
 
   useEffect(() => {
     fetchData();
-  }, [fetchData, isLivingWorldEnabled]);
+  }, [fetchData]);
 
   const handleLogActivity = async (data: {
     category: string;
@@ -117,6 +119,20 @@ export default function DashboardPage() {
     emissionFactorId: string;
     activityDate: string;
   }) => {
+    // Optimistic Update!
+    if (worldState) {
+      const isPositive = data.category === "food" && data.subCategory.includes("plant");
+      const impact = isPositive ? 2 : -2;
+      setWorldState((prev: any) => ({
+        ...prev,
+        phiScore: Math.max(0, Math.min(100, prev.phiScore + impact)),
+        airQuality: Math.max(0, Math.min(100, prev.airQuality + (isPositive ? 1 : -3))),
+        forestHealth: Math.max(0, Math.min(100, prev.forestHealth + impact)),
+        waterQuality: Math.max(0, Math.min(100, prev.waterQuality + impact)),
+      }));
+      setLastAction({ type: isPositive ? "positive" : "negative", timestamp: Date.now() });
+    }
+
     const res = await fetch("/api/activities", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -124,7 +140,7 @@ export default function DashboardPage() {
     });
 
     if (res.ok) {
-      await fetchData(); // Refresh all data
+      await fetchData(); // Fetch true server state
     }
   };
 
@@ -154,7 +170,7 @@ export default function DashboardPage() {
 
       {isLivingWorldEnabled && worldState && (
         <div className="mb-8">
-          <LivingCarbonWorld worldState={worldState} />
+          <LivingCarbonWorld worldState={worldState} lastAction={lastAction} />
         </div>
       )}
 

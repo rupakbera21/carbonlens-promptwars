@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useMemo } from "react";
+import React, { useRef, useMemo, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Stars, Environment, Float, Sparkles } from "@react-three/drei";
 import * as THREE from "three";
@@ -15,116 +15,175 @@ interface WorldState {
 
 interface LivingCarbonWorldProps {
   worldState: WorldState;
+  lastAction?: { type: "positive" | "negative"; timestamp: number } | null;
 }
 
-function Planet({ state }: { state: WorldState }) {
+function ActionShockwave({ lastAction }: { lastAction?: { type: "positive" | "negative"; timestamp: number } | null }) {
   const meshRef = useRef<THREE.Mesh>(null);
+  const materialRef = useRef<THREE.MeshBasicMaterial>(null);
+  const [active, setActive] = useState(false);
+  const [color, setColor] = useState("#00ff00");
 
-  // Rotate planet slowly
-  useFrame(() => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += 0.001;
+  useEffect(() => {
+    if (lastAction) {
+      setColor(lastAction.type === "positive" ? "#4ade80" : "#f87171");
+      setActive(true);
+      if (meshRef.current) {
+        meshRef.current.scale.set(1, 1, 1);
+      }
+      if (materialRef.current) {
+        materialRef.current.opacity = 0.8;
+      }
+    }
+  }, [lastAction]);
+
+  useFrame((_, delta) => {
+    if (active && meshRef.current && materialRef.current) {
+      meshRef.current.scale.addScalar(delta * 4); // Expand outward
+      materialRef.current.opacity -= delta * 0.8; // Fade out
+      if (materialRef.current.opacity <= 0) {
+        setActive(false);
+      }
     }
   });
 
-  // Calculate colors based on health (0-100)
-  const getWaterColor = (health: number) => {
-    const clean = new THREE.Color("#1ca3ec");
-    const polluted = new THREE.Color("#4a4e4d");
-    return polluted.clone().lerp(clean, health / 100);
-  };
-
-  const getLandColor = (health: number) => {
-    const rich = new THREE.Color("#2e8b57");
-    const barren = new THREE.Color("#8b7355");
-    return barren.clone().lerp(rich, health / 100);
-  };
-
-  const waterColor = useMemo(
-    () => getWaterColor(state.waterQuality),
-    [state.waterQuality],
+  return (
+    <mesh ref={meshRef} visible={active}>
+      <sphereGeometry args={[2.05, 32, 32]} />
+      <meshBasicMaterial
+        ref={materialRef}
+        color={color}
+        transparent
+        blending={THREE.AdditiveBlending}
+        depthWrite={false}
+      />
+    </mesh>
   );
-  const landColor = useMemo(() => getLandColor(state.forestHealth), [state.forestHealth]);
+}
+
+function Planet({ state }: { state: WorldState }) {
+  const coreRef = useRef<THREE.Mesh>(null);
+  const cloudsRef = useRef<THREE.Mesh>(null);
+
+  useFrame((_, delta) => {
+    if (coreRef.current) coreRef.current.rotation.y += delta * 0.05;
+    if (cloudsRef.current) cloudsRef.current.rotation.y += delta * 0.07;
+  });
+
+  const targetWaterColor = useMemo(() => new THREE.Color().lerpColors(
+    new THREE.Color("#1a365d"), // Polluted dark ocean
+    new THREE.Color("#0ea5e9"), // Vibrant clean ocean
+    state.waterQuality / 100
+  ), [state.waterQuality]);
+  
+  const targetLandColor = useMemo(() => new THREE.Color().lerpColors(
+    new THREE.Color("#78350f"), // Barren earth
+    new THREE.Color("#22c55e"), // Lush green forest
+    state.forestHealth / 100
+  ), [state.forestHealth]);
+
+  const [waterColor] = useState(() => targetWaterColor.clone());
+  const [landColor] = useState(() => targetLandColor.clone());
+
+  // Smooth color transitions
+  useFrame((_, delta) => {
+    waterColor.lerp(targetWaterColor, delta * 2);
+    landColor.lerp(targetLandColor, delta * 2);
+  });
 
   return (
     <group>
-      {/* The Core Planet (Water Base) */}
-      <mesh ref={meshRef}>
+      {/* Deep Ocean Core */}
+      <mesh ref={coreRef}>
         <sphereGeometry args={[2, 64, 64]} />
         <meshStandardMaterial
           color={waterColor}
-          roughness={0.1}
+          roughness={0.4}
           metalness={0.1}
-          envMapIntensity={1.5}
+          envMapIntensity={2}
         />
-
-        {/* Landmasses (Noise-based bump map illusion via wireframe or secondary sphere) */}
-        <mesh scale={[1.01, 1.01, 1.01]}>
-          <sphereGeometry args={[2, 32, 32]} />
+        
+        {/* Landmass Layer (Stylized) */}
+        <mesh scale={1.015}>
+          <icosahedronGeometry args={[2, 12]} />
           <meshStandardMaterial
             color={landColor}
             roughness={0.8}
-            metalness={0.0}
-            wireframe={state.forestHealth < 30} // If dead, look barren/wirey
+            metalness={0.1}
             transparent
-            opacity={state.forestHealth / 100}
+            opacity={0.85}
+            wireframe={state.forestHealth < 40}
           />
         </mesh>
       </mesh>
 
-      {/* Atmosphere / Air Quality Glow */}
-      <mesh scale={[1.15, 1.15, 1.15]}>
+      {/* Dynamic Cloud Layer */}
+      <mesh ref={cloudsRef} scale={1.04}>
         <sphereGeometry args={[2, 32, 32]} />
         <meshStandardMaterial
-          color={state.airQuality > 50 ? "#a8e6cf" : "#ff8b94"}
+          color="#ffffff"
           transparent
-          opacity={Math.max(0.1, (100 - state.airQuality) / 200)}
+          opacity={0.25 + (state.airQuality / 100) * 0.15}
+          roughness={1}
+          depthWrite={false}
+          wireframe
+        />
+      </mesh>
+
+      {/* Atmospheric Glow */}
+      <mesh scale={1.12}>
+        <sphereGeometry args={[2, 32, 32]} />
+        <meshBasicMaterial
+          color={state.airQuality > 50 ? "#38bdf8" : "#f87171"}
+          transparent
+          opacity={0.15}
           blending={THREE.AdditiveBlending}
           side={THREE.BackSide}
           depthWrite={false}
         />
       </mesh>
-
-      {/* Biodiversity Sparkles */}
-      {state.biodiversity > 50 && (
+      
+      {/* Vibrant Biodiversity Sparkles */}
+      {state.biodiversity > 30 && (
         <Sparkles
-          count={Math.floor(state.biodiversity * 5)}
-          scale={5}
-          size={state.biodiversity / 10}
+          count={Math.floor(state.biodiversity * 6)}
+          scale={5.5}
+          size={state.biodiversity / 8}
           speed={0.4}
-          color="#ffeb3b"
+          color={state.biodiversity > 70 ? "#fbbf24" : "#a3e635"}
         />
       )}
     </group>
   );
 }
 
-export function LivingCarbonWorld({ worldState }: LivingCarbonWorldProps) {
+export function LivingCarbonWorld({ worldState, lastAction }: LivingCarbonWorldProps) {
   return (
     <div
-      className="relative h-[400px] w-full overflow-hidden rounded-xl bg-slate-900 shadow-2xl"
+      className="relative h-[400px] w-full overflow-hidden rounded-xl bg-slate-950 shadow-[0_0_40px_rgba(14,165,233,0.15)] ring-1 ring-white/10"
       aria-label="Interactive 3D living carbon world representing your planet health index"
       role="img"
     >
-      <Canvas camera={{ position: [0, 0, 6], fov: 45 }}>
-        <color attach="background" args={["#050510"]} />
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[5, 5, 5]} intensity={1.5} castShadow />
-        <pointLight position={[-5, -5, -5]} intensity={0.5} color="#444" />
+      <Canvas camera={{ position: [0, 0, 6.5], fov: 45 }}>
+        <color attach="background" args={["#020617"]} />
+        <ambientLight intensity={0.6} />
+        <directionalLight position={[10, 10, 5]} intensity={2} castShadow />
+        <pointLight position={[-10, -10, -5]} intensity={0.5} color="#0ea5e9" />
 
-        <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
+        <Float speed={2} rotationIntensity={0.6} floatIntensity={1.2}>
           <Planet state={worldState} />
+          <ActionShockwave lastAction={lastAction} />
         </Float>
 
-        {worldState.airQuality > 50 && (
+        {worldState.airQuality > 40 && (
           <Stars
             radius={100}
             depth={50}
-            count={5000}
-            factor={4}
-            saturation={0}
+            count={6000}
+            factor={5}
+            saturation={0.5}
             fade
-            speed={1}
+            speed={1.5}
           />
         )}
 
@@ -132,25 +191,30 @@ export function LivingCarbonWorld({ worldState }: LivingCarbonWorldProps) {
         <OrbitControls
           enablePan={false}
           enableZoom={true}
-          minDistance={3}
-          maxDistance={10}
+          minDistance={3.5}
+          maxDistance={12}
           autoRotate={false}
         />
       </Canvas>
 
-      {/* PHI Overlay */}
-      <div className="absolute bottom-4 left-4 rounded-lg border border-white/10 bg-black/50 p-4 text-white backdrop-blur-md">
-        <h3 className="text-xl font-bold">
+      {/* Floating Glassmorphism Overlay */}
+      <div className="absolute bottom-6 left-6 rounded-2xl border border-white/20 bg-black/40 p-5 text-white shadow-2xl backdrop-blur-xl transition-all duration-300 hover:bg-black/50 hover:border-white/30">
+        <h3 className="bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-2xl font-black text-transparent drop-shadow-md">
           Planet Health: {worldState.phiScore.toFixed(1)}%
         </h3>
-        <p className="mt-1 text-sm opacity-80">
-          Level:{" "}
-          {worldState.phiScore > 80
-            ? "Thriving"
-            : worldState.phiScore > 50
-              ? "Stable"
-              : "Critical"}
-        </p>
+        <div className="mt-2 flex items-center gap-2">
+          <span className="relative flex h-3 w-3">
+            <span className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-75 ${worldState.phiScore > 50 ? 'bg-emerald-400' : 'bg-red-400'}`}></span>
+            <span className={`relative inline-flex h-3 w-3 rounded-full ${worldState.phiScore > 50 ? 'bg-emerald-500' : 'bg-red-500'}`}></span>
+          </span>
+          <p className="text-sm font-medium uppercase tracking-wider opacity-90">
+            {worldState.phiScore > 80
+              ? "Thriving World"
+              : worldState.phiScore > 50
+                ? "Stable Orbit"
+                : "Critical Condition"}
+          </p>
+        </div>
       </div>
     </div>
   );

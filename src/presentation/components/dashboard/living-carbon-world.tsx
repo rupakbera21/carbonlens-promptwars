@@ -105,14 +105,14 @@ function useAudioEngine(isGameOver: boolean | undefined, isSoundEnabled: boolean
           
           const lfo = ctx.createOscillator();
           lfo.type = "sine";
-          // Breathing rate ~ 1 cycle every 6-10 seconds
-          lfo.frequency.setValueAtTime(0.1 + Math.random() * 0.05, ctx.currentTime);
+          // Extremely slow, calm breathing rate (1 cycle every ~15 seconds)
+          lfo.frequency.setValueAtTime(0.04 + Math.random() * 0.03, ctx.currentTime);
           
           const lfoGain = ctx.createGain();
-          lfoGain.gain.setValueAtTime(0.08, ctx.currentTime); // Depth of breathing
+          lfoGain.gain.setValueAtTime(0.03, ctx.currentTime); // Gentle depth of breathing
           
           const mainGain = ctx.createGain();
-          mainGain.gain.setValueAtTime(0.08, ctx.currentTime); // Base volume
+          mainGain.gain.setValueAtTime(0.02, ctx.currentTime); // Very soft base volume
           
           const panner = ctx.createStereoPanner();
           panner.pan.value = pan;
@@ -130,13 +130,13 @@ function useAudioEngine(isGameOver: boolean | undefined, isSoundEnabled: boolean
           return { osc, lfo, mainGain };
         };
 
-        // Create a lush, ambient A-Major/9 pad
+        // Create an extremely calm, soft C-Major 7 ambient pad
         voices = [
-          createBreathingOsc(110.00, -0.5), // A2
-          createBreathingOsc(164.81, 0.5),  // E3
-          createBreathingOsc(220.00, -0.2), // A3
-          createBreathingOsc(277.18, 0.2),  // C#4
-          createBreathingOsc(329.63, 0.0)   // E4
+          createBreathingOsc(65.41, -0.5),  // C2
+          createBreathingOsc(98.00, 0.5),   // G2
+          createBreathingOsc(130.81, -0.2), // C3
+          createBreathingOsc(164.81, 0.2),  // E3
+          createBreathingOsc(246.94, 0.0)   // B3
         ];
       }
       if (audioCtxRef.current.state === "suspended" && isSoundEnabledRef.current) {

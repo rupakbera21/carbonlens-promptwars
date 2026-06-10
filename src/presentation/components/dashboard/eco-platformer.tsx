@@ -192,7 +192,7 @@ export function EcoPlatformer({ onComplete, onClose }: EcoPlatformerProps) {
 
       // Win condition (Touch Flagpole)
       if (checkCollision(player, flagpole)) {
-        currentScore = 100; // Bonus to next level!
+        currentScore += 10; // Gradual bonus to next level!
         setScore(currentScore);
         setGameState("won");
       }

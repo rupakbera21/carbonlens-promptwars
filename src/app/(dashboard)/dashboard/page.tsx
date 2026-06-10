@@ -179,7 +179,7 @@ export default function DashboardPage() {
       
       const estimatedCo2eKg = data.quantity * (category === "energy" ? 0.5 : category === "transport" ? 0.2 : 0.1);
       const difference = baseline - estimatedCo2eKg;
-      let impact = difference * 2.0;
+      let impact = difference * 0.5;
       impact = Math.max(-60, Math.min(40, impact));
       const isPositive = impact > 0;
       

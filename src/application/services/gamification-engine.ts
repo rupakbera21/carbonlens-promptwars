@@ -19,8 +19,8 @@ export class GamificationEngineService {
     // Difference: Positive means you saved carbon compared to average. Negative means excess pollution.
     const difference = baseline - activity.co2eKg;
 
-    // Multiplier for RAPID progression so the user sees changes immediately
-    const impactMultiplier = 2.0; 
+    // Multiplier for progression (lowered to prevent rapid jumping)
+    const impactMultiplier = 0.5; 
     
     phiImpact = difference * impactMultiplier;
     

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -23,6 +23,15 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isLockedOut, setIsLockedOut] = useState(false);
+
+  useEffect(() => {
+    const lockout = localStorage.getItem("carbonlens_game_over");
+    if (lockout && parseInt(lockout, 10) > Date.now()) {
+      setIsLockedOut(true);
+      setError("WORLD COLLAPSED: Your planet reached 0 health. You cannot log in until tomorrow.");
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -98,7 +107,7 @@ export default function LoginPage() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-3">
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="w-full" disabled={isLoading || isLockedOut}>
               {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Sign in"}
             </Button>
             <p className="text-center text-sm text-muted-foreground">

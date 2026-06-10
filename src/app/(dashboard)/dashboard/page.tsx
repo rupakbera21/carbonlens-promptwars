@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { signOut } from "next-auth/react";
 import { ScoreCard } from "@/presentation/components/dashboard/score-card";
 import { CategoryBreakdownCard } from "@/presentation/components/dashboard/category-breakdown";
 import { QuickLog } from "@/presentation/components/dashboard/quick-log";
@@ -116,8 +117,18 @@ export default function DashboardPage() {
     const lockout = localStorage.getItem("carbonlens_game_over");
     if (lockout && parseInt(lockout, 10) > Date.now()) {
       setIsGameOver(true);
+      signOut({ callbackUrl: "/login" });
     }
   }, []);
+
+  useEffect(() => {
+    if (isGameOver) {
+      const timer = setTimeout(() => {
+        signOut({ callbackUrl: "/login" });
+      }, 4000); // Wait 4s for big bang animation
+      return () => clearTimeout(timer);
+    }
+  }, [isGameOver]);
 
   const handleLogActivity = async (data: {
     category: string;
@@ -130,7 +141,7 @@ export default function DashboardPage() {
     // Optimistic Update!
     if (worldState) {
       const isPositive = data.category === "food" && data.subCategory.includes("plant");
-      const impact = isPositive ? 2 : -20; // amplified negative impact for demo
+      const impact = isPositive ? 15 : -35; // Amplified impact for rapid change
       
       let nextPhi = worldState.phiScore + impact;
       if (nextPhi <= 0) {
@@ -160,6 +171,16 @@ export default function DashboardPage() {
 
     if (res.ok) {
       await fetchData(); // Fetch true server state
+    }
+  };
+
+  const handleMissionComplete = (score: number) => {
+    if (worldState) {
+      setWorldState((prev: any) => ({
+        ...prev,
+        phiScore: Math.max(0, Math.min(100, prev.phiScore + score)),
+        forestHealth: Math.max(0, Math.min(100, prev.forestHealth + score)),
+      }));
     }
   };
 
@@ -315,7 +336,7 @@ export default function DashboardPage() {
       {/* Gamification Modules Row */}
       {(isDetectiveMissionsEnabled || isCommunityChallengesEnabled) && (
         <div className="mt-6 grid gap-6 lg:grid-cols-2">
-          {isDetectiveMissionsEnabled && <MissionPanel />}
+          {isDetectiveMissionsEnabled && <MissionPanel onMissionComplete={handleMissionComplete} />}
           {isCommunityChallengesEnabled && <CommunityChallengePanel />}
         </div>
       )}

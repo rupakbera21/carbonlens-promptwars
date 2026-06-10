@@ -62,6 +62,59 @@ function ActionShockwave({ lastAction }: { lastAction?: { type: "positive" | "ne
   );
 }
 
+function useAudioEngine(isGameOver?: boolean) {
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const explosionPlayed = useRef(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    
+    const handleInteraction = () => {
+      if (!audioCtxRef.current) {
+        audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+      }
+      if (audioCtxRef.current.state === "suspended") {
+        audioCtxRef.current.resume();
+      }
+    };
+    
+    window.addEventListener('click', handleInteraction);
+    return () => window.removeEventListener('click', handleInteraction);
+  }, []);
+
+  useEffect(() => {
+    if (isGameOver && !explosionPlayed.current && audioCtxRef.current) {
+      explosionPlayed.current = true;
+      const ctx = audioCtxRef.current;
+      
+      // Synthesize deep explosion
+      const bufferSize = ctx.sampleRate * 3;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1; // White noise
+      }
+
+      const noiseSource = ctx.createBufferSource();
+      noiseSource.buffer = buffer;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(1000, ctx.currentTime);
+      filter.frequency.exponentialRampToValueAtTime(50, ctx.currentTime + 2);
+
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(2, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 2.5);
+
+      noiseSource.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+      noiseSource.start();
+    }
+  }, [isGameOver]);
+}
+
 function BigBang({ active }: { active: boolean }) {
   const meshRef = useRef<THREE.Mesh>(null);
   const materialRef = useRef<THREE.MeshBasicMaterial>(null);
@@ -101,12 +154,21 @@ function BigBang({ active }: { active: boolean }) {
 }
 
 function Planet({ state, isGameOver }: { state: WorldState, isGameOver?: boolean }) {
+  const groupRef = useRef<THREE.Group>(null);
   const coreRef = useRef<THREE.Mesh>(null);
   const cloudsRef = useRef<THREE.Mesh>(null);
 
   useFrame((_, delta) => {
     if (coreRef.current) coreRef.current.rotation.y += delta * 0.05;
     if (cloudsRef.current) cloudsRef.current.rotation.y += delta * 0.07;
+    
+    if (isGameOver && groupRef.current) {
+      if (groupRef.current.scale.x > 0.01) {
+        groupRef.current.scale.lerp(new THREE.Vector3(0, 0, 0), delta * 4);
+      } else {
+        groupRef.current.visible = false;
+      }
+    }
   });
 
   const targetWaterColor = useMemo(() => {
@@ -137,7 +199,7 @@ function Planet({ state, isGameOver }: { state: WorldState, isGameOver?: boolean
   });
 
   return (
-    <group>
+    <group ref={groupRef}>
       {/* Deep Ocean Core */}
       <mesh ref={coreRef}>
         <sphereGeometry args={[2, 64, 64]} />
@@ -203,6 +265,8 @@ function Planet({ state, isGameOver }: { state: WorldState, isGameOver?: boolean
 }
 
 export function LivingCarbonWorld({ worldState, lastAction, isGameOver }: LivingCarbonWorldProps) {
+  useAudioEngine(isGameOver);
+
   return (
     <div
       className="relative h-[400px] w-full overflow-hidden rounded-xl bg-slate-950 shadow-[0_0_40px_rgba(14,165,233,0.15)] ring-1 ring-white/10"

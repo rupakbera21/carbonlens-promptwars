@@ -2,7 +2,7 @@
 
 import React, { useRef, useMemo, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, Stars, Environment, Float, Sparkles } from "@react-three/drei";
+import { OrbitControls, Stars, Environment, Float, Sparkles, useTexture } from "@react-three/drei";
 import * as THREE from "three";
 import { Volume2, VolumeX } from "lucide-react";
 
@@ -231,28 +231,31 @@ function Planet({ state, isGameOver }: { state: WorldState, isGameOver?: boolean
     landColor.lerp(targetLandColor, delta * 2);
   });
 
+  const earthMask = useTexture("/earth-mask.jpg");
+
   return (
     <group ref={groupRef}>
-      {/* Deep Ocean Core */}
       <mesh ref={coreRef}>
+        {/* Core Landmass (Inside) */}
         <sphereGeometry args={[2, 64, 64]} />
         <meshStandardMaterial
-          color={waterColor}
-          roughness={0.4}
+          color={landColor}
+          roughness={0.8}
           metalness={0.1}
-          envMapIntensity={2}
+          wireframe={state.forestHealth < 40 && !isGameOver}
         />
         
-        {/* Landmass Layer (Stylized) */}
+        {/* Water Ocean Layer (Uses Alpha Map to reveal land) */}
         <mesh scale={1.015}>
-          <icosahedronGeometry args={[2, 12]} />
+          <sphereGeometry args={[2, 64, 64]} />
           <meshStandardMaterial
-            color={landColor}
-            roughness={0.8}
+            color={waterColor}
+            roughness={0.4}
             metalness={0.1}
+            alphaMap={earthMask}
             transparent
-            opacity={0.85}
-            wireframe={state.forestHealth < 40}
+            opacity={0.95}
+            envMapIntensity={2}
           />
         </mesh>
       </mesh>
@@ -504,8 +507,9 @@ export function LivingCarbonWorld({ worldState, lastAction, isGameOver }: Living
 
         {/* Main Solar System Renderer */}
         <Float speed={2} rotationIntensity={0.6} floatIntensity={1.2}>
-          <SolarSystem state={worldState} isGameOver={isGameOver} />
-          {/* ActionShockwave stays centered on active planet. It's complex to move it dynamically, so we leave it hidden or on origin for now, or just remove it if multiple planets since BigBang is handled */}
+          <React.Suspense fallback={null}>
+            <SolarSystem state={worldState} isGameOver={isGameOver} />
+          </React.Suspense>
         </Float>
 
         <Stars

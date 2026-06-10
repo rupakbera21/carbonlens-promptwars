@@ -44,13 +44,17 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+import { GamificationProvider } from "@/presentation/providers/gamification-provider";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
       <body className="min-h-screen antialiased">
         <SkipLink />
         <AuthProvider>
-          <ThemeProvider>{children}</ThemeProvider>
+          <GamificationProvider>
+            <ThemeProvider>{children}</ThemeProvider>
+          </GamificationProvider>
         </AuthProvider>
       </body>
     </html>

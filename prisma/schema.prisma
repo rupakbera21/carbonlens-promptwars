@@ -31,6 +31,9 @@ model User {
   carbonScores    CarbonScore[]
   goals           Goal[]
   recommendations Recommendation[]
+  worldState      WorldState?
+  missions        UserMission[]
+  achievements    UserAchievement[]
 
   @@index([email])
   @@index([id], map: "idx_user_active")
@@ -168,4 +171,63 @@ model Rule {
   recommendations Recommendation[]
 
   @@map("rules")
+}
+
+// ─── Gamification Domain ─────────────────────────────────────────────
+
+model WorldState {
+  id           String   @id @default(uuid())
+  userId       String   @unique @map("user_id")
+  phiScore     Float    @default(50.0) @map("phi_score")
+  ecoPoints    Int      @default(0) @map("eco_points")
+  level        Int      @default(1)
+  forestHealth Float    @default(50.0) @map("forest_health")
+  waterQuality Float    @default(50.0) @map("water_quality")
+  airQuality   Float    @default(50.0) @map("air_quality")
+  biodiversity Float    @default(50.0)
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("world_states")
+}
+
+model UserMission {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  missionType String   @map("mission_type")
+  progress    Float    @default(0)
+  completed   Boolean  @default(false)
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, missionType], map: "idx_user_mission")
+  @@map("user_missions")
+}
+
+model UserAchievement {
+  id              String   @id @default(uuid())
+  userId          String   @map("user_id")
+  achievementType String   @map("achievement_type")
+  unlockedAt      DateTime @default(now()) @map("unlocked_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "idx_user_achievement")
+  @@map("user_achievements")
+}
+
+model CommunityChallenge {
+  id            String   @id @default(uuid())
+  title         String
+  description   String
+  targetValue   Float    @map("target_value")
+  currentValue  Float    @default(0) @map("current_value")
+  startDate     DateTime @map("start_date")
+  endDate       DateTime @map("end_date")
+  status        String   @default("active")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@map("community_challenges")
 }

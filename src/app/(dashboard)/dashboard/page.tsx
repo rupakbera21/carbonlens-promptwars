@@ -6,6 +6,8 @@ import { CategoryBreakdownCard } from "@/presentation/components/dashboard/categ
 import { QuickLog } from "@/presentation/components/dashboard/quick-log";
 import { TrendChart } from "@/presentation/components/charts/trend-chart";
 import { Loading } from "@/presentation/components/common/loading";
+import { useGamification } from "@/presentation/providers/gamification-provider";
+import { LivingCarbonWorld } from "@/presentation/components/dashboard/living-carbon-world";
 import {
   Card,
   CardContent,
@@ -57,28 +59,34 @@ export default function DashboardPage() {
   const [emissionFactors, setEmissionFactors] = useState<
     Array<{ id: string; subCategory: string; name: string; unit: string }>
   >([]);
+  const [worldState, setWorldState] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const { isLivingWorldEnabled } = useGamification();
 
   const fetchData = useCallback(async () => {
     try {
-      const [scoreRes, goalsRes, recsRes, efRes] = await Promise.all([
+      const [scoreRes, goalsRes, recsRes, efRes, worldStateRes] = await Promise.all([
         fetch("/api/scores"),
         fetch("/api/goals"),
         fetch("/api/recommendations"),
         fetch("/api/emission-factors"),
+        isLivingWorldEnabled ? fetch("/api/world-state") : Promise.resolve(null),
       ]);
 
-      const [scoreDataRes, goalsDataRes, recsDataRes, efDataRes] = await Promise.all([
-        scoreRes.ok ? scoreRes.json() : null,
-        goalsRes.ok ? goalsRes.json() : { data: [] },
-        recsRes.ok ? recsRes.json() : { data: [] },
-        efRes.ok ? efRes.json() : { data: [] },
-      ]);
+      const [scoreDataRes, goalsDataRes, recsDataRes, efDataRes, worldStateDataRes] =
+        await Promise.all([
+          scoreRes.ok ? scoreRes.json() : null,
+          goalsRes.ok ? goalsRes.json() : { data: [] },
+          recsRes.ok ? recsRes.json() : { data: [] },
+          efRes.ok ? efRes.json() : { data: [] },
+          worldStateRes?.ok ? worldStateRes.json() : null,
+        ]);
 
       setScoreData(scoreDataRes?.data ?? null);
       setGoals(goalsDataRes.data);
       setRecommendations(recsDataRes.data);
       setEmissionFactors(efDataRes.data);
+      if (worldStateDataRes?.data) setWorldState(worldStateDataRes.data);
     } catch (error) {
       console.error("Failed to fetch dashboard data:", error);
     } finally {
@@ -88,7 +96,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, [fetchData, isLivingWorldEnabled]);
 
   const handleLogActivity = async (data: {
     category: string;
@@ -132,6 +140,12 @@ export default function DashboardPage() {
         <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
         <p className="text-muted-foreground">Your carbon footprint at a glance</p>
       </div>
+
+      {isLivingWorldEnabled && worldState && (
+        <div className="mb-8">
+          <LivingCarbonWorld worldState={worldState} />
+        </div>
+      )}
 
       {/* Score + Breakdown + Quick Log */}
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">

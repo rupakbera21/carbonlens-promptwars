@@ -252,7 +252,7 @@ function Planet({ state, isGameOver }: { state: WorldState, isGameOver?: boolean
       </mesh>
       
       {/* Vibrant Biodiversity Sparkles */}
-      {state.biodiversity > 30 && (
+      {state.biodiversity > 30 && !isGameOver && (
         <Sparkles
           count={Math.floor(state.biodiversity * 6)}
           scale={5.5}
@@ -261,7 +261,108 @@ function Planet({ state, isGameOver }: { state: WorldState, isGameOver?: boolean
           color={state.biodiversity > 70 ? "#fbbf24" : "#a3e635"}
         />
       )}
+
+      {/* Procedural Vegetation and Cities */}
+      {!isGameOver && (
+        <>
+          <ProceduralNature forestHealth={state.forestHealth} />
+          <ProceduralCity phiScore={state.phiScore} waterQuality={state.waterQuality} />
+        </>
+      )}
     </group>
+  );
+}
+
+// Procedural Trees
+function ProceduralNature({ forestHealth }: { forestHealth: number }) {
+  const count = Math.floor((Math.max(0, forestHealth - 30) / 70) * 150); // Up to 150 trees
+  
+  const meshRef = useRef<THREE.InstancedMesh>(null);
+  
+  useEffect(() => {
+    if (!meshRef.current || count === 0) return;
+    const dummy = new THREE.Object3D();
+    
+    // Seeded random for consistent placement
+    let seed = 12345;
+    const random = () => {
+      const x = Math.sin(seed++) * 10000;
+      return x - Math.floor(x);
+    };
+
+    for (let i = 0; i < count; i++) {
+      const phi = Math.acos(-1 + (2 * i) / count);
+      const theta = Math.sqrt(count * Math.PI) * phi;
+      
+      const r = 2.02; // Slightly above core
+      dummy.position.setFromSphericalCoords(r, phi, theta);
+      dummy.lookAt(0, 0, 0);
+      dummy.rotateX(Math.PI / 2); // Point outward
+      
+      const scale = 0.5 + random() * 0.5;
+      dummy.scale.set(scale, scale, scale);
+      dummy.updateMatrix();
+      meshRef.current.setMatrixAt(i, dummy.matrix);
+    }
+    meshRef.current.instanceMatrix.needsUpdate = true;
+  }, [count]);
+
+  if (count === 0) return null;
+
+  return (
+    <instancedMesh ref={meshRef} args={[undefined, undefined, 150]} count={count}>
+      <coneGeometry args={[0.04, 0.15, 5]} />
+      <meshStandardMaterial color="#15803d" roughness={0.9} />
+    </instancedMesh>
+  );
+}
+
+// Procedural Cities
+function ProceduralCity({ phiScore, waterQuality }: { phiScore: number, waterQuality: number }) {
+  const count = Math.floor((Math.max(0, phiScore - 50) / 50) * 80); // Up to 80 buildings
+  const isRuined = waterQuality < 40 || phiScore < 40;
+  
+  const meshRef = useRef<THREE.InstancedMesh>(null);
+  
+  useEffect(() => {
+    if (!meshRef.current || count === 0) return;
+    const dummy = new THREE.Object3D();
+    
+    let seed = 98765;
+    const random = () => {
+      const x = Math.sin(seed++) * 10000;
+      return x - Math.floor(x);
+    };
+
+    for (let i = 0; i < count; i++) {
+      const phi = Math.acos(-1 + (2 * i) / count);
+      const theta = Math.sqrt(count * Math.PI) * phi + Math.PI; // Offset from trees
+      
+      const r = 2.02;
+      dummy.position.setFromSphericalCoords(r, phi, theta);
+      dummy.lookAt(0, 0, 0);
+      
+      const heightScale = isRuined ? 0.3 + random() * 0.2 : 0.8 + random() * 1.5;
+      dummy.scale.set(1, 1, heightScale);
+      dummy.updateMatrix();
+      meshRef.current.setMatrixAt(i, dummy.matrix);
+    }
+    meshRef.current.instanceMatrix.needsUpdate = true;
+  }, [count, isRuined]);
+
+  if (count === 0) return null;
+
+  return (
+    <instancedMesh ref={meshRef} args={[undefined, undefined, 80]} count={count}>
+      <boxGeometry args={[0.03, 0.03, 0.1]} />
+      <meshStandardMaterial 
+        color={isRuined ? "#525252" : "#e2e8f0"} 
+        roughness={0.2} 
+        metalness={0.8}
+        emissive={isRuined ? "#000000" : "#38bdf8"}
+        emissiveIntensity={0.2}
+      />
+    </instancedMesh>
   );
 }
 

@@ -50,7 +50,7 @@ export class PrismaUserRepository implements UserRepository {
         ...(data.name && { name: data.name }),
         ...(data.region && { region: data.region }),
         ...(data.timezone && { timezone: data.timezone }),
-        ...(data.preferences && { preferences: data.preferences ?? {} }),
+        ...(data.preferences && { preferences: (data.preferences ?? {}) as any }),
       },
     });
     return this.toSafeDomain(record);

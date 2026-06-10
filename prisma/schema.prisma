@@ -178,13 +178,13 @@ model Rule {
 model WorldState {
   id           String   @id @default(uuid())
   userId       String   @unique @map("user_id")
-  phiScore     Float    @default(50.0) @map("phi_score")
+  phiScore     Float    @default(0.0) @map("phi_score")
   ecoPoints    Int      @default(0) @map("eco_points")
   level        Int      @default(1)
-  forestHealth Float    @default(50.0) @map("forest_health")
-  waterQuality Float    @default(50.0) @map("water_quality")
-  airQuality   Float    @default(50.0) @map("air_quality")
-  biodiversity Float    @default(50.0)
+  forestHealth Float    @default(0.0) @map("forest_health")
+  waterQuality Float    @default(0.0) @map("water_quality")
+  airQuality   Float    @default(0.0) @map("air_quality")
+  biodiversity Float    @default(0.0)
   updatedAt    DateTime @updatedAt @map("updated_at")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)

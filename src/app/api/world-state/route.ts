@@ -10,9 +10,14 @@ export async function GET() {
     if (auth instanceof NextResponse) return auth;
 
     let worldState = null;
+    let achievements = [];
     try {
       worldState = await prisma.worldState.findUnique({
         where: { userId: auth.userId },
+      });
+      achievements = await prisma.userAchievement.findMany({
+        where: { userId: auth.userId },
+        orderBy: { unlockedAt: 'desc' }
       });
     } catch (dbError) {
       console.warn("Database unavailable, using mock world state.");
@@ -23,17 +28,17 @@ export async function GET() {
         id: "default-new",
         userId: auth.userId,
         ecoPoints: 0,
-        phiScore: 50.0,
-        forestHealth: 50.0,
-        waterQuality: 50.0,
-        airQuality: 50.0,
-        biodiversity: 50.0,
+        phiScore: 0.0,
+        forestHealth: 0.0,
+        waterQuality: 0.0,
+        airQuality: 0.0,
+        biodiversity: 0.0,
         level: 1,
         updatedAt: new Date(),
       };
     }
 
-    return NextResponse.json(successResponse(worldState));
+    return NextResponse.json(successResponse({ ...worldState, achievements }));
   } catch (error) {
     return handleApiError(error);
   }

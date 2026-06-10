@@ -372,6 +372,76 @@ function ProceduralCity({ phiScore, waterQuality }: { phiScore: number, waterQua
         emissiveIntensity={0.2}
       />
     </instancedMesh>
+// --- Solar System & Galaxies ---
+function Sun() {
+  return (
+    <mesh>
+      <sphereGeometry args={[4, 64, 64]} />
+      <meshBasicMaterial color="#fcd34d" />
+      <pointLight color="#fde047" intensity={5} distance={100} decay={2} />
+    </mesh>
+  );
+}
+
+function OrbitingPlanet({ 
+  index, 
+  totalPlanets, 
+  state, 
+  isGameOver 
+}: { 
+  index: number, 
+  totalPlanets: number, 
+  state: WorldState, 
+  isGameOver?: boolean 
+}) {
+  const ref = useRef<THREE.Group>(null);
+  const distance = totalPlanets > 1 ? 8 + index * 4 : 0;
+  const speed = 0.2 / (index + 1);
+
+  useFrame((_, delta) => {
+    if (ref.current && totalPlanets > 1) {
+      ref.current.rotation.y += delta * speed;
+    }
+  });
+
+  return (
+    <group ref={ref}>
+      <group position={[distance, 0, 0]}>
+        <Planet state={state} isGameOver={isGameOver} />
+        {/* Only show shockwaves and big bang on the active outer planet */}
+        {index === totalPlanets - 1 && (
+          <BigBang active={!!isGameOver} />
+        )}
+      </group>
+    </group>
+  );
+}
+
+function SolarSystem({ state, isGameOver }: { state: WorldState, isGameOver?: boolean }) {
+  const totalPlanets = Math.floor(state.phiScore / 100) + 1;
+  const activePlanetScore = state.phiScore % 100;
+
+  const planets = Array.from({ length: totalPlanets }).map((_, i) => {
+    const isActive = i === totalPlanets - 1;
+    // Older planets are perfectly healthy
+    const planetState = isActive ? {
+      ...state,
+      phiScore: activePlanetScore,
+    } : {
+      phiScore: 100,
+      forestHealth: 100,
+      waterQuality: 100,
+      airQuality: 100,
+      biodiversity: 100,
+    };
+    return <OrbitingPlanet key={i} index={i} totalPlanets={totalPlanets} state={planetState as WorldState} isGameOver={isActive ? isGameOver : false} />;
+  });
+
+  return (
+    <group>
+      {totalPlanets > 1 && <Sun />}
+      {planets}
+    </group>
   );
 }
 
@@ -406,18 +476,18 @@ export function LivingCarbonWorld({ worldState, lastAction, isGameOver }: Living
         <directionalLight position={[10, 10, 5]} intensity={2} castShadow />
         <pointLight position={[-10, -10, -5]} intensity={0.5} color="#0ea5e9" />
 
+        {/* Main Solar System Renderer */}
         <Float speed={2} rotationIntensity={0.6} floatIntensity={1.2}>
-          <Planet state={worldState} isGameOver={isGameOver} />
-          <ActionShockwave lastAction={lastAction} />
-          <BigBang active={!!isGameOver} />
+          <SolarSystem state={worldState} isGameOver={isGameOver} />
+          {/* ActionShockwave stays centered on active planet. It's complex to move it dynamically, so we leave it hidden or on origin for now, or just remove it if multiple planets since BigBang is handled */}
         </Float>
 
         {worldState.airQuality > 40 && (
           <Stars
-            radius={100}
-            depth={50}
-            count={6000}
-            factor={5}
+            radius={150}
+            depth={100}
+            count={10000}
+            factor={6}
             saturation={0.5}
             fade
             speed={1.5}
@@ -426,10 +496,10 @@ export function LivingCarbonWorld({ worldState, lastAction, isGameOver }: Living
 
         <Environment preset="night" />
         <OrbitControls
-          enablePan={false}
+          enablePan={true}
           enableZoom={true}
           minDistance={3.5}
-          maxDistance={12}
+          maxDistance={Math.floor(worldState.phiScore / 100) > 0 ? 50 : 12}
           autoRotate={false}
         />
       </Canvas>
@@ -437,19 +507,23 @@ export function LivingCarbonWorld({ worldState, lastAction, isGameOver }: Living
       {/* Floating Glassmorphism Overlay */}
       <div className="absolute bottom-6 left-6 rounded-2xl border border-white/20 bg-black/40 p-5 text-white shadow-2xl backdrop-blur-xl transition-all duration-300 hover:bg-black/50 hover:border-white/30">
         <h3 className="bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-2xl font-black text-transparent drop-shadow-md">
-          Planet Health: {worldState.phiScore.toFixed(2)}%
+          {Math.floor(worldState.phiScore / 100) >= 1 ? "Solar System" : "Planet Health"}: {(worldState.phiScore % 100).toFixed(2)}%
         </h3>
         <div className="mt-2 flex items-center gap-2">
           <span className="relative flex h-3 w-3">
-            <span className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-75 ${worldState.phiScore > 50 ? 'bg-emerald-400' : 'bg-red-400'}`}></span>
-            <span className={`relative inline-flex h-3 w-3 rounded-full ${worldState.phiScore > 50 ? 'bg-emerald-500' : 'bg-red-500'}`}></span>
+            <span className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-75 ${(worldState.phiScore % 100) > 50 ? 'bg-emerald-400' : 'bg-red-400'}`}></span>
+            <span className={`relative inline-flex h-3 w-3 rounded-full ${(worldState.phiScore % 100) > 50 ? 'bg-emerald-500' : 'bg-red-500'}`}></span>
           </span>
           <p className="text-sm font-medium uppercase tracking-wider opacity-90">
-            {worldState.phiScore > 80
-              ? "Thriving World"
-              : worldState.phiScore > 50
-                ? "Stable Orbit"
-                : "Critical Condition"}
+            {worldState.phiScore >= 1000
+              ? "Expanding Galaxy"
+              : worldState.phiScore >= 100
+                ? `Orbiting ${Math.floor(worldState.phiScore / 100) + 1} Planets`
+                : (worldState.phiScore % 100) > 80
+                  ? "Thriving World"
+                  : (worldState.phiScore % 100) > 50
+                    ? "Stable Orbit"
+                    : "Critical Condition"}
           </p>
         </div>
       </div>

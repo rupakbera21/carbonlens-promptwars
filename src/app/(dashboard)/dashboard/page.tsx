@@ -209,7 +209,7 @@ export default function DashboardPage() {
     if (worldState) {
       setWorldState((prev: any) => ({
         ...prev,
-        phiScore: Math.max(0, Math.min(100, prev.phiScore + score)),
+        phiScore: Math.max(0, prev.phiScore + score),
         forestHealth: Math.max(0, Math.min(100, prev.forestHealth + score)),
       }));
     }
@@ -244,6 +244,18 @@ export default function DashboardPage() {
       {isLivingWorldEnabled && worldState && (
         <div className="mb-8 relative">
           <LivingCarbonWorld worldState={worldState} lastAction={lastAction} isGameOver={isGameOver} />
+          
+          {/* Badges System */}
+          {worldState.achievements && worldState.achievements.length > 0 && (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {worldState.achievements.map((ach: any) => (
+                <div key={ach.id} className="flex items-center gap-1 rounded-full border border-yellow-500/30 bg-yellow-500/10 px-3 py-1 text-xs font-semibold text-yellow-500 shadow-sm backdrop-blur-sm">
+                  <span>{ach.achievementType.includes('Galaxy') ? '🌌' : ach.achievementType.includes('System') ? '☀️' : '🌍'}</span>
+                  {ach.achievementType}
+                </div>
+              ))}
+            </div>
+          )}
           
           {isGameOver && (
             <div className="absolute inset-0 z-50 flex flex-col items-center justify-center rounded-xl bg-black/80 p-8 text-center backdrop-blur-sm animation-fade-in">

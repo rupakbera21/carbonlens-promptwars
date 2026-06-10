@@ -15,12 +15,9 @@ const GamificationContext = createContext<GamificationContextType>({
 });
 
 export function GamificationProvider({ children }: { children: ReactNode }) {
-  // Safe fallback to false if not strictly "true"
-  const isLivingWorldEnabled = process.env.NEXT_PUBLIC_ENABLE_LIVING_WORLD === "true";
-  const isDetectiveMissionsEnabled =
-    process.env.NEXT_PUBLIC_ENABLE_DETECTIVE_MISSIONS === "true";
-  const isCommunityChallengesEnabled =
-    process.env.NEXT_PUBLIC_ENABLE_COMMUNITY_CHALLENGES === "true";
+  const isLivingWorldEnabled = true;
+  const isDetectiveMissionsEnabled = true;
+  const isCommunityChallengesEnabled = true;
 
   return (
     <GamificationContext.Provider

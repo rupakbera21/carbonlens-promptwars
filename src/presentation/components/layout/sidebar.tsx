@@ -61,7 +61,7 @@ export function Sidebar() {
     >
       <div className="flex h-full flex-col">
         {/* Logo */}
-        <div className="flex h-16 items-center justify-between border-b px-4">
+        <div className={cn("flex h-16 items-center border-b", isCollapsed ? "justify-center" : "justify-between px-4")}>
           <div className="flex items-center gap-2 overflow-hidden">
             <Leaf className="h-6 w-6 flex-shrink-0 text-primary" aria-hidden="true" />
             {!isCollapsed && (
@@ -74,7 +74,7 @@ export function Sidebar() {
 
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="absolute -right-3 top-5 flex h-6 w-6 items-center justify-center rounded-full border bg-background shadow-sm hover:bg-accent"
+          className="absolute -right-3 top-5 z-50 flex h-6 w-6 items-center justify-center rounded-full border bg-background shadow-sm hover:bg-accent"
           aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {isCollapsed ? <Menu className="h-3 w-3" /> : <ChevronLeft className="h-3 w-3" />}

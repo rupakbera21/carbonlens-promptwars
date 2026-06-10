@@ -196,6 +196,7 @@ export default function DashboardPage() {
 
   // Week-over-week change
   const history = scoreData?.weeklyHistory ?? [];
+  const dailyHistory = scoreData?.dailyHistory ?? [];
   const weekChange =
     history.length >= 2
       ? history[history.length - 1].totalCo2eKg - history[history.length - 2].totalCo2eKg
@@ -343,7 +344,7 @@ export default function DashboardPage() {
 
       {/* Trends chart + Recommendations */}
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
-        <TrendChart data={history} />
+        <TrendChart data={dailyHistory} />
 
         {/* Recommendations */}
         <Card>

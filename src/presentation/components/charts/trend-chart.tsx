@@ -29,7 +29,7 @@ interface TrendChartProps {
 }
 
 /**
- * TrendChart — visualizes weekly CO₂e trends as an area chart.
+ * TrendChart — visualizes daily CO₂e trends as an area chart.
  * Includes an accessible data table hidden for screen readers.
  */
 export function TrendChart({ data, className }: TrendChartProps) {
@@ -44,15 +44,15 @@ export function TrendChart({ data, className }: TrendChartProps) {
   return (
     <Card className={cn(className)}>
       <CardHeader className="pb-2">
-        <CardTitle className="text-lg">Weekly Trends</CardTitle>
+        <CardTitle className="text-lg">Daily Trends</CardTitle>
       </CardHeader>
       <CardContent>
         {/* Screen reader table */}
         <table className="sr-only">
-          <caption>Weekly carbon emissions trend</caption>
+          <caption>Daily carbon emissions trend</caption>
           <thead>
             <tr>
-              <th>Week Starting</th>
+              <th>Date</th>
               <th>CO₂e (kg)</th>
               <th>Score</th>
             </tr>

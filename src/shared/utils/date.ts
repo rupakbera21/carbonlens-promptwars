@@ -38,6 +38,20 @@ export function getMonthEnd(date: Date = new Date()): Date {
   return d;
 }
 
+/** Get the start of the day */
+export function getDayStart(date: Date = new Date()): Date {
+  const d = new Date(date);
+  d.setUTCHours(0, 0, 0, 0);
+  return d;
+}
+
+/** Get the end of the day */
+export function getDayEnd(date: Date = new Date()): Date {
+  const d = new Date(date);
+  d.setUTCHours(23, 59, 59, 999);
+  return d;
+}
+
 /** Format a date as YYYY-MM-DD */
 export function formatDate(date: Date): string {
   return date.toISOString().split("T")[0];

@@ -13,7 +13,7 @@ export class ScoreService {
 
   async calculateAndStore(
     userId: string,
-    periodType: "weekly" | "monthly",
+    periodType: "daily" | "weekly" | "monthly",
     periodStart: Date,
     periodEnd: Date,
   ): Promise<CarbonScore> {
@@ -69,7 +69,7 @@ export class ScoreService {
 
   async getScoreHistory(
     userId: string,
-    periodType: "weekly" | "monthly",
+    periodType: "daily" | "weekly" | "monthly",
     limit = 12,
   ): Promise<CarbonScore[]> {
     const records = await prisma.carbonScore.findMany({

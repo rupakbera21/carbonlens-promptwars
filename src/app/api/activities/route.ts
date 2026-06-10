@@ -11,7 +11,7 @@ import { ScoreService } from "@/application/services/score-service";
 import { RecommendationService } from "@/application/services/recommendation-service";
 import { PrismaActivityRepository } from "@/infrastructure/database/activity-repository-impl";
 import { PrismaEmissionFactorRepository } from "@/infrastructure/database/emission-factor-repository-impl";
-import { getWeekStart, getWeekEnd } from "@/shared/utils/date";
+import { getWeekStart, getWeekEnd, getDayStart, getDayEnd } from "@/shared/utils/date";
 
 const activityRepo = new PrismaActivityRepository();
 const emissionFactorRepo = new PrismaEmissionFactorRepository();
@@ -61,14 +61,22 @@ export async function POST(request: NextRequest) {
       ...input,
     });
 
-    // Recalculate weekly score after logging
+    // Recalculate weekly and daily score after logging
     const now = new Date();
-    await scoreService.calculateAndStore(
-      auth.userId,
-      "weekly",
-      getWeekStart(now),
-      getWeekEnd(now),
-    );
+    await Promise.all([
+      scoreService.calculateAndStore(
+        auth.userId,
+        "weekly",
+        getWeekStart(now),
+        getWeekEnd(now),
+      ),
+      scoreService.calculateAndStore(
+        auth.userId,
+        "daily",
+        getDayStart(now),
+        getDayEnd(now),
+      ),
+    ]);
 
     // Generate recommendations asynchronously (fire-and-forget)
     recommendationService

@@ -24,7 +24,7 @@ export class PrismaActivityRepository implements ActivityRepository {
         co2eKg: input.co2eKg,
         emissionFactorId: input.emissionFactorId,
         activityDate: input.activityDate,
-        metadata: JSON.stringify(input.metadata ?? {}),
+        metadata: input.metadata ?? {},
       },
     });
     return this.toDomain(record);
@@ -157,7 +157,7 @@ export class PrismaActivityRepository implements ActivityRepository {
       co2eKg: record.co2eKg,
       emissionFactorId: record.emissionFactorId,
       activityDate: record.activityDate,
-      metadata: JSON.parse(record.metadata as string),
+      metadata: record.metadata as Record<string, unknown>,
       synced: record.synced,
       createdAt: record.createdAt,
     };

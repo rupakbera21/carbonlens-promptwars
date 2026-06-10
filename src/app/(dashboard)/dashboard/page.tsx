@@ -62,28 +62,31 @@ export default function DashboardPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchData = useCallback(async () => {
-    setIsLoading(false);
-    setScoreData({
-      current: {
-        score: 75,
-        totalCo2eKg: 50,
-        breakdown: { transport: 25, energy: 15, food: 10, shopping: 0 },
-      },
-      explanation: "Good! Your footprint is 25% lower than the weekly average.",
-      weeklyHistory: [
-        { periodStart: "2024-05-01", totalCo2eKg: 65, score: 68 },
-        { periodStart: "2024-05-08", totalCo2eKg: 60, score: 70 },
-        { periodStart: "2024-05-15", totalCo2eKg: 50, score: 75 },
-      ],
-    });
-    setGoals([{ id: "g1", targetCo2eKg: 100, status: "active" }]);
-    setRecommendations([
-      { id: "r1", title: "Take the train instead of flying", description: "You took a flight recently. A train is greener.", potentialSavingKg: 45, priority: "high", category: "transport" },
-      { id: "r2", title: "Eat less beef", description: "Replacing two beef meals with poultry saves significant CO₂e.", potentialSavingKg: 12, priority: "medium", category: "food" }
-    ]);
-    setEmissionFactors([
-      { id: "e1", subCategory: "car_petrol", name: "Petrol Car", unit: "km" }
-    ]);
+    try {
+      const [scoreRes, goalsRes, recsRes, efRes] = await Promise.all([
+        fetch("/api/scores"),
+        fetch("/api/goals"),
+        fetch("/api/recommendations"),
+        fetch("/api/emission-factors"),
+      ]);
+
+      const [scoreDataRes, goalsDataRes, recsDataRes, efDataRes] =
+        await Promise.all([
+          scoreRes.ok ? scoreRes.json() : null,
+          goalsRes.ok ? goalsRes.json() : { data: [] },
+          recsRes.ok ? recsRes.json() : { data: [] },
+          efRes.ok ? efRes.json() : { data: [] },
+        ]);
+
+      setScoreData(scoreDataRes?.data ?? null);
+      setGoals(goalsDataRes.data);
+      setRecommendations(recsDataRes.data);
+      setEmissionFactors(efDataRes.data);
+    } catch (error) {
+      console.error("Failed to fetch dashboard data:", error);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
   useEffect(() => {

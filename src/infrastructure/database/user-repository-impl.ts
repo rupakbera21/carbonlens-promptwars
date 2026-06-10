@@ -50,7 +50,7 @@ export class PrismaUserRepository implements UserRepository {
         ...(data.name && { name: data.name }),
         ...(data.region && { region: data.region }),
         ...(data.timezone && { timezone: data.timezone }),
-        ...(data.preferences && { preferences: JSON.stringify(data.preferences) }),
+        ...(data.preferences && { preferences: data.preferences ?? {} }),
       },
     });
     return this.toSafeDomain(record);
@@ -108,7 +108,7 @@ export class PrismaUserRepository implements UserRepository {
   }): User {
     return {
       ...record,
-      preferences: JSON.parse(record.preferences as string),
+      preferences: record.preferences as Record<string, unknown>,
     };
   }
 
@@ -129,7 +129,7 @@ export class PrismaUserRepository implements UserRepository {
       name: record.name,
       region: record.region,
       timezone: record.timezone,
-      preferences: JSON.parse(record.preferences as string),
+      preferences: record.preferences as Record<string, unknown>,
       createdAt: record.createdAt,
       updatedAt: record.updatedAt,
       deletedAt: record.deletedAt,

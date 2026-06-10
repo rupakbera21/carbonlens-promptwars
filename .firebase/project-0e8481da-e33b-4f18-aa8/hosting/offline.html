@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CarbonLens — Offline</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      background: #f8fafc;
+      color: #0f172a;
+    }
+    .container { text-align: center; padding: 2rem; max-width: 400px; }
+    h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    p { color: #64748b; line-height: 1.6; }
+    .icon { font-size: 3rem; margin-bottom: 1rem; }
+    button {
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      background: #16a34a;
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+    button:hover { background: #15803d; }
+    button:focus-visible { outline: 2px solid #16a34a; outline-offset: 2px; }
+  </style>
+</head>
+<body>
+  <div class="container" role="main">
+    <div class="icon" aria-hidden="true">🌿</div>
+    <h1>You're offline</h1>
+    <p>
+      CarbonLens needs an internet connection to load for the first time.
+      Your previously cached data will be available once you reconnect.
+    </p>
+    <button onclick="location.reload()">Try again</button>
+  </div>
+</body>
+</html>

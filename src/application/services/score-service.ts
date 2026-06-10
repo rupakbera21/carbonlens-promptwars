@@ -37,14 +37,14 @@ export class ScoreService {
       update: {
         score,
         totalCo2eKg,
-        breakdown: JSON.stringify(breakdown),
+        breakdown: breakdown as any,
         calculatedAt: new Date(),
       },
       create: {
         userId,
         score,
         totalCo2eKg,
-        breakdown: JSON.stringify(breakdown),
+        breakdown: breakdown as any,
         periodType,
         periodStart,
         periodEnd,
@@ -54,7 +54,7 @@ export class ScoreService {
 
     return {
       ...record,
-      breakdown: JSON.parse(record.breakdown) as CategoryBreakdown,
+      breakdown: record.breakdown as unknown as CategoryBreakdown,
     };
   }
 
@@ -68,7 +68,7 @@ export class ScoreService {
 
     return {
       ...record,
-      breakdown: JSON.parse(record.breakdown) as CategoryBreakdown,
+      breakdown: record.breakdown as unknown as CategoryBreakdown,
     };
   }
 
@@ -85,7 +85,7 @@ export class ScoreService {
 
     return records.map((r) => ({
       ...r,
-      breakdown: JSON.parse(r.breakdown) as CategoryBreakdown,
+      breakdown: r.breakdown as unknown as CategoryBreakdown,
     }));
   }
 

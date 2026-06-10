@@ -7,8 +7,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 // ─── User ────────────────────────────────────────────────────────────
@@ -22,7 +22,7 @@ model User {
   region       String    @default("global")
   timezone     String    @default("UTC")
   // SQLite does not support Json, using String for JSON data
-  preferences  String    @default("{}")
+  preferences  Json      @default("{}")
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime  @updatedAt @map("updated_at")
   deletedAt    DateTime? @map("deleted_at")
@@ -51,7 +51,7 @@ model Activity {
   co2eKg           Float    @map("co2e_kg")
   emissionFactorId String   @map("emission_factor_id")
   activityDate     DateTime @map("activity_date")
-  metadata         String   @default("{}")
+  metadata         Json     @default("{}")
   synced           Boolean  @default(true)
   createdAt        DateTime @default(now()) @map("created_at")
 
@@ -95,7 +95,7 @@ model CarbonScore {
   userId      String   @map("user_id")
   score       Int
   totalCo2eKg Float    @map("total_co2e_kg")
-  breakdown   String
+  breakdown   Json
   periodType  String   @map("period_type")
   periodStart DateTime @map("period_start")
   periodEnd   DateTime @map("period_end")
@@ -159,8 +159,8 @@ model Rule {
   id         String   @id @default(uuid())
   name       String
   category   String
-  conditions String
-  actions    String
+  conditions Json
+  actions    Json
   priority   Int      @default(0)
   active     Boolean  @default(true)
   createdAt  DateTime @default(now()) @map("created_at")

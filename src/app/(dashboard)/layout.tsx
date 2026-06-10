@@ -12,7 +12,11 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = { user: { name: "Demo User", email: "demo@carbonlens.app" } };
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    redirect("/login");
+  }
 
   return (
     <div className="flex min-h-screen">

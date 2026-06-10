@@ -4,6 +4,7 @@ import { prisma } from "@/infrastructure/database/prisma-client";
 export class GamificationEngineService {
   async processActivity(activity: Activity): Promise<void> {
     let phiImpact = 0;
+    let xpAwarded = 0;
 
     // Baselines: Average daily CO2e footprint for typical actions (in kg)
     const baselines: Record<string, number> = {

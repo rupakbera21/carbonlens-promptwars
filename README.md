@@ -188,6 +188,16 @@ npm run type-check        # TypeScript compilation
 
 ## 🐳 Deployment
 
+### Vercel + Supabase (Recommended)
+When deploying to Vercel with a Supabase database, Vercel build servers block IPv6 connections, preventing automatic database migrations (`prisma db push`). We completely bypass this limitation using a raw SQL setup script:
+
+1. Deploy the repository to Vercel (the build script automatically skips database pushing).
+2. Connect a Supabase integration to your Vercel project.
+3. Open your Supabase Dashboard -> **SQL Editor**.
+4. Copy the contents of `setup.sql` from the root of this repository.
+5. Paste into the SQL Editor, select **Run without RLS**, and execute.
+6. Your database is now fully populated with tables, seed data, and a demo user!
+
 ### Docker Production Build
 ```bash
 docker build -f docker/Dockerfile -t carbonlens .

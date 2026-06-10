@@ -82,7 +82,12 @@ describe("ScoreService", () => {
       breakdown: { transport: 0 },
     });
 
-    const result = await service.calculateAndStore("u1", "weekly", new Date(), new Date());
+    const result = await service.calculateAndStore(
+      "u1",
+      "weekly",
+      new Date(),
+      new Date(),
+    );
     expect(result.id).toBe("existing-id");
     expect(prismaMock.carbonScore.findFirst).toHaveBeenCalled();
   });

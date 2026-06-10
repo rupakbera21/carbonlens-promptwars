@@ -78,7 +78,7 @@ describe("GoalService", () => {
 
   it("should calculate progress", () => {
     expect(service.calculateProgress(50, 100)).toBe(50);
-    expect(service.calculateProgress(150, 100)).toBe(-50); 
+    expect(service.calculateProgress(150, 100)).toBe(-50);
   });
 
   it("should return 100 progress if targetCo2eKg is <= 0", () => {

@@ -67,11 +67,11 @@ describe("RecommendationService", () => {
           { field: "monthlyCount", operator: "greaterThan", value: 5 },
         ]),
         actions: JSON.stringify([{ type: "recommend", params: { title: "Test 3" } }]),
-      }
+      },
     ]);
     prismaMock.recommendation.findFirst.mockResolvedValue(null);
     prismaMock.recommendation.create.mockResolvedValue({ id: "rec1", title: "Test" });
-    
+
     activityRepo.getWeeklyTotalByCategory.mockResolvedValue(20);
     activityRepo.getMonthlyCountBySubCategory.mockResolvedValue(10);
 

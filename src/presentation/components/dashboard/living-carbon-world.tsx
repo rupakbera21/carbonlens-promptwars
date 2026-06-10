@@ -79,25 +79,53 @@ function useAudioEngine(isGameOver: boolean | undefined, isSoundEnabled: boolean
   useEffect(() => {
     if (typeof window === "undefined" || !isSoundEnabled) return;
     
-    let ambientOsc: OscillatorNode | null = null;
-    let ambientGain: GainNode | null = null;
+    let voices: { osc: OscillatorNode; lfo: OscillatorNode; mainGain: GainNode }[] = [];
 
     const handleInteraction = () => {
       if (!audioCtxRef.current) {
         audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
-        
-        // Start ambient music on first interaction
         const ctx = audioCtxRef.current;
-        ambientOsc = ctx.createOscillator();
-        ambientOsc.type = "triangle";
-        ambientOsc.frequency.setValueAtTime(110, ctx.currentTime); // Low A hum
-        
-        ambientGain = ctx.createGain();
-        ambientGain.gain.setValueAtTime(0.15, ctx.currentTime);
-        
-        ambientOsc.connect(ambientGain);
-        ambientGain.connect(ctx.destination);
-        ambientOsc.start();
+
+        const createBreathingOsc = (freq: number, pan: number) => {
+          const osc = ctx.createOscillator();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(freq, ctx.currentTime);
+          
+          const lfo = ctx.createOscillator();
+          lfo.type = "sine";
+          // Breathing rate ~ 1 cycle every 6-10 seconds
+          lfo.frequency.setValueAtTime(0.1 + Math.random() * 0.05, ctx.currentTime);
+          
+          const lfoGain = ctx.createGain();
+          lfoGain.gain.setValueAtTime(0.08, ctx.currentTime); // Depth of breathing
+          
+          const mainGain = ctx.createGain();
+          mainGain.gain.setValueAtTime(0.08, ctx.currentTime); // Base volume
+          
+          const panner = ctx.createStereoPanner();
+          panner.pan.value = pan;
+          
+          lfo.connect(lfoGain);
+          lfoGain.connect(mainGain.gain); // Modulate amplitude
+          
+          osc.connect(mainGain);
+          mainGain.connect(panner);
+          panner.connect(ctx.destination);
+          
+          osc.start();
+          lfo.start();
+          
+          return { osc, lfo, mainGain };
+        };
+
+        // Create a lush, ambient A-Major/9 pad
+        voices = [
+          createBreathingOsc(110.00, -0.5), // A2
+          createBreathingOsc(164.81, 0.5),  // E3
+          createBreathingOsc(220.00, -0.2), // A3
+          createBreathingOsc(277.18, 0.2),  // C#4
+          createBreathingOsc(329.63, 0.0)   // E4
+        ];
       }
       if (audioCtxRef.current.state === "suspended") {
         audioCtxRef.current.resume();
@@ -107,11 +135,13 @@ function useAudioEngine(isGameOver: boolean | undefined, isSoundEnabled: boolean
     window.addEventListener('click', handleInteraction);
     return () => {
       window.removeEventListener('click', handleInteraction);
-      if (ambientOsc) {
-        ambientOsc.stop();
-        ambientOsc.disconnect();
-      }
-      if (ambientGain) ambientGain.disconnect();
+      voices.forEach((v) => {
+        v.osc.stop();
+        v.lfo.stop();
+        v.osc.disconnect();
+        v.lfo.disconnect();
+        v.mainGain.disconnect();
+      });
     };
   }, []);
 

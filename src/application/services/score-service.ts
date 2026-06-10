@@ -25,27 +25,33 @@ export class ScoreService {
 
     const { score, totalCo2eKg, breakdown } = ScoreCalculator.compute(activities);
 
-    const record = await prisma.carbonScore.upsert({
-      where: {
-        id: await this.findExistingScoreId(userId, periodType, periodStart),
-      },
-      update: {
-        score,
-        totalCo2eKg,
-        breakdown: breakdown as any,
-        calculatedAt: new Date(),
-      },
-      create: {
-        userId,
-        score,
-        totalCo2eKg,
-        breakdown: breakdown as any,
-        periodType,
-        periodStart,
-        periodEnd,
-        calculatedAt: new Date(),
-      },
-    });
+    const existingId = await this.findExistingScoreId(userId, periodType, periodStart);
+    
+    let record;
+    if (existingId) {
+      record = await prisma.carbonScore.update({
+        where: { id: existingId },
+        data: {
+          score,
+          totalCo2eKg,
+          breakdown: breakdown as any,
+          calculatedAt: new Date(),
+        },
+      });
+    } else {
+      record = await prisma.carbonScore.create({
+        data: {
+          userId,
+          score,
+          totalCo2eKg,
+          breakdown: breakdown as any,
+          periodType,
+          periodStart,
+          periodEnd,
+          calculatedAt: new Date(),
+        },
+      });
+    }
 
     return {
       ...record,
@@ -88,13 +94,11 @@ export class ScoreService {
     userId: string,
     periodType: string,
     periodStart: Date,
-  ): Promise<string> {
+  ): Promise<string | null> {
     const existing = await prisma.carbonScore.findFirst({
       where: { userId, periodType, periodStart },
       select: { id: true },
     });
-    // Return existing ID or generate a new UUID-like placeholder
-    // that will trigger the "create" branch of upsert
-    return existing?.id ?? "00000000-0000-0000-0000-000000000000";
+    return existing?.id || null;
   }
 }

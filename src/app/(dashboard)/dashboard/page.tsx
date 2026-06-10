@@ -158,9 +158,9 @@ export default function DashboardPage() {
     }
   }, [isGameOver]);
 
-  // Ensure game over happens if phiScore hits 0
+  // Ensure game over happens if phiScore hits 0 only if they have progressed first
   useEffect(() => {
-    if (worldState && worldState.phiScore <= 0 && !isGameOver) {
+    if (worldState && worldState.ecoPoints > 0 && worldState.phiScore <= 0 && !isGameOver) {
       setIsGameOver(true);
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);

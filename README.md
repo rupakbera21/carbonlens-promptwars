@@ -2,7 +2,6 @@
 
 > A production-grade Progressive Web Application that helps individuals understand, track, and reduce their personal carbon footprint through transparent scoring, personalized insights, and actionable recommendations.
 
-[![CI](https://github.com/your-org/carbonlens/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/carbonlens/actions)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue.svg)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-15-black.svg)](https://nextjs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)

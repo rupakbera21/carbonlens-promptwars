@@ -79,9 +79,25 @@ function useAudioEngine(isGameOver: boolean | undefined, isSoundEnabled: boolean
   useEffect(() => {
     if (typeof window === "undefined" || !isSoundEnabled) return;
     
+    let ambientOsc: OscillatorNode | null = null;
+    let ambientGain: GainNode | null = null;
+
     const handleInteraction = () => {
       if (!audioCtxRef.current) {
         audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+        
+        // Start ambient music on first interaction
+        const ctx = audioCtxRef.current;
+        ambientOsc = ctx.createOscillator();
+        ambientOsc.type = "triangle";
+        ambientOsc.frequency.setValueAtTime(110, ctx.currentTime); // Low A hum
+        
+        ambientGain = ctx.createGain();
+        ambientGain.gain.setValueAtTime(0.05, ctx.currentTime);
+        
+        ambientOsc.connect(ambientGain);
+        ambientGain.connect(ctx.destination);
+        ambientOsc.start();
       }
       if (audioCtxRef.current.state === "suspended") {
         audioCtxRef.current.resume();
@@ -89,7 +105,14 @@ function useAudioEngine(isGameOver: boolean | undefined, isSoundEnabled: boolean
     };
     
     window.addEventListener('click', handleInteraction);
-    return () => window.removeEventListener('click', handleInteraction);
+    return () => {
+      window.removeEventListener('click', handleInteraction);
+      if (ambientOsc) {
+        ambientOsc.stop();
+        ambientOsc.disconnect();
+      }
+      if (ambientGain) ambientGain.disconnect();
+    };
   }, []);
 
   useEffect(() => {
@@ -485,17 +508,15 @@ export function LivingCarbonWorld({ worldState, lastAction, isGameOver }: Living
           {/* ActionShockwave stays centered on active planet. It's complex to move it dynamically, so we leave it hidden or on origin for now, or just remove it if multiple planets since BigBang is handled */}
         </Float>
 
-        {worldState.airQuality > 40 && (
-          <Stars
-            radius={150}
-            depth={100}
-            count={10000}
-            factor={6}
-            saturation={0.5}
-            fade
-            speed={1.5}
-          />
-        )}
+        <Stars
+          radius={150}
+          depth={100}
+          count={10000}
+          factor={6}
+          saturation={0.5}
+          fade
+          speed={1.5}
+        />
 
         <Environment preset="night" />
         <OrbitControls

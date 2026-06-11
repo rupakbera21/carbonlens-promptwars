@@ -27,7 +27,7 @@ export type CreateActivityInput = z.infer<typeof createActivitySchema>;
 /** Validation schema for activity query parameters */
 export const activityQuerySchema = z.object({
   cursor: z.string().uuid().optional(),
-  pageSize: z.coerce.number().int().min(1).max(100).optional().default(20),
+  pageSize: z.coerce.number().int().min(1).max(1000).optional().default(20),
   category: z.enum(["transport", "energy", "food", "shopping"]).optional(),
   startDate: z
     .string()

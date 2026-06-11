@@ -5,11 +5,21 @@ import { signOut } from "next-auth/react";
 import { ScoreCard } from "@/presentation/components/dashboard/score-card";
 import { CategoryBreakdownCard } from "@/presentation/components/dashboard/category-breakdown";
 import { QuickLog } from "@/presentation/components/dashboard/quick-log";
-import { TrendChart } from "@/presentation/components/charts/trend-chart";
-import { RadarChart } from "@/presentation/components/charts/radar-chart";
 import { Loading } from "@/presentation/components/common/loading";
 import { useGamification } from "@/presentation/providers/gamification-provider";
 import dynamic from "next/dynamic";
+
+const TrendChart = dynamic(
+  () =>
+    import("@/presentation/components/charts/trend-chart").then((mod) => mod.TrendChart),
+  { ssr: false },
+);
+
+const RadarChart = dynamic(
+  () =>
+    import("@/presentation/components/charts/radar-chart").then((mod) => mod.RadarChart),
+  { ssr: false },
+);
 
 const LivingCarbonWorld = dynamic(
   () =>

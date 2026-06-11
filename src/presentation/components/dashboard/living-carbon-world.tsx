@@ -573,36 +573,36 @@ export function LivingCarbonWorld({
       role="img"
     >
       <Canvas camera={{ position: [0, 0, 6.5], fov: 45 }}>
-        <color attach="background" args={["#020617"]} />
-        <ambientLight intensity={0.6} />
-        <directionalLight position={[10, 10, 5]} intensity={2} castShadow />
-        <pointLight position={[-10, -10, -5]} intensity={0.5} color="#0ea5e9" />
+        <React.Suspense fallback={null}>
+          <color attach="background" args={["#020617"]} />
+          <ambientLight intensity={0.6} />
+          <directionalLight position={[10, 10, 5]} intensity={2} castShadow />
+          <pointLight position={[-10, -10, -5]} intensity={0.5} color="#0ea5e9" />
 
-        {/* Main Solar System Renderer */}
-        <Float speed={2} rotationIntensity={0.6} floatIntensity={1.2}>
-          <React.Suspense fallback={null}>
+          {/* Main Solar System Renderer */}
+          <Float speed={2} rotationIntensity={0.6} floatIntensity={1.2}>
             <SolarSystem state={worldState} isGameOver={isGameOver} />
-          </React.Suspense>
-        </Float>
+          </Float>
 
-        <Stars
-          radius={150}
-          depth={100}
-          count={10000}
-          factor={6}
-          saturation={0.5}
-          fade
-          speed={1.5}
-        />
+          <Stars
+            radius={150}
+            depth={100}
+            count={10000}
+            factor={6}
+            saturation={0.5}
+            fade
+            speed={1.5}
+          />
 
-        <Environment preset="night" />
-        <OrbitControls
-          enablePan={true}
-          enableZoom={true}
-          minDistance={3.5}
-          maxDistance={Math.floor(worldState.phiScore / 100) > 0 ? 50 : 12}
-          autoRotate={false}
-        />
+          <Environment preset="night" />
+          <OrbitControls
+            enablePan={true}
+            enableZoom={true}
+            minDistance={3.5}
+            maxDistance={Math.floor(worldState.phiScore / 100) > 0 ? 50 : 12}
+            autoRotate={false}
+          />
+        </React.Suspense>
       </Canvas>
 
       {/* Floating Glassmorphism Overlay */}

@@ -28,6 +28,8 @@ const LivingCarbonWorld = dynamic(
     ),
   { ssr: false },
 );
+import { ErrorBoundary } from "@/presentation/components/common/error-boundary";
+import { LivingCarbonWorldFallback } from "@/presentation/components/dashboard/living-carbon-world-fallback";
 import { MissionPanel } from "@/presentation/components/dashboard/mission-panel";
 import { CommunityChallengePanel } from "@/presentation/components/dashboard/community-challenge";
 import {
@@ -420,11 +422,16 @@ export default function DashboardPage() {
 
       {isLivingWorldEnabled && worldState && (
         <div className="relative mb-8">
-          <LivingCarbonWorld
-            worldState={worldState}
-            lastAction={lastAction}
-            isGameOver={isGameOver}
-          />
+          <ErrorBoundary
+            name="Living Carbon World (3D Planet)"
+            fallback={<LivingCarbonWorldFallback worldState={worldState} />}
+          >
+            <LivingCarbonWorld
+              worldState={worldState}
+              lastAction={lastAction}
+              isGameOver={isGameOver}
+            />
+          </ErrorBoundary>
 
           {/* Badges System */}
           {worldState.achievements && worldState.achievements.length > 0 && (
@@ -585,8 +592,12 @@ export default function DashboardPage() {
 
           {/* Trends chart + Radar chart + Recommendations */}
           <div className="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            <TrendChart data={hourlyHistory} />
-            <RadarChart data={radarData} />
+            <ErrorBoundary name="Trend Chart">
+              <TrendChart data={hourlyHistory} />
+            </ErrorBoundary>
+            <ErrorBoundary name="Radar Chart">
+              <RadarChart data={radarData} />
+            </ErrorBoundary>
 
             {/* Recommendations */}
             <Card className="md:col-span-2 xl:col-span-1">

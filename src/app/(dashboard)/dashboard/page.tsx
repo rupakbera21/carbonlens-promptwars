@@ -232,9 +232,9 @@ export default function DashboardPage() {
       ]);
 
       setScoreData(scoreDataRes?.data ?? null);
-      setGoals(goalsDataRes.data);
-      setRecommendations(recsDataRes.data);
-      setEmissionFactors(efDataRes.data);
+      setGoals(goalsDataRes?.data ?? []);
+      setRecommendations(recsDataRes?.data ?? []);
+      setEmissionFactors(efDataRes?.data ?? []);
       // NOTE: worldState is intentionally NOT fetched here
     } catch (error) {
       console.error("Failed to fetch dashboard data:", error);
@@ -438,17 +438,17 @@ export default function DashboardPage() {
             <div className="mt-4 flex flex-wrap gap-2">
               {worldState.achievements.map((ach: any) => (
                 <div
-                  key={ach.id}
+                  key={ach?.id || Math.random().toString()}
                   className="flex items-center gap-1 rounded-full border border-yellow-500/30 bg-yellow-500/10 px-3 py-1 text-xs font-semibold text-yellow-500 shadow-sm backdrop-blur-sm"
                 >
                   <span>
-                    {ach.achievementType.includes("Galaxy")
+                    {ach?.achievementType?.includes("Galaxy")
                       ? "🌌"
-                      : ach.achievementType.includes("System")
+                      : ach?.achievementType?.includes("System")
                         ? "☀️"
                         : "🌍"}
                   </span>
-                  {ach.achievementType}
+                  {ach?.achievementType || "Badge"}
                 </div>
               ))}
             </div>

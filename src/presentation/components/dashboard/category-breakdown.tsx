@@ -74,14 +74,15 @@ export function CategoryBreakdownCard({
         {/* Visual bars */}
         <div className="space-y-4" aria-hidden="true">
           {categories.map(([cat, value]) => {
-            const Icon = CATEGORY_ICON_MAP[cat];
+            const Icon = cat in CATEGORY_ICON_MAP ? CATEGORY_ICON_MAP[cat as keyof typeof CATEGORY_ICON_MAP] : null;
             const percent = total > 0 ? (value / total) * 100 : 0;
+            const label = cat in CATEGORY_LABELS ? CATEGORY_LABELS[cat as keyof typeof CATEGORY_LABELS] : cat;
             return (
               <div key={cat} className="space-y-1.5">
                 <div className="flex items-center justify-between text-sm">
                   <div className="flex items-center gap-2">
-                    <Icon className="h-4 w-4 text-muted-foreground" />
-                    <span className="font-medium">{CATEGORY_LABELS[cat]}</span>
+                    {Icon && <Icon className="h-4 w-4 text-muted-foreground" />}
+                    <span className="font-medium">{label}</span>
                   </div>
                   <span className="tabular-nums text-muted-foreground">
                     {formatCo2e(value)}

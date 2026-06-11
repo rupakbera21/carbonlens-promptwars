@@ -372,6 +372,28 @@ export default function DashboardPage() {
     }
   };
 
+  // Radar Chart profile data
+  const radarData = useMemo(() => {
+    const totals: Record<string, number> = {
+      transport: 0,
+      energy: 0,
+      food: 0,
+      shopping: 0,
+    };
+    for (const act of activities) {
+      const cat = act?.category?.toLowerCase();
+      if (cat && cat in totals) {
+        totals[cat] += act.co2eKg || 0;
+      }
+    }
+    return [
+      { category: "Transport", value: Math.round(totals.transport * 10) / 10 },
+      { category: "Energy", value: Math.round(totals.energy * 10) / 10 },
+      { category: "Food", value: Math.round(totals.food * 10) / 10 },
+      { category: "Shopping", value: Math.round(totals.shopping * 10) / 10 },
+    ];
+  }, [activities]);
+
   if (isLoading) {
     return <Loading text="Loading your dashboard..." />;
   }
@@ -391,27 +413,7 @@ export default function DashboardPage() {
       ? history[history.length - 1].totalCo2eKg - history[history.length - 2].totalCo2eKg
       : null;
 
-  // Radar Chart profile data
-  const radarData = useMemo(() => {
-    const totals: Record<string, number> = {
-      transport: 0,
-      energy: 0,
-      food: 0,
-      shopping: 0,
-    };
-    for (const act of activities) {
-      const cat = act.category.toLowerCase();
-      if (cat in totals) {
-        totals[cat] += act.co2eKg;
-      }
-    }
-    return [
-      { category: "Transport", value: Math.round(totals.transport * 10) / 10 },
-      { category: "Energy", value: Math.round(totals.energy * 10) / 10 },
-      { category: "Food", value: Math.round(totals.food * 10) / 10 },
-      { category: "Shopping", value: Math.round(totals.shopping * 10) / 10 },
-    ];
-  }, [activities]);
+
 
   return (
     <div className="space-y-6">

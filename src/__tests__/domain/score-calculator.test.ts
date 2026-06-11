@@ -33,12 +33,12 @@ describe("ScoreCalculator", () => {
       expect(result.breakdown.energy).toBe(5);
       expect(result.breakdown.shopping).toBe(0);
       expect(result.totalCo2eKg).toBe(30);
-      expect(result.score).toBe(85);
+      expect(result.score).toBe(50);
     });
 
-    it("should return score 100 for empty activities", () => {
+    it("should return score 50 for empty activities", () => {
       const result = ScoreCalculator.compute([]);
-      expect(result.score).toBe(100);
+      expect(result.score).toBe(50);
       expect(result.totalCo2eKg).toBe(0);
     });
 

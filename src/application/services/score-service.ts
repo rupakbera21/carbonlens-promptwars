@@ -26,7 +26,7 @@ export class ScoreService {
     const { score, totalCo2eKg, breakdown } = ScoreCalculator.compute(activities);
 
     const existingId = await this.findExistingScoreId(userId, periodType, periodStart);
-    
+
     let record;
     if (existingId) {
       record = await prisma.carbonScore.update({

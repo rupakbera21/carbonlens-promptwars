@@ -38,7 +38,27 @@ export class ScoreCalculator {
     }
 
     const totalCo2eKg = Object.values(breakdown).reduce((sum, val) => sum + val, 0);
-    const score = calculateScore(totalCo2eKg);
+
+    const baselines: Record<string, number> = {
+      transport: 15,
+      energy: 20,
+      food: 10,
+      shopping: 10,
+    };
+
+    let score = 50;
+    if (activities.length > 0) {
+      for (const activity of activities) {
+        const category = activity.category.toLowerCase();
+        const baseline = baselines[category] || 10;
+        if (activity.co2eKg < baseline) {
+          score += 8;
+        } else {
+          score -= 4;
+        }
+      }
+    }
+    score = Math.max(0, Math.min(100, score));
 
     return {
       score,

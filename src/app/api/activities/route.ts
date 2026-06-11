@@ -11,7 +11,14 @@ import { ScoreService } from "@/application/services/score-service";
 import { RecommendationService } from "@/application/services/recommendation-service";
 import { PrismaActivityRepository } from "@/infrastructure/database/activity-repository-impl";
 import { PrismaEmissionFactorRepository } from "@/infrastructure/database/emission-factor-repository-impl";
-import { getWeekStart, getWeekEnd, getDayStart, getDayEnd, getHourStart, getHourEnd } from "@/shared/utils/date";
+import {
+  getWeekStart,
+  getWeekEnd,
+  getDayStart,
+  getDayEnd,
+  getHourStart,
+  getHourEnd,
+} from "@/shared/utils/date";
 import { GamificationEngineService } from "@/application/services/gamification-engine";
 
 const activityRepo = new PrismaActivityRepository();

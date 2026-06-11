@@ -29,7 +29,9 @@ export default function LoginPage() {
     const lockout = localStorage.getItem("carbonlens_game_over");
     if (lockout && parseInt(lockout, 10) > Date.now()) {
       setIsLockedOut(true);
-      setError("WORLD COLLAPSED: Your planet reached 0 health. You cannot log in until tomorrow.");
+      setError(
+        "WORLD COLLAPSED: Your planet reached 0 health. You cannot log in until tomorrow.",
+      );
     }
   }, []);
 

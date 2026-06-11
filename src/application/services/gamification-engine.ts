@@ -9,21 +9,21 @@ export class GamificationEngineService {
     // Baselines: Average daily CO2e footprint for typical actions (in kg)
     const baselines: Record<string, number> = {
       transport: 15, // E.g., average commute
-      energy: 20,    // E.g., daily household energy
-      food: 10,      // E.g., meat-heavy diet average
-      waste: 5       // E.g., daily trash
+      energy: 20, // E.g., daily household energy
+      food: 10, // E.g., meat-heavy diet average
+      waste: 5, // E.g., daily trash
     };
 
     const baseline = baselines[activity.category.toLowerCase()] || 10;
-    
+
     // Difference: Positive means you saved carbon compared to average. Negative means excess pollution.
     const difference = baseline - activity.co2eKg;
 
     // Multiplier for progression (lowered to prevent rapid jumping)
-    const impactMultiplier = 0.5; 
-    
+    const impactMultiplier = 0.5;
+
     phiImpact = difference * impactMultiplier;
-    
+
     // Cap extreme impacts per single activity so one flight doesn't drop score by -5000 instantly,
     // but still drops it by a massive amount like -50.
     phiImpact = Math.max(-60, Math.min(40, phiImpact));
@@ -38,7 +38,7 @@ export class GamificationEngineService {
       where: { userId: activity.userId },
     });
 
-    const oldPhi = state ? state.phiScore : 0.0;
+    const oldPhi = state ? state.phiScore : 100.0;
     const newPhi = Math.max(0, oldPhi + phiImpact);
 
     if (!state) {
@@ -47,10 +47,10 @@ export class GamificationEngineService {
           userId: activity.userId,
           ecoPoints: xpAwarded,
           phiScore: newPhi,
-          forestHealth: this.clamp(0.0 + phiImpact),
-          waterQuality: this.clamp(0.0 + phiImpact),
-          airQuality: this.clamp(0.0 + phiImpact),
-          biodiversity: this.clamp(0.0 + phiImpact),
+          forestHealth: this.clamp(100.0 + phiImpact),
+          waterQuality: this.clamp(100.0 + phiImpact),
+          airQuality: this.clamp(100.0 + phiImpact),
+          biodiversity: this.clamp(100.0 + phiImpact),
         },
       });
     } else {
@@ -75,18 +75,19 @@ export class GamificationEngineService {
       let achievementType = `Planet ${newMilestone + 1} Restored`;
       if (newMilestone === 1) achievementType = "Solar System Formed";
       if (newMilestone === 10) achievementType = "First Galaxy Unlocked";
-      if (newMilestone > 10 && newMilestone % 10 === 0) achievementType = `Galaxy ${newMilestone / 10} Unlocked`;
-      
+      if (newMilestone > 10 && newMilestone % 10 === 0)
+        achievementType = `Galaxy ${newMilestone / 10} Unlocked`;
+
       // Check if already awarded
       const existing = await prisma.userAchievement.findFirst({
-        where: { userId: activity.userId, achievementType }
+        where: { userId: activity.userId, achievementType },
       });
       if (!existing) {
         await prisma.userAchievement.create({
           data: {
             userId: activity.userId,
-            achievementType
-          }
+            achievementType,
+          },
         });
       }
     }

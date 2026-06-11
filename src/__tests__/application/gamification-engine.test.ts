@@ -43,18 +43,18 @@ describe("GamificationEngineService", () => {
   it("should create new WorldState if not exists and award positive impact", async () => {
     prismaMock.worldState.findUnique.mockResolvedValue(null);
 
-    const activity = createMockActivity(2); // < 5 gives +0.5 PHI and 50 XP
+    const activity = createMockActivity(2); // 15 - 2 = 13; 13 * 0.5 = 6.5 PHI and 19 XP
     await service.processActivity(activity);
 
     expect(prismaMock.worldState.create).toHaveBeenCalledWith({
       data: {
         userId: "user-1",
-        ecoPoints: 50,
-        phiScore: 50.5,
-        forestHealth: 50.5,
-        waterQuality: 50.5,
-        airQuality: 50.5,
-        biodiversity: 50.5,
+        ecoPoints: 19,
+        phiScore: 106.5,
+        forestHealth: 100.0,
+        waterQuality: 100.0,
+        airQuality: 100.0,
+        biodiversity: 100.0,
       },
     });
   });
@@ -62,18 +62,18 @@ describe("GamificationEngineService", () => {
   it("should create new WorldState if not exists and give neutral impact", async () => {
     prismaMock.worldState.findUnique.mockResolvedValue(null);
 
-    const activity = createMockActivity(20); // 10 XP, 0 PHI
+    const activity = createMockActivity(15); // 15 - 15 = 0; 0 PHI and 0 XP
     await service.processActivity(activity);
 
     expect(prismaMock.worldState.create).toHaveBeenCalledWith({
       data: {
         userId: "user-1",
-        ecoPoints: 10,
-        phiScore: 50,
-        forestHealth: 50,
-        waterQuality: 50,
-        airQuality: 50,
-        biodiversity: 50,
+        ecoPoints: 0,
+        phiScore: 100.0,
+        forestHealth: 100.0,
+        waterQuality: 100.0,
+        airQuality: 100.0,
+        biodiversity: 100.0,
       },
     });
   });
@@ -89,18 +89,18 @@ describe("GamificationEngineService", () => {
       biodiversity: 50,
     });
 
-    const activity = createMockActivity(60); // > 50 gives -0.5 PHI and 0 XP
+    const activity = createMockActivity(60); // 15 - 60 = -45; -45 * 0.5 = -22.5 PHI and 0 XP
     await service.processActivity(activity);
 
     expect(prismaMock.worldState.update).toHaveBeenCalledWith({
       where: { id: "ws-1" },
       data: {
         ecoPoints: 100, // +0
-        phiScore: 49.5,
-        forestHealth: 49.5,
-        waterQuality: 49.5,
-        airQuality: 49.5,
-        biodiversity: 49.5,
+        phiScore: 27.5,
+        forestHealth: 27.5,
+        waterQuality: 27.5,
+        airQuality: 27.5,
+        biodiversity: 27.5,
       },
     });
   });
@@ -111,23 +111,23 @@ describe("GamificationEngineService", () => {
       ecoPoints: 1000,
       phiScore: 99.8,
       forestHealth: 100, // Should stay 100
-      waterQuality: 0, // Should stay 0 if further reduced, but here we add 0.5
+      waterQuality: 0,
       airQuality: 50,
       biodiversity: 50,
     });
 
-    const activity = createMockActivity(1); // +0.5 PHI
+    const activity = createMockActivity(1); // 15 - 1 = 14; 14 * 0.5 = 7 PHI; 7 * 3 = 21 XP
     await service.processActivity(activity);
 
     expect(prismaMock.worldState.update).toHaveBeenCalledWith({
       where: { id: "ws-1" },
       data: {
-        ecoPoints: 1050,
-        phiScore: 100, // Clamped from 100.3
-        forestHealth: 100, // Clamped from 100.5
-        waterQuality: 0.5,
-        airQuality: 50.5,
-        biodiversity: 50.5,
+        ecoPoints: 1021,
+        phiScore: 106.8, // Unbounded
+        forestHealth: 100, // Clamped from 107
+        waterQuality: 7.0, // Clamped from 7
+        airQuality: 57.0, // Clamped from 57
+        biodiversity: 57.0, // Clamped from 57
       },
     });
   });

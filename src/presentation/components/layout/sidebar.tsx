@@ -53,19 +53,24 @@ export function Sidebar() {
   return (
     <aside
       className={cn(
-        "hidden flex-shrink-0 border-r bg-card lg:block transition-all duration-300 relative",
-        isCollapsed ? "w-16" : "w-64"
+        "relative hidden flex-shrink-0 border-r bg-card transition-all duration-300 lg:block",
+        isCollapsed ? "w-16" : "w-64",
       )}
       role="navigation"
       aria-label="Main navigation"
     >
       <div className="flex h-full flex-col">
         {/* Logo */}
-        <div className={cn("flex h-16 items-center border-b", isCollapsed ? "justify-center" : "justify-between px-4")}>
+        <div
+          className={cn(
+            "flex h-16 items-center border-b",
+            isCollapsed ? "justify-center" : "justify-between px-4",
+          )}
+        >
           <div className="flex items-center gap-2 overflow-hidden">
             <Leaf className="h-6 w-6 flex-shrink-0 text-primary" aria-hidden="true" />
             {!isCollapsed && (
-              <span className="text-xl font-bold tracking-tight whitespace-nowrap">
+              <span className="whitespace-nowrap text-xl font-bold tracking-tight">
                 Carbon<span className="text-primary">Lens</span>
               </span>
             )}
@@ -77,7 +82,11 @@ export function Sidebar() {
           className="absolute -right-3 top-5 z-50 flex h-6 w-6 items-center justify-center rounded-full border bg-background shadow-sm hover:bg-accent"
           aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
-          {isCollapsed ? <Menu className="h-3 w-3" /> : <ChevronLeft className="h-3 w-3" />}
+          {isCollapsed ? (
+            <Menu className="h-3 w-3" />
+          ) : (
+            <ChevronLeft className="h-3 w-3" />
+          )}
         </button>
 
         {/* Navigation links */}
@@ -97,7 +106,7 @@ export function Sidebar() {
                   "hover:bg-accent hover:text-accent-foreground",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                   isActive ? "bg-primary/10 text-primary" : "text-muted-foreground",
-                  isCollapsed && "justify-center px-0"
+                  isCollapsed && "justify-center px-0",
                 )}
                 aria-current={isActive ? "page" : undefined}
               >
@@ -110,7 +119,7 @@ export function Sidebar() {
 
         {/* Footer info */}
         {!isCollapsed && (
-          <div className="border-t p-4 whitespace-nowrap overflow-hidden">
+          <div className="overflow-hidden whitespace-nowrap border-t p-4">
             <p className="text-xs text-muted-foreground">CarbonLens v1.0.0</p>
             <p className="text-xs text-muted-foreground">Tracking your impact</p>
           </div>

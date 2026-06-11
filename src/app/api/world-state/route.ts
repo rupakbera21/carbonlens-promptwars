@@ -17,7 +17,7 @@ export async function GET() {
       });
       achievements = await prisma.userAchievement.findMany({
         where: { userId: auth.userId },
-        orderBy: { unlockedAt: 'desc' }
+        orderBy: { unlockedAt: "desc" },
       });
     } catch (dbError) {
       console.warn("Database unavailable, using mock world state.");
@@ -28,11 +28,11 @@ export async function GET() {
         id: "default-new",
         userId: auth.userId,
         ecoPoints: 0,
-        phiScore: 0.0,
-        forestHealth: 0.0,
-        waterQuality: 0.0,
-        airQuality: 0.0,
-        biodiversity: 0.0,
+        phiScore: 100.0,
+        forestHealth: 100.0,
+        waterQuality: 100.0,
+        airQuality: 100.0,
+        biodiversity: 100.0,
         level: 1,
         updatedAt: new Date(),
       };
@@ -61,11 +61,11 @@ export async function POST(request: Request) {
       create: {
         userId: auth.userId,
         ecoPoints: boost,
-        phiScore: boost,
-        forestHealth: boost,
-        waterQuality: boost,
-        airQuality: boost,
-        biodiversity: boost,
+        phiScore: 100.0 + boost,
+        forestHealth: Math.min(100.0, 100.0 + boost),
+        waterQuality: Math.min(100.0, 100.0 + boost),
+        airQuality: Math.min(100.0, 100.0 + boost),
+        biodiversity: Math.min(100.0, 100.0 + boost),
         level: 1,
       },
       update: {

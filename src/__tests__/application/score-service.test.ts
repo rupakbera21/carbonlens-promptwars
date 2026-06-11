@@ -7,7 +7,8 @@ import { ScoreCalculator } from "../../domain/services/score-calculator";
 const { prismaMock } = vi.hoisted(() => ({
   prismaMock: {
     carbonScore: {
-      upsert: vi.fn(),
+      create: vi.fn(),
+      update: vi.fn(),
       findFirst: vi.fn(),
       findMany: vi.fn(),
     },
@@ -42,7 +43,7 @@ describe("ScoreService", () => {
     ]);
 
     prismaMock.carbonScore.findFirst.mockResolvedValue(null);
-    prismaMock.carbonScore.upsert.mockResolvedValue({
+    prismaMock.carbonScore.create.mockResolvedValue({
       id: "s1",
       score: 95,
       totalCo2eKg: 10,
@@ -57,7 +58,7 @@ describe("ScoreService", () => {
     );
 
     expect(result.score).toBe(95);
-    expect(prismaMock.carbonScore.upsert).toHaveBeenCalled();
+    expect(prismaMock.carbonScore.create).toHaveBeenCalled();
   });
 
   it("should get current score", async () => {
@@ -75,7 +76,7 @@ describe("ScoreService", () => {
   it("should update existing score during calculateAndStore", async () => {
     activityRepo.findByUserAndDateRange.mockResolvedValue([]);
     prismaMock.carbonScore.findFirst.mockResolvedValue({ id: "existing-id" });
-    prismaMock.carbonScore.upsert.mockResolvedValue({
+    prismaMock.carbonScore.update.mockResolvedValue({
       id: "existing-id",
       score: 100,
       totalCo2eKg: 0,
@@ -90,6 +91,7 @@ describe("ScoreService", () => {
     );
     expect(result.id).toBe("existing-id");
     expect(prismaMock.carbonScore.findFirst).toHaveBeenCalled();
+    expect(prismaMock.carbonScore.update).toHaveBeenCalled();
   });
 
   it("should get score history", async () => {

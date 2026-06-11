@@ -73,14 +73,50 @@ export function EcoPlatformer({ onComplete, onClose }: EcoPlatformerProps) {
 
     // Villains patrolling platforms
     let villains = [
-      { x: 220, y: 256, width: 24, height: 24, vx: 1.5, minX: 200, maxX: 300, dead: false },
+      {
+        x: 220,
+        y: 256,
+        width: 24,
+        height: 24,
+        vx: 1.5,
+        minX: 200,
+        maxX: 300,
+        dead: false,
+      },
       { x: 420, y: 196, width: 24, height: 24, vx: 2, minX: 400, maxX: 500, dead: false },
       { x: 300, y: 326, width: 24, height: 24, vx: 1, minX: 100, maxX: 700, dead: false },
       // Extended level villains
       { x: 850, y: 226, width: 24, height: 24, vx: 2, minX: 800, maxX: 950, dead: false },
-      { x: 1320, y: 126, width: 24, height: 24, vx: 2.5, minX: 1300, maxX: 1450, dead: false },
-      { x: 1620, y: 256, width: 24, height: 24, vx: 1.5, minX: 1600, maxX: 1720, dead: false },
-      { x: 1000, y: 326, width: 24, height: 24, vx: 2, minX: 800, maxX: 2000, dead: false },
+      {
+        x: 1320,
+        y: 126,
+        width: 24,
+        height: 24,
+        vx: 2.5,
+        minX: 1300,
+        maxX: 1450,
+        dead: false,
+      },
+      {
+        x: 1620,
+        y: 256,
+        width: 24,
+        height: 24,
+        vx: 1.5,
+        minX: 1600,
+        maxX: 1720,
+        dead: false,
+      },
+      {
+        x: 1000,
+        y: 326,
+        width: 24,
+        height: 24,
+        vx: 2,
+        minX: 800,
+        maxX: 2000,
+        dead: false,
+      },
     ];
 
     const flagpole = { x: 2250, y: 100, width: 20, height: 250 };
@@ -265,7 +301,7 @@ export function EcoPlatformer({ onComplete, onClose }: EcoPlatformerProps) {
 
       // Restore camera transform
       ctx.restore();
-      
+
       // Draw UI (Static over the camera)
       ctx.font = "bold 20px Arial";
       ctx.textAlign = "left";
@@ -295,19 +331,16 @@ export function EcoPlatformer({ onComplete, onClose }: EcoPlatformerProps) {
         </button>
 
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Eco-Platformer</h2>
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">
+            Eco-Platformer
+          </h2>
           <span className="rounded-full bg-emerald-100 px-4 py-1 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300">
             Score: {score}
           </span>
         </div>
 
         <div className="relative overflow-hidden rounded-xl border-4 border-slate-800">
-          <canvas
-            ref={canvasRef}
-            width={800}
-            height={400}
-            className="block"
-          />
+          <canvas ref={canvasRef} width={800} height={400} className="block" />
 
           {gameState !== "playing" && (
             <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 text-center">

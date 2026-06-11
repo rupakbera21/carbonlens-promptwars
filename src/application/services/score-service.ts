@@ -59,10 +59,10 @@ export class ScoreService {
     };
   }
 
-  async getCurrentScore(userId: string): Promise<CarbonScore | null> {
+  async getCurrentScore(userId: string, periodType = "weekly"): Promise<CarbonScore | null> {
     const record = await prisma.carbonScore.findFirst({
-      where: { userId },
-      orderBy: { calculatedAt: "desc" },
+      where: { userId, periodType },
+      orderBy: { periodStart: "desc" },
     });
 
     if (!record) return null;

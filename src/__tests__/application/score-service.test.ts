@@ -12,6 +12,9 @@ const { prismaMock } = vi.hoisted(() => ({
       findFirst: vi.fn(),
       findMany: vi.fn(),
     },
+    activity: {
+      findMany: vi.fn(),
+    },
   },
 }));
 vi.mock("@/infrastructure/database/prisma-client", () => ({
@@ -62,13 +65,20 @@ describe("ScoreService", () => {
   });
 
   it("should get current score", async () => {
-    prismaMock.carbonScore.findFirst.mockResolvedValue({ id: "s1", score: 90 });
+    activityRepo.findByUserAndDateRange.mockResolvedValue([
+      { co2eKg: 12, category: "food" } as any, // >= 10 baseline -> score -= 4
+    ]);
+    prismaMock.activity.findMany.mockResolvedValue([
+      { co2eKg: 12, category: "food" } as any, // 50 - 4 = 46
+    ]);
     const result = await service.getCurrentScore("u1");
-    expect(result?.score).toBe(90);
+    expect(result?.score).toBe(46);
+    expect(result?.totalCo2eKg).toBe(12);
   });
 
   it("should return null if no current score", async () => {
-    prismaMock.carbonScore.findFirst.mockResolvedValue(null);
+    activityRepo.findByUserAndDateRange.mockResolvedValue([]);
+    prismaMock.activity.findMany.mockResolvedValue([]);
     const result = await service.getCurrentScore("u1");
     expect(result).toBeNull();
   });

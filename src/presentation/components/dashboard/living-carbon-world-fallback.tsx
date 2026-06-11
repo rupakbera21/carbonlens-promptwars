@@ -21,19 +21,26 @@ interface LivingCarbonWorldFallbackProps {
 export function LivingCarbonWorldFallback({
   worldState,
 }: LivingCarbonWorldFallbackProps) {
-  const phiPercentage = worldState ? worldState.phiScore % 100 : 0;
-  const isHealthy = phiPercentage > 50;
+  let totalPlanets = 1;
+  let activePlanetScore = worldState ? worldState.phiScore : 0;
+  if (worldState && worldState.phiScore > 100) {
+    totalPlanets = Math.floor((worldState.phiScore - 1) / 100) + 1;
+    activePlanetScore = ((worldState.phiScore - 1) % 100) + 1;
+  } else if (worldState && worldState.phiScore < 0) {
+    activePlanetScore = 0;
+  }
+  const isHealthy = activePlanetScore > 50;
 
   let statusText = "Stable Orbit";
   if (worldState.phiScore >= 1000) {
     statusText = "Expanding Galaxy";
-  } else if (worldState.phiScore >= 100) {
-    statusText = `Orbiting ${Math.floor(worldState.phiScore / 100) + 1} Planets`;
-  } else if (phiPercentage > 80) {
+  } else if (totalPlanets > 1) {
+    statusText = `Orbiting ${totalPlanets} Planets`;
+  } else if (activePlanetScore > 80) {
     statusText = "Thriving World";
-  } else if (phiPercentage > 50) {
+  } else if (activePlanetScore > 50) {
     statusText = "Stable Orbit";
-  } else if (phiPercentage <= 0 && worldState.phiScore <= 0) {
+  } else if (worldState.phiScore <= 0) {
     statusText = "Barren World";
   } else {
     statusText = "Critical Condition";
@@ -68,10 +75,10 @@ export function LivingCarbonWorldFallback({
         />
 
         {/* Orbit Rings (if multiple planets are owned) */}
-        {worldState.phiScore >= 100 && (
+        {totalPlanets >= 2 && (
           <div className="absolute h-56 w-56 animate-[spin_20s_linear_infinite] rounded-full border border-dashed border-cyan-500/20" />
         )}
-        {worldState.phiScore >= 200 && (
+        {totalPlanets >= 3 && (
           <div className="absolute h-64 w-64 animate-[spin_35s_linear_infinite] rounded-full border border-dashed border-teal-500/15" />
         )}
       </div>
@@ -84,8 +91,8 @@ export function LivingCarbonWorldFallback({
       {/* Floating Glassmorphism Overlay */}
       <div className="absolute bottom-6 left-6 rounded-2xl border border-white/20 bg-black/40 p-5 text-white shadow-2xl backdrop-blur-xl transition-all duration-300 hover:border-white/30 hover:bg-black/50">
         <h3 className="bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-2xl font-black text-transparent drop-shadow-md">
-          {worldState.phiScore >= 100 ? "Solar System" : "Planet Health"}:{" "}
-          {phiPercentage.toFixed(2)}%
+          {totalPlanets > 1 ? "Solar System" : "Planet Health"}:{" "}
+          {activePlanetScore.toFixed(2)}%
         </h3>
         <div className="mt-2 flex items-center gap-2">
           <span className="relative flex h-3 w-3">

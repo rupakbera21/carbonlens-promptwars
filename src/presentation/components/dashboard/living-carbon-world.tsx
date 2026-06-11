@@ -473,6 +473,22 @@ function Sun() {
   );
 }
 
+function OrbitRing({ radius }: { radius: number }) {
+  return (
+    <mesh rotation={[-Math.PI / 2, 0, 0]}>
+      <ringGeometry args={[radius - 0.04, radius + 0.04, 64]} />
+      <meshBasicMaterial
+        color="#0ea5e9"
+        transparent
+        opacity={0.15}
+        side={THREE.DoubleSide}
+        blending={THREE.AdditiveBlending}
+        depthWrite={false}
+      />
+    </mesh>
+  );
+}
+
 function OrbitingPlanet({
   index,
   totalPlanets,
@@ -485,7 +501,7 @@ function OrbitingPlanet({
   isGameOver?: boolean;
 }) {
   const ref = useRef<THREE.Group>(null);
-  const distance = totalPlanets > 1 ? 8 + index * 4 : 0;
+  const distance = totalPlanets > 1 ? 6 + index * 4 : 0;
   const speed = 0.2 / (index + 1);
 
   useFrame((_, delta) => {
@@ -506,8 +522,15 @@ function OrbitingPlanet({
 }
 
 function SolarSystem({ state, isGameOver }: { state: WorldState; isGameOver?: boolean }) {
-  const totalPlanets = Math.floor(state.phiScore / 110) + 1;
-  const activePlanetScore = state.phiScore % 110;
+  let totalPlanets = 1;
+  let activePlanetScore = state.phiScore;
+
+  if (state.phiScore > 100) {
+    totalPlanets = Math.floor((state.phiScore - 1) / 100) + 1;
+    activePlanetScore = ((state.phiScore - 1) % 100) + 1;
+  } else if (state.phiScore < 0) {
+    activePlanetScore = 0;
+  }
 
   const planets = Array.from({ length: totalPlanets }).map((_, i) => {
     const isActive = i === totalPlanets - 1;
@@ -535,9 +558,16 @@ function SolarSystem({ state, isGameOver }: { state: WorldState; isGameOver?: bo
     );
   });
 
+  const rings = totalPlanets > 1
+    ? Array.from({ length: totalPlanets }).map((_, i) => (
+        <OrbitRing key={`ring-${i}`} radius={6 + i * 4} />
+      ))
+    : null;
+
   return (
     <group>
       {totalPlanets > 1 && <Sun />}
+      {rings}
       {planets}
     </group>
   );
@@ -550,6 +580,15 @@ export function LivingCarbonWorld({
 }: LivingCarbonWorldProps) {
   const [isSoundEnabled, setIsSoundEnabled] = useState(true);
   const [activeHint, setActiveHint] = useState<string | null>(null);
+
+  let totalPlanets = 1;
+  let activePlanetScore = worldState.phiScore;
+  if (worldState.phiScore > 100) {
+    totalPlanets = Math.floor((worldState.phiScore - 1) / 100) + 1;
+    activePlanetScore = ((worldState.phiScore - 1) % 100) + 1;
+  } else if (worldState.phiScore < 0) {
+    activePlanetScore = 0;
+  }
 
   useAudioEngine(isGameOver, isSoundEnabled);
 
@@ -599,7 +638,7 @@ export function LivingCarbonWorld({
             enablePan={true}
             enableZoom={true}
             minDistance={3.5}
-            maxDistance={Math.floor(worldState.phiScore / 100) > 0 ? 50 : 12}
+            maxDistance={totalPlanets > 1 ? 50 : 12}
             autoRotate={false}
           />
         </React.Suspense>
@@ -608,28 +647,28 @@ export function LivingCarbonWorld({
       {/* Floating Glassmorphism Overlay */}
       <div className="absolute bottom-6 left-6 rounded-2xl border border-white/20 bg-black/40 p-5 text-white shadow-2xl backdrop-blur-xl transition-all duration-300 hover:border-white/30 hover:bg-black/50">
         <h3 className="bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-2xl font-black text-transparent drop-shadow-md">
-          {Math.floor(worldState.phiScore / 100) >= 1 ? "Solar System" : "Planet Health"}:{" "}
-          {(worldState.phiScore % 100).toFixed(2)}%
+          {totalPlanets > 1 ? "Solar System" : "Planet Health"}:{" "}
+          {activePlanetScore.toFixed(2)}%
         </h3>
         <div className="mt-2 flex items-center gap-2">
           <span className="relative flex h-3 w-3">
             <span
-              className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-75 ${worldState.phiScore % 100 > 50 ? "bg-emerald-400" : "bg-red-400"}`}
+              className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-75 ${activePlanetScore > 50 ? "bg-emerald-400" : "bg-red-400"}`}
             ></span>
             <span
-              className={`relative inline-flex h-3 w-3 rounded-full ${worldState.phiScore % 100 > 50 ? "bg-emerald-500" : "bg-red-500"}`}
+              className={`relative inline-flex h-3 w-3 rounded-full ${activePlanetScore > 50 ? "bg-emerald-500" : "bg-red-500"}`}
             ></span>
           </span>
           <p className="text-sm font-medium uppercase tracking-wider opacity-90">
             {worldState.phiScore >= 1000
               ? "Expanding Galaxy"
-              : worldState.phiScore >= 100
-                ? `Orbiting ${Math.floor(worldState.phiScore / 100) + 1} Planets`
-                : worldState.phiScore % 100 > 80
+              : totalPlanets > 1
+                ? `Orbiting ${totalPlanets} Planets`
+                : activePlanetScore > 80
                   ? "Thriving World"
-                  : worldState.phiScore % 100 > 50
+                  : activePlanetScore > 50
                     ? "Stable Orbit"
-                    : worldState.phiScore % 100 <= 0 && worldState.phiScore <= 0
+                    : worldState.phiScore <= 0
                       ? "Barren World"
                       : "Critical Condition"}
           </p>

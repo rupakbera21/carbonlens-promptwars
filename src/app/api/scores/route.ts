@@ -5,6 +5,14 @@ import { successResponse } from "@/shared/types/api-response";
 import { ScoreService } from "@/application/services/score-service";
 import { PrismaActivityRepository } from "@/infrastructure/database/activity-repository-impl";
 import { ScoreCalculator } from "@/domain/services/score-calculator";
+import {
+  getWeekStart,
+  getWeekEnd,
+  getDayStart,
+  getDayEnd,
+  getHourStart,
+  getHourEnd,
+} from "@/shared/utils/date";
 
 const activityRepo = new PrismaActivityRepository();
 const scoreService = new ScoreService(activityRepo);
@@ -16,6 +24,30 @@ export async function GET() {
   try {
     const auth = await requireAuth();
     if (auth instanceof NextResponse) return auth;
+
+    const now = new Date();
+
+    // Recalculate current period scores on GET to ensure data freshness and correct scoring formulas
+    await Promise.all([
+      scoreService.calculateAndStore(
+        auth.userId,
+        "weekly",
+        getWeekStart(now),
+        getWeekEnd(now),
+      ),
+      scoreService.calculateAndStore(
+        auth.userId,
+        "daily",
+        getDayStart(now),
+        getDayEnd(now),
+      ),
+      scoreService.calculateAndStore(
+        auth.userId,
+        "hourly",
+        getHourStart(now),
+        getHourEnd(now),
+      ),
+    ]);
 
     const [currentScore, hourlyHistory, dailyHistory, weeklyHistory, monthlyHistory] =
       await Promise.all([

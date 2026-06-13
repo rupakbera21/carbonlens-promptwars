@@ -74,9 +74,15 @@ export function CategoryBreakdownCard({
         {/* Visual bars */}
         <div className="space-y-4" aria-hidden="true">
           {categories.map(([cat, value]) => {
-            const Icon = cat in CATEGORY_ICON_MAP ? CATEGORY_ICON_MAP[cat as keyof typeof CATEGORY_ICON_MAP] : null;
+            const Icon =
+              cat in CATEGORY_ICON_MAP
+                ? CATEGORY_ICON_MAP[cat as keyof typeof CATEGORY_ICON_MAP]
+                : null;
             const percent = total > 0 ? (value / total) * 100 : 0;
-            const label = cat in CATEGORY_LABELS ? CATEGORY_LABELS[cat as keyof typeof CATEGORY_LABELS] : cat;
+            const label =
+              cat in CATEGORY_LABELS
+                ? CATEGORY_LABELS[cat as keyof typeof CATEGORY_LABELS]
+                : cat;
             return (
               <div key={cat} className="space-y-1.5">
                 <div className="flex items-center justify-between text-sm">

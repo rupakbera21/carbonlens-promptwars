@@ -2,14 +2,7 @@
 
 import React, { useRef, useMemo, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import {
-  OrbitControls,
-  Stars,
-  Environment,
-  Float,
-  Sparkles,
-  useTexture,
-} from "@react-three/drei";
+import { OrbitControls, Stars, Environment, Float, useTexture } from "@react-three/drei";
 import * as THREE from "three";
 import { Volume2, VolumeX } from "lucide-react";
 
@@ -341,16 +334,7 @@ function Planet({ state, isGameOver }: { state: WorldState; isGameOver?: boolean
         />
       </mesh>
 
-      {/* Vibrant Biodiversity Sparkles */}
-      {state.biodiversity > 30 && !isGameOver && (
-        <Sparkles
-          count={Math.floor(state.biodiversity * 6)}
-          scale={5.5}
-          size={state.biodiversity / 8}
-          speed={0.4}
-          color={state.biodiversity > 70 ? "#fbbf24" : "#a3e635"}
-        />
-      )}
+      {/* Vibrant Biodiversity Sparkles removed to avoid jittering/floating yellow lights */}
 
       {/* Procedural Vegetation and Cities */}
       {!isGameOver && (
@@ -501,7 +485,10 @@ function OrbitingPlanet({
   isGameOver?: boolean;
 }) {
   const ref = useRef<THREE.Group>(null);
-  const distance = totalPlanets > 1 ? 6 + index * 4 : 0;
+  // Different sizes for planets, reminiscent of our solar system
+  const PLANET_SCALES = [0.6, 0.9, 1.0, 0.75, 1.8, 1.5, 1.3, 1.2];
+  const scale = totalPlanets > 1 ? PLANET_SCALES[index % PLANET_SCALES.length] : 1.0;
+  const distance = totalPlanets > 1 ? 6.5 + index * 5.0 : 0;
   const speed = 0.2 / (index + 1);
 
   useFrame((_, delta) => {
@@ -512,7 +499,7 @@ function OrbitingPlanet({
 
   return (
     <group ref={ref}>
-      <group position={[distance, 0, 0]}>
+      <group position={[distance, 0, 0]} scale={[scale, scale, scale]}>
         <Planet state={state} isGameOver={isGameOver} />
         {/* Only show shockwaves and big bang on the active outer planet */}
         {index === totalPlanets - 1 && <BigBang active={!!isGameOver} />}
@@ -558,11 +545,12 @@ function SolarSystem({ state, isGameOver }: { state: WorldState; isGameOver?: bo
     );
   });
 
-  const rings = totalPlanets > 1
-    ? Array.from({ length: totalPlanets }).map((_, i) => (
-        <OrbitRing key={`ring-${i}`} radius={6 + i * 4} />
-      ))
-    : null;
+  const rings =
+    totalPlanets > 1
+      ? Array.from({ length: totalPlanets }).map((_, i) => (
+          <OrbitRing key={`ring-${i}`} radius={6.5 + i * 5.0} />
+        ))
+      : null;
 
   return (
     <group>

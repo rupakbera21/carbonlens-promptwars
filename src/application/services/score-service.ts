@@ -60,7 +60,10 @@ export class ScoreService {
     };
   }
 
-  async getCurrentScore(userId: string, periodType = "weekly"): Promise<CarbonScore | null> {
+  async getCurrentScore(
+    userId: string,
+    periodType = "weekly",
+  ): Promise<CarbonScore | null> {
     const now = new Date();
     const weekStart = getWeekStart(now);
     const weekEnd = getWeekEnd(now);
@@ -138,7 +141,6 @@ export class ScoreService {
       calculatedAt: new Date(),
     };
   }
-
 
   async getScoreHistory(
     userId: string,

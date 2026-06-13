@@ -413,8 +413,6 @@ export default function DashboardPage() {
       ? history[history.length - 1].totalCo2eKg - history[history.length - 2].totalCo2eKg
       : null;
 
-
-
   return (
     <div className="space-y-6">
       <div>

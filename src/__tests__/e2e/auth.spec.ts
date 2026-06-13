@@ -58,7 +58,8 @@ test.describe("Authentication", () => {
  * E2E test: Accessibility checks.
  */
 test.describe("Accessibility", () => {
-  test("login page should have skip link", async ({ page }) => {
+  test("login page should have skip link", async ({ page, isMobile }) => {
+    test.skip(isMobile, "Skip links are for desktop keyboard navigation");
     await page.goto("/login");
 
     // Tab to skip link

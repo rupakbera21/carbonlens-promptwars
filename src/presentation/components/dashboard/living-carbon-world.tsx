@@ -578,6 +578,11 @@ export function LivingCarbonWorld({
     activePlanetScore = 0;
   }
 
+  // Calculate dynamic camera distance so the entire solar system fits in the initial view on load
+  const initialCameraZ = totalPlanets > 1 ? 10 + totalPlanets * 6.0 : 7.5;
+  const initialCameraPosition: [number, number, number] =
+    totalPlanets > 1 ? [0, totalPlanets * 2.0 + 2.0, initialCameraZ] : [0, 0, 7.5];
+
   useAudioEngine(isGameOver, isSoundEnabled);
 
   useEffect(() => {
@@ -599,7 +604,7 @@ export function LivingCarbonWorld({
       aria-label="Interactive 3D living carbon world representing your planet health index"
       role="img"
     >
-      <Canvas camera={{ position: [0, 0, 6.5], fov: 45 }}>
+      <Canvas camera={{ position: initialCameraPosition, fov: 45 }}>
         <React.Suspense fallback={null}>
           <color attach="background" args={["#020617"]} />
           <ambientLight intensity={0.6} />

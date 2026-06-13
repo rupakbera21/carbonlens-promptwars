@@ -32,6 +32,7 @@ CarbonLens is a **carbon footprint tracking and reduction platform** designed wi
 - Track **transportation**, **electricity**, **food**, and **shopping** emissions
 - Real-time score updates with animated visualizations
 - Per-category breakdown with accessible data tables
+- **Interactive 3D Living World / Solar System**: A dynamic 3D simulation built with React Three Fiber representing your carbon footprint health index. The system scales by generating orbiting planets with distinct, deterministic sizes and clean planetary spacing, with jitter-free visuals.
 
 ### 2. Smart Carbon Score (0-100)
 
@@ -378,6 +379,19 @@ PORT=3001 npm run dev
 # Ensure test database exists and migrations are applied
 DATABASE_URL="..." npx prisma migrate deploy
 ```
+
+### Windows ARM64 / Apple Silicon VM compatibility issues (Prisma dll error)
+
+If you are running on a Windows ARM64 architecture (e.g., Snapdragon laptops or virtualization on ARM hosts) and receive a `query_engine-windows.dll.node is not a valid Win32 application` error from Prisma:
+1. Configure the Prisma engines to use binary execution rather than node-api library files. Add the following to your `.env` file:
+   ```env
+   PRISMA_CLI_QUERY_ENGINE_TYPE="binary"
+   PRISMA_CLIENT_ENGINE_TYPE="binary"
+   ```
+2. Regenerate the client:
+   ```bash
+   npx prisma generate
+   ```
 
 ---
 

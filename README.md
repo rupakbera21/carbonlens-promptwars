@@ -383,6 +383,7 @@ DATABASE_URL="..." npx prisma migrate deploy
 ### Windows ARM64 / Apple Silicon VM compatibility issues (Prisma dll error)
 
 If you are running on a Windows ARM64 architecture (e.g., Snapdragon laptops or virtualization on ARM hosts) and receive a `query_engine-windows.dll.node is not a valid Win32 application` error from Prisma:
+
 1. Configure the Prisma engines to use binary execution rather than node-api library files. Add the following to your `.env` file:
    ```env
    PRISMA_CLI_QUERY_ENGINE_TYPE="binary"

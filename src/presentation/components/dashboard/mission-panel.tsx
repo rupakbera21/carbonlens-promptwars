@@ -73,7 +73,7 @@ export function MissionPanel({ onMissionComplete }: MissionPanelProps) {
   return (
     <Card className="border-indigo-500/20 shadow-indigo-500/10">
       <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-lg text-indigo-400">
+        <CardTitle className="flex items-center gap-2 text-lg text-indigo-600 dark:text-indigo-400">
           <ShieldAlert className="h-5 w-5" />
           Active Detective Missions
         </CardTitle>
@@ -84,7 +84,7 @@ export function MissionPanel({ onMissionComplete }: MissionPanelProps) {
             return (
               <div
                 key={mission.id}
-                className={`relative overflow-hidden rounded-xl border-2 p-4 transition-all ${!mission.completed ? "cursor-pointer border-indigo-500 bg-indigo-500/10 hover:scale-[1.02] hover:bg-indigo-500/20" : "border-slate-800 bg-slate-900/50"}`}
+                className={`relative overflow-hidden rounded-xl border-2 p-4 transition-all ${!mission.completed ? "cursor-pointer border-indigo-500 bg-indigo-500/10 hover:scale-[1.02] hover:bg-indigo-500/20" : "border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-900/50"}`}
                 onClick={() => {
                   if (!mission.completed) {
                     handleStartMission(mission.id, mission.missionType);
@@ -92,7 +92,7 @@ export function MissionPanel({ onMissionComplete }: MissionPanelProps) {
                 }}
               >
                 <div className="mb-2 flex items-center justify-between">
-                  <span className="flex items-center gap-2 text-lg font-bold text-indigo-300">
+                  <span className="flex items-center gap-2 text-lg font-bold text-indigo-700 dark:text-indigo-300">
                     {mission.completed && (
                       <ShieldCheck className="h-5 w-5 text-green-400" />
                     )}
@@ -104,7 +104,7 @@ export function MissionPanel({ onMissionComplete }: MissionPanelProps) {
                     </span>
                   )}
                 </div>
-                <p className="mb-3 text-sm text-indigo-200/70">
+                <p className="mb-3 text-sm text-indigo-600/80 dark:text-indigo-200/70">
                   {mission.completed
                     ? "Mission Complete! World saved."
                     : "Critical mission! Jump and collect Eco-Coins to instantly restore Planet Health!"}
@@ -123,7 +123,7 @@ export function MissionPanel({ onMissionComplete }: MissionPanelProps) {
           return (
             <div key={mission.id} className="space-y-2 p-2">
               <div className="flex items-center justify-between text-sm">
-                <span className="flex items-center gap-2 font-medium text-slate-200">
+                <span className="flex items-center gap-2 font-medium text-slate-700 dark:text-slate-200">
                   {mission.completed && (
                     <ShieldCheck className="h-4 w-4 text-green-400" />
                   )}

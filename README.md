@@ -32,7 +32,7 @@ CarbonLens is a **carbon footprint tracking and reduction platform** designed wi
 - Track **transportation**, **electricity**, **food**, and **shopping** emissions
 - Real-time score updates with animated visualizations
 - Per-category breakdown with accessible data tables
-- **Interactive 3D Living World / Solar System**: A dynamic 3D simulation built with React Three Fiber representing your carbon footprint health index. The system scales by generating orbiting planets with distinct, deterministic sizes and clean planetary spacing, with jitter-free visuals.
+- **Interactive 3D Living World / Solar System**: A dynamic 3D simulation built with React Three Fiber representing your carbon footprint health index. The system scales by generating orbiting planets with distinct, deterministic sizes, clean planetary spacing, and a jitter-free presentation. The initial viewport automatically adapts its camera zoom/distance on load to fit the entire size of the solar system, while allowing manual zoom exploration.
 
 ### 2. Smart Carbon Score (0-100)
 
@@ -271,6 +271,7 @@ WCAG 2.2 AA compliance achieved through:
 - **High contrast mode** with 7:1 ratio available in settings
 - **Touch targets** ≥ 44×44px
 - **Responsive design** tested at 320px through 1440px
+- **Consistent Light/Dark Mode Contrast**: Text elements in cards and lists (such as the Active Detective Missions panel) dynamically switch color themes to maintain comfortable WCAG AAA/AA visibility in both Light and Dark modes.
 
 ---
 
